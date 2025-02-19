@@ -1,0 +1,561 @@
+model_name,run_id,data_name,task_name,metric_name,function_name,result_value,result_cr,result_type
+gpt-4-turbo,7,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,7,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,7,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,7,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,7,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,7,human_8,Completion Rate,CR,CR,0.4,0.4,Completion Rate
+gpt-4-turbo,3,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,3,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,False,1,single task (bool)
+gpt-4-turbo,3,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,3,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,3,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,3,human_8,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo-ca,1,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo-ca,1,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo-ca,1,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo-ca,1,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_8,Completion Rate,CR,CR,0.4,0.4,Completion Rate
+gpt-4-turbo,2,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,2,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,2,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,2,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,2,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,2,human_8,Completion Rate,CR,CR,0.3,0.3,Completion Rate
+gpt-4-turbo,9,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,9,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,9,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,9,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,9,human_8,Interpretability and report generation,Report Completeness,Report Completeness,False,1,single task (bool)
+gpt-4-turbo,9,human_8,Completion Rate,CR,CR,0.2,0.2,Completion Rate
+gpt-4-turbo,4,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,4,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,4,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,4,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,4,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,4,human_8,Completion Rate,CR,CR,0.3,0.3,Completion Rate
+gpt-4-turbo,0,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,0,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,0,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,0,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,0,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,0,human_8,Completion Rate,CR,CR,0.3,0.3,Completion Rate
+gpt-4-turbo,8,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,8,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,8,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,8,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,8,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_8,Completion Rate,CR,CR,0.3,0.3,Completion Rate
+gpt-4-turbo,1,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,1,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,False,1,single task (bool)
+gpt-4-turbo,1,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,1,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,1,human_8,Interpretability and report generation,Report Completeness,Report Completeness,False,1,single task (bool)
+gpt-4-turbo,1,human_8,Completion Rate,CR,CR,0.4,0.4,Completion Rate
+gpt-4-turbo,5,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,5,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,5,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,5,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,5,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,5,human_8,Completion Rate,CR,CR,0.3,0.3,Completion Rate
+gpt-4-turbo,6,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,6,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,6,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,6,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_8,Completion Rate,CR,CR,0.4,0.4,Completion Rate
+gpt-4-turbo-ca,2,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_8,Data visualization,Feature Importance Scores,Plot Validity,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_8,Completion Rate,CR,CR,1.0,1.0,Completion Rate
+gpt-4-turbo,7,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,7,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,7,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo,7,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,7,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo,7,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo,7,human_9,Completion Rate,CR,CR,0.6666666666666666,0.6666666666666666,Completion Rate
+gpt-4-turbo,3,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,3,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,3,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,3,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,3,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,3,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,3,human_9,Completion Rate,CR,CR,0.3333333333333333,0.3333333333333333,Completion Rate
+gpt-4-turbo-ca,1,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo-ca,1,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo-ca,1,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_9,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,2,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,2,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,2,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,2,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,2,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,2,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,2,human_9,Completion Rate,CR,CR,0.08333333333333333,0.08333333333333333,Completion Rate
+gpt-4-turbo,9,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,9,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,9,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,9,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,9,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,9,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,9,human_9,Completion Rate,CR,CR,0.08333333333333333,0.08333333333333333,Completion Rate
+gpt-4-turbo,4,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,4,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,4,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo,4,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,4,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo,4,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo,4,human_9,Completion Rate,CR,CR,0.75,0.75,Completion Rate
+gpt-4-turbo,0,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,0,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,0,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,0,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,0,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,0,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,0,human_9,Completion Rate,CR,CR,0.08333333333333333,0.08333333333333333,Completion Rate
+gpt-4-turbo,8,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo,8,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo,8,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo,8,human_9,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,1,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,1,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,1,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo,1,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,1,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo,1,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,1,human_9,Completion Rate,CR,CR,0.5833333333333334,0.5833333333333334,Completion Rate
+gpt-4-turbo-ca,0,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo-ca,0,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo-ca,0,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_9,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,5,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,5,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,5,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,5,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,5,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,5,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,5,human_9,Completion Rate,CR,CR,0.08333333333333333,0.08333333333333333,Completion Rate
+gpt-4-turbo,6,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,6,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,6,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,6,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,6,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,6,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,6,human_9,Completion Rate,CR,CR,0.08333333333333333,0.08333333333333333,Completion Rate
+gpt-4-turbo-ca,2,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Completion Rate,CR,CR,1.0,1.0,Completion Rate
+gpt-4-turbo,7,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,7,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,7,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,7,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,7,human_10,Completion Rate,CR,CR,0.125,0.125,Completion Rate
+gpt-4-turbo,3,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,3,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,3,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,3,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,3,human_10,Completion Rate,CR,CR,0.125,0.125,Completion Rate
+gpt-4-turbo-ca,1,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo-ca,1,human_10,Completion Rate,CR,CR,0.75,0.75,Completion Rate
+gpt-4-turbo,2,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,2,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,2,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,2,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,2,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,9,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,9,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,9,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,9,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,9,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,4,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,4,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,4,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,4,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,4,human_10,Completion Rate,CR,CR,0.25,0.25,Completion Rate
+gpt-4-turbo,0,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,0,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,0,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,0,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,0,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,8,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,8,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,8,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,8,human_10,Completion Rate,CR,CR,0.375,0.375,Completion Rate
+gpt-4-turbo,1,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,1,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,1,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,1,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,1,human_10,Completion Rate,CR,CR,0.25,0.25,Completion Rate
+gpt-4-turbo-ca,0,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo-ca,0,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo-ca,0,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,5,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,5,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,5,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,5,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,5,human_10,Completion Rate,CR,CR,0.375,0.375,Completion Rate
+gpt-4-turbo,6,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,6,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,6,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo-ca,2,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo-ca,2,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo-ca,2,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,7,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,7,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,7,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,7,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,3,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,3,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,3,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,3,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo-ca,1,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo-ca,1,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,2,human_7,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,2,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,2,human_7,Interpretability and report generation,Report Completeness,Report Completeness,False,1,single task (bool)
+gpt-4-turbo,2,human_7,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,9,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,9,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,9,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,9,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,4,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,4,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,4,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,4,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,0,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,0,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,0,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,0,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,8,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,8,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,1,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,1,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,1,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,1,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo-ca,0,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo-ca,0,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,5,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,5,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,5,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,5,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,6,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,6,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo-ca,2,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo-ca,2,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,7,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,7,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,7,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,7,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,7,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,7,human_8,Completion Rate,CR,CR,0.4,0.4,Completion Rate
+gpt-4-turbo,3,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,3,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,False,1,single task (bool)
+gpt-4-turbo,3,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,3,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,3,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,3,human_8,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo-ca,1,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo-ca,1,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo-ca,1,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo-ca,1,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_8,Completion Rate,CR,CR,0.4,0.4,Completion Rate
+gpt-4-turbo,2,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,2,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,2,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,2,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,2,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,2,human_8,Completion Rate,CR,CR,0.3,0.3,Completion Rate
+gpt-4-turbo,9,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,9,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,9,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,9,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,9,human_8,Interpretability and report generation,Report Completeness,Report Completeness,False,1,single task (bool)
+gpt-4-turbo,9,human_8,Completion Rate,CR,CR,0.2,0.2,Completion Rate
+gpt-4-turbo,4,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,4,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,4,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,4,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,4,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,4,human_8,Completion Rate,CR,CR,0.3,0.3,Completion Rate
+gpt-4-turbo,0,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,0,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,0,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,0,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,0,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,0,human_8,Completion Rate,CR,CR,0.3,0.3,Completion Rate
+gpt-4-turbo,8,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,8,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,8,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,8,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,8,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_8,Completion Rate,CR,CR,0.3,0.3,Completion Rate
+gpt-4-turbo,1,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,1,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,False,1,single task (bool)
+gpt-4-turbo,1,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,1,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,1,human_8,Interpretability and report generation,Report Completeness,Report Completeness,False,1,single task (bool)
+gpt-4-turbo,1,human_8,Completion Rate,CR,CR,0.4,0.4,Completion Rate
+gpt-4-turbo,5,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,5,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,5,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,5,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,5,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,5,human_8,Completion Rate,CR,CR,0.3,0.3,Completion Rate
+gpt-4-turbo,6,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,6,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,6,human_8,Data visualization,Feature Importance Scores,Plot Validity,Error,0,single task
+gpt-4-turbo,6,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_8,Completion Rate,CR,CR,0.4,0.4,Completion Rate
+gpt-4-turbo-ca,2,human_8,Data cleaning and preprocessing,Data Cleaning Quality,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_8,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_8,Pattern recognition,Association Rule Strength (Lift),Pattern Recognition Validity,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_8,Data visualization,Feature Importance Scores,Plot Validity,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_8,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_8,Completion Rate,CR,CR,1.0,1.0,Completion Rate
+gpt-4-turbo,7,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,7,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,7,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo,7,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,7,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo,7,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo,7,human_9,Completion Rate,CR,CR,0.6666666666666666,0.6666666666666666,Completion Rate
+gpt-4-turbo,3,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,3,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,3,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,3,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,3,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,3,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,3,human_9,Completion Rate,CR,CR,0.3333333333333333,0.3333333333333333,Completion Rate
+gpt-4-turbo-ca,1,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo-ca,1,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo-ca,1,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_9,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,2,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,2,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,2,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,2,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,2,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,2,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,2,human_9,Completion Rate,CR,CR,0.08333333333333333,0.08333333333333333,Completion Rate
+gpt-4-turbo,9,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,9,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,9,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,9,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,9,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,9,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,9,human_9,Completion Rate,CR,CR,0.08333333333333333,0.08333333333333333,Completion Rate
+gpt-4-turbo,4,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,4,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,4,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo,4,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,4,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo,4,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo,4,human_9,Completion Rate,CR,CR,0.75,0.75,Completion Rate
+gpt-4-turbo,0,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,0,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,0,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,0,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,0,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,0,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,0,human_9,Completion Rate,CR,CR,0.08333333333333333,0.08333333333333333,Completion Rate
+gpt-4-turbo,8,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo,8,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo,8,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo,8,human_9,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,1,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,1,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,1,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo,1,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,1,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo,1,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,1,human_9,Completion Rate,CR,CR,0.5833333333333334,0.5833333333333334,Completion Rate
+gpt-4-turbo-ca,0,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,False,1,single task (bool)
+gpt-4-turbo-ca,0,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,False,1,single task (bool)
+gpt-4-turbo-ca,0,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_9,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,5,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,5,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,5,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,5,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,5,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,5,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,5,human_9,Completion Rate,CR,CR,0.08333333333333333,0.08333333333333333,Completion Rate
+gpt-4-turbo,6,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,6,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,6,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,Error,0,single task
+gpt-4-turbo,6,human_9,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,6,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,Error,0,single task
+gpt-4-turbo,6,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,Error,0,single task
+gpt-4-turbo,6,human_9,Completion Rate,CR,CR,0.08333333333333333,0.08333333333333333,Completion Rate
+gpt-4-turbo-ca,2,human_9,Data cleaning and preprocessing,Missing Value Ratio,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Data cleaning and preprocessing,Duplicate Rows Removed,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Data exploration and statistics understand,Summary Statistics Consistency,Data Consistency,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Pattern recognition,Pattern Recognition Validity,Pattern Recognition Validity,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Data mining,Clustering Silhouette Score,Silhouette Score,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_9,Completion Rate,CR,CR,1.0,1.0,Completion Rate
+gpt-4-turbo,7,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,7,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,7,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,7,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,7,human_10,Completion Rate,CR,CR,0.125,0.125,Completion Rate
+gpt-4-turbo,3,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,Error,0,single task
+gpt-4-turbo,3,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,3,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,3,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,3,human_10,Completion Rate,CR,CR,0.125,0.125,Completion Rate
+gpt-4-turbo-ca,1,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo-ca,1,human_10,Completion Rate,CR,CR,0.75,0.75,Completion Rate
+gpt-4-turbo,2,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,2,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,2,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,2,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,2,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,9,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,9,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,9,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,9,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,9,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,4,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,4,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,4,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,4,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,4,human_10,Completion Rate,CR,CR,0.25,0.25,Completion Rate
+gpt-4-turbo,0,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,0,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,0,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,0,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,0,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,8,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,8,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,8,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,8,human_10,Completion Rate,CR,CR,0.375,0.375,Completion Rate
+gpt-4-turbo,1,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,False,1,single task (bool)
+gpt-4-turbo,1,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,1,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,1,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,1,human_10,Completion Rate,CR,CR,0.25,0.25,Completion Rate
+gpt-4-turbo-ca,0,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo-ca,0,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo-ca,0,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,5,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,5,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,5,human_10,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,5,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,5,human_10,Completion Rate,CR,CR,0.375,0.375,Completion Rate
+gpt-4-turbo,6,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo,6,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo,6,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo-ca,2,human_10,Data cleaning and preprocessing,Data Cleaning Completeness,Data Cleaning Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_10,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+gpt-4-turbo-ca,2,human_10,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_10,Interpretability and report generation,Report Completeness,Report Completeness,Error,0,single task
+gpt-4-turbo-ca,2,human_10,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,7,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,7,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,7,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,7,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,3,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,3,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,3,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,3,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo-ca,1,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo-ca,1,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,1,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,2,human_7,Data visualization,Visualization Completeness,Visualization Completeness,False,1,single task (bool)
+gpt-4-turbo,2,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,2,human_7,Interpretability and report generation,Report Completeness,Report Completeness,False,1,single task (bool)
+gpt-4-turbo,2,human_7,Completion Rate,CR,CR,0.5,0.5,Completion Rate
+gpt-4-turbo,9,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,9,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,9,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,9,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,4,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,4,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,4,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,4,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,0,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,0,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,0,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,0,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,8,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,8,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,8,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,1,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,1,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,1,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,1,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo-ca,0,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo-ca,0,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,0,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,5,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,5,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,5,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,5,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo,6,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo,6,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo,6,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate
+gpt-4-turbo-ca,2,human_7,Data visualization,Visualization Completeness,Visualization Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_7,Data mining,Association Rule Coverage,Association Rule Confidence,False,1,single task (bool)
+gpt-4-turbo-ca,2,human_7,Interpretability and report generation,Report Completeness,Report Completeness,True,2,single task (bool)
+gpt-4-turbo-ca,2,human_7,Completion Rate,CR,CR,0.8333333333333334,0.8333333333333334,Completion Rate

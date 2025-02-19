@@ -1,0 +1,29 @@
+model_name,run_id,data_name,task_name,metric_name,function_name,result_value,result_cr,result_type
+CodeLlama-34b-Instruct-hf,3,human_142,Data mining,Association Rules Validity,Clustering Validity,Error,0,single task
+CodeLlama-34b-Instruct-hf,3,human_142,Data mining,Frequent Itemsets Validity,Clustering Validity,Error,0,single task
+CodeLlama-34b-Instruct-hf,3,human_142,Pattern recognition,Pattern Analysis Completeness Ratio,Completeness,False,1,single task (bool)
+CodeLlama-34b-Instruct-hf,3,human_142,Interpretability and report generation,Client Segments Description Cohesion,Report Quality,False,1,single task (bool)
+CodeLlama-34b-Instruct-hf,3,human_142,Interpretability and report generation,Report Completeness,Report Completeness,False,1,single task (bool)
+CodeLlama-34b-Instruct-hf,3,human_142,Completion Rate,CR,CR,0.3,0.3,Completion Rate
+CodeLlama-34b-Instruct-hf,9,csv_excel_10,Interpretability and report generation,Report Quality (Content Accuracy),Report Quality,Error,0,single task
+CodeLlama-34b-Instruct-hf,9,csv_excel_10,Completion Rate,CR,CR,0.0,0.0,Completion Rate
+CodeLlama-34b-Instruct-hf,5,human_17,Data cleaning and preprocessing,Dataset Completeness,Data Completeness,False,1,single task (bool)
+CodeLlama-34b-Instruct-hf,5,human_17,Data mining,Association Rule Count,Association Rule Count,Error,0,single task
+CodeLlama-34b-Instruct-hf,5,human_17,Pattern recognition,Rule Analysis Completeness,Completeness,Error,0,single task
+CodeLlama-34b-Instruct-hf,5,human_17,Completion Rate,CR,CR,0.16666666666666666,0.16666666666666666,Completion Rate
+CodeLlama-34b-Instruct-hf,8,human_0,Data exploration and statistics understand,Summary Statistics Comparison,Data Consistency,Error,0,single task
+CodeLlama-34b-Instruct-hf,8,human_0,Predictive modeling,Model Accuracy,Model Accuracy,Error,0,single task
+CodeLlama-34b-Instruct-hf,8,human_0,Completion Rate,CR,CR,0.0,0.0,Completion Rate
+CodeLlama-34b-Instruct-hf,1,csv_excel_37,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+CodeLlama-34b-Instruct-hf,1,csv_excel_37,Interpretability and report generation,R-squared Score,Result Quality,Error,0,single task
+CodeLlama-34b-Instruct-hf,1,csv_excel_37,Completion Rate,CR,CR,0.0,0.0,Completion Rate
+CodeLlama-34b-Instruct-hf,9,csv_excel_37,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+CodeLlama-34b-Instruct-hf,9,csv_excel_37,Interpretability and report generation,R-squared Score,Result Quality,Error,0,single task
+CodeLlama-34b-Instruct-hf,9,csv_excel_37,Completion Rate,CR,CR,0.0,0.0,Completion Rate
+CodeLlama-34b-Instruct-hf,4,csv_excel_37,Predictive modeling,Mean Absolute Error (MAE),Mean Absolute Error,Error,0,single task
+CodeLlama-34b-Instruct-hf,4,csv_excel_37,Interpretability and report generation,R-squared Score,Result Quality,Error,0,single task
+CodeLlama-34b-Instruct-hf,4,csv_excel_37,Completion Rate,CR,CR,0.0,0.0,Completion Rate
+CodeLlama-34b-Instruct-hf,9,dl_15,Predictive modeling,Code Completeness,Model Accuracy,Error,0,single task
+CodeLlama-34b-Instruct-hf,9,dl_15,Interpretability and report generation,L1 Norm Calculation,Result Quality,Error,0,single task
+CodeLlama-34b-Instruct-hf,9,dl_15,Data exploration and statistics understand,Weight Pruning Efficiency,Data Accuracy,Error,0,single task
+CodeLlama-34b-Instruct-hf,9,dl_15,Completion Rate,CR,CR,0.0,0.0,Completion Rate

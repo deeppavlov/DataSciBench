@@ -1,0 +1,42 @@
+model_name,run_id,data_name,task_name,metric_name,function_name,result_value,result_cr,result_type
+CodeLlama-7b-Instruct-hf,8,human_3,Data cleaning and preprocessing,Column Integrity Check,Data Quality Score,True,2,single task (bool)
+CodeLlama-7b-Instruct-hf,8,human_3,Data exploration and statistics understand,Row Count Comparison,Data Consistency,True,2,single task (bool)
+CodeLlama-7b-Instruct-hf,8,human_3,Completion Rate,CR,CR,1.0,1.0,Completion Rate
+CodeLlama-7b-Instruct-hf,9,human_3,Data cleaning and preprocessing,Column Integrity Check,Data Quality Score,True,2,single task (bool)
+CodeLlama-7b-Instruct-hf,9,human_3,Data exploration and statistics understand,Row Count Comparison,Data Consistency,True,2,single task (bool)
+CodeLlama-7b-Instruct-hf,9,human_3,Completion Rate,CR,CR,1.0,1.0,Completion Rate
+CodeLlama-7b-Instruct-hf,7,human_3,Data cleaning and preprocessing,Column Integrity Check,Data Quality Score,Error,0,single task
+CodeLlama-7b-Instruct-hf,7,human_3,Data exploration and statistics understand,Row Count Comparison,Data Consistency,Error,0,single task
+CodeLlama-7b-Instruct-hf,7,human_3,Completion Rate,CR,CR,0.0,0.0,Completion Rate
+CodeLlama-7b-Instruct-hf,9,human_16,Pattern recognition,Clustering Quality (Silhouette Score),Silhouette Score,Error,0,single task
+CodeLlama-7b-Instruct-hf,9,human_16,Data visualization,Visualization Accuracy (Visual Similarity),Visualization Quality,Error,0,single task
+CodeLlama-7b-Instruct-hf,9,human_16,Completion Rate,CR,CR,0.0,0.0,Completion Rate
+CodeLlama-7b-Instruct-hf,8,human_1,Predictive modeling,Model Accuracy,Model Accuracy,Error,0,single task
+CodeLlama-7b-Instruct-hf,8,human_1,Completion Rate,CR,CR,0.0,0.0,Completion Rate
+CodeLlama-7b-Instruct-hf,6,csv_excel_33,Data mining,Silhouette Score for Clustering,Silhouette Score,Error,0,single task
+CodeLlama-7b-Instruct-hf,6,csv_excel_33,Data cleaning and preprocessing,Keep Column Accuracy,Data Quality Score,Error,0,single task
+CodeLlama-7b-Instruct-hf,6,csv_excel_33,Completion Rate,CR,CR,0.0,0.0,Completion Rate
+CodeLlama-7b-Instruct-hf,0,csv_excel_4,Data cleaning and preprocessing,Outlier Detection Rate,Data Quality Score,True,2,single task (bool)
+CodeLlama-7b-Instruct-hf,0,csv_excel_4,Data exploration and statistics understand,Mean Squared Error (MSE) for Outlier Replacements,Data Accuracy,Error,0,single task
+CodeLlama-7b-Instruct-hf,0,csv_excel_4,Data visualization,Plot Clarity Score (using the difference in means of original vs. smoothed),Visualization Quality,Error,0,single task
+CodeLlama-7b-Instruct-hf,0,csv_excel_4,Completion Rate,CR,CR,0.3333333333333333,0.3333333333333333,Completion Rate
+CodeLlama-7b-Instruct-hf,1,human_24,Data cleaning and preprocessing,Encoding Consistency Check,Data Quality Score,True,2,single task (bool)
+CodeLlama-7b-Instruct-hf,1,human_24,Completion Rate,CR,CR,1.0,1.0,Completion Rate
+CodeLlama-7b-Instruct-hf,8,human_22,Data cleaning and preprocessing,CustomerID Missing Value Removal Rate,Data Completeness,Error,0,single task
+CodeLlama-7b-Instruct-hf,8,human_22,Data cleaning and preprocessing,One-Hot Encoding Integrity,Data Quality Score,Error,0,single task
+CodeLlama-7b-Instruct-hf,8,human_22,Completion Rate,CR,CR,0.0,0.0,Completion Rate
+CodeLlama-7b-Instruct-hf,5,human_21,Data cleaning and preprocessing,Missing Value Imputation Accuracy,Data Completeness,True,2,single task (bool)
+CodeLlama-7b-Instruct-hf,5,human_21,Data cleaning and preprocessing,Outlier Replacement Consistency,Data Quality Score,False,1,single task (bool)
+CodeLlama-7b-Instruct-hf,5,human_21,Data cleaning and preprocessing,Z-Score Normalization Check,Normalization Range Check,False,1,single task (bool)
+CodeLlama-7b-Instruct-hf,5,human_21,Data cleaning and preprocessing,Encoding Accuracy for Diagnosis,Data Quality Score,True,2,single task (bool)
+CodeLlama-7b-Instruct-hf,5,human_21,Completion Rate,CR,CR,0.75,0.75,Completion Rate
+CodeLlama-7b-Instruct-hf,3,human_21,Data cleaning and preprocessing,Missing Value Imputation Accuracy,Data Completeness,True,2,single task (bool)
+CodeLlama-7b-Instruct-hf,3,human_21,Data cleaning and preprocessing,Outlier Replacement Consistency,Data Quality Score,Error,0,single task
+CodeLlama-7b-Instruct-hf,3,human_21,Data cleaning and preprocessing,Z-Score Normalization Check,Normalization Range Check,Error,0,single task
+CodeLlama-7b-Instruct-hf,3,human_21,Data cleaning and preprocessing,Encoding Accuracy for Diagnosis,Data Quality Score,Error,0,single task
+CodeLlama-7b-Instruct-hf,3,human_21,Completion Rate,CR,CR,0.25,0.25,Completion Rate
+CodeLlama-7b-Instruct-hf,4,dl_0,Data cleaning and preprocessing,Missing Value Percentage,Data Completeness,Error,0,single task
+CodeLlama-7b-Instruct-hf,4,dl_0,Data exploration and statistics understand,Descriptive Statistics Comparison,Data Consistency,Error,0,single task
+CodeLlama-7b-Instruct-hf,4,dl_0,Data mining,Cluster Quality (Silhouette Score),Silhouette Score,Error,0,single task
+CodeLlama-7b-Instruct-hf,4,dl_0,Interpretability and report generation,Report Completeness,Report Completeness,False,1,single task (bool)
+CodeLlama-7b-Instruct-hf,4,dl_0,Completion Rate,CR,CR,0.125,0.125,Completion Rate
