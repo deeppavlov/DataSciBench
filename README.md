@@ -1,5 +1,12 @@
 # DataSciBench: An LLM Agent Benchmark for Data Science
 
+<p align="center">
+📃 <a href="https://arxiv.org/abs/2502.13897" target="_blank">[DataSciBench]</a> 
+<a href="https://github.com/THUDM/DataSciBench" target="_blank">[GitHub]</a>
+<a href="https://huggingface.co/datasets/zd21/DataSciBench/tree/main" target="_blank">[Evaluation Data]</a>
+<a href="https://datascibench.github.io/" target="_blank">[Website]</a> <br> <br>
+</p>
+
 ## Introduction
 
 ### Install MetaGPT
@@ -120,3 +127,16 @@ python -m experiments.evaluate
 See `SciDataInterpreter.update_results_for_eval` at `role/sci_data_interpreter`. We can get the plans with codes and results from each step; the costs for each step per plan; and the number of errors. 
 
 See `SciDataInterpreter.get_CR` at `role/sci_data_interpreter`. We can get the Completion Rate for this question that just ran. (Ground Truth not incorporated, so max at 0.5)
+
+## **Citation**
+
+If you find our work helpful, please kindly cite our paper:
+
+```
+@article{zhang2025datascibench,
+        title={DataSciBench: An LLM Agent Benchmark for Data Science},
+        author={Zhang, Dan and Zhoubian, Sining and Cai, Min and Li, Fengzu and Yang, Lekang and Wang, Wei and Dong, Tianjiao and Hu, Ziniu and Tang, Jie and Yue, Yisong},
+        journal={arXiv preprint arXiv:2502.13897},
+        year={2025}
+        }
+```
