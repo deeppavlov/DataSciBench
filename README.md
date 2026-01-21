@@ -37,15 +37,24 @@ Config model in `~/.metagpt/config2.yaml/`
 
 Run all experiments as follows
 ```bash
+python -c "import sys; sys.path.append('/path/to/DataSciBench'); from experiments import run_examples"
+
 python -m experiments.run_examples
 ```
 Run a particular experiment, as follows
 ```bash
 python -m experiments.run_examples --task_id dl_0
+
+python -m experiments.run_examples --data_type dl --config test_config_dl.yaml
 ```
 Specifies to run a prompt of some kind, for example, to run a prompt with no external data dependencies
 ```bash
 python -m experiments.run_examples --data_source_type 1
+```
+
+### Check the generation process
+```bash
+python -m evaluations.check_result --model_id all
 ```
 
 ### Output Sample
@@ -111,13 +120,29 @@ python -m experiments.run_examples --data_source_type 1
 
 #### Evaluate functions of BigCodeBench 
 ```bash
-python -m experiments.evaluate_tmc
+python -m experiments.evaluate_tmc --model_id glm-4.5-flash
 ```
 
 #### Evaluate other tasks
+
+##### Set ground truth
+
+Download ground truth from https://huggingface.co/datasets/zd21/DataSciBench/tree/main and move it to data/task_id/gt
+
+##### Run evaluation
 ```bash
 python -m experiments.evaluate
+
+python -m experiments.evaluate --task_id all --model_id glm-4.5-flash
 ```
+
+### Calculate metric
+
+#### Calculate metrics for BigCodeBench 
+```bash
+python -m evaluation_results.calculate_final_metric
+```
+#### 
 
 
 ### Others
