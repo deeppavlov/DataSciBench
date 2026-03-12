@@ -1,0 +1,13 @@
+Model Architecture:
+Hidden Layers: (100,)
+Max Iterations: 300
+
+Training Summary:
+              precision    recall  f1-score   support
+
+           0       0.79      0.81      0.80        99
+           1       0.64      0.62      0.63        55
+
+    accuracy                           0.74       154
+   macro avg       0.72      0.71      0.71       154
+weighted avg       0.74      0.74      0.74       154

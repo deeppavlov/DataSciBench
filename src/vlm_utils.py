@@ -1,8 +1,41 @@
 import os
 from openai import OpenAI
+import json
+from datetime import datetime
+
+API_KEY = "InnPracAutoIntent:Sergey_Malyshev:b63f0e572df646e18bd678be43c59ca1"
+
 client = OpenAI(
-    base_url="https://api.turboai.one/v1"
+    api_key=API_KEY,
+    base_url="http://31.56.222.86:8002/api/providers/openai/v1",
 )
+
+def _log_vlm(request_messages, response_content=None, error=None):
+    try:
+        log_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "evaluation_results", "vlm_run_log.txt")
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(f"\n[{datetime.now().isoformat()}] --- VLM Request ---\n")
+            # Create a copy without full base64 image data for brevity
+            log_messages = []
+            for m in request_messages:
+                if isinstance(m.get("content"), list):
+                    content = []
+                    for item in m["content"]:
+                        if item.get("type") == "image_url":
+                            content.append({"type": "image_url", "image_url": {"url": "data:image/png;base64,...<truncated>..."}})
+                        else:
+                            content.append(item)
+                    log_messages.append({**m, "content": content})
+                else:
+                    log_messages.append(m)
+
+            f.write(json.dumps(log_messages, indent=2, ensure_ascii=False) + "\n")
+            if response_content:
+                f.write(f"--- VLM Response ---\n{response_content}\n")
+            if error:
+                f.write(f"--- VLM Error ---\n{str(error)}\n")
+    except Exception as e:
+        print(f"Failed to log VLM call: {e}")
 
 import base64
 def vlm_vis_quality(ground_truth_path, test_path):
@@ -11,8 +44,12 @@ def vlm_vis_quality(ground_truth_path, test_path):
         with open(image_path, "rb") as image_file:
             return base64.b64encode(image_file.read()).decode("utf-8")
 
-    gt_image = encode_image(ground_truth_path)
-    test_image = encode_image(test_path)
+    try:
+        gt_image = encode_image(ground_truth_path)
+        test_image = encode_image(test_path)
+    except Exception as e:
+        _log_vlm([], error=f"File read error: {e}")
+        raise e
 
     REWADRING_PROMPT = """Above are two figures, which are A and B. The first figure is the ground truth image and the second figure is the predicted image. The total score is 5. Please score B following the criteria below:
     - add 1 point for Data Representation Consistency: Ensure that the underlying data represented by the two charts is identical. This includes the values for all data points and the range of the data. Any variation in the dataset used would make the charts different.
@@ -34,28 +71,39 @@ def vlm_vis_quality(ground_truth_path, test_path):
     max_retry = 5
     retry = 0
     while not success:
-        response = client.chat.completions.create(
-            model='gpt-4o-mini',
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant that responds in Markdown. Help me with my math homework!"},
-                {"role": "user", "content": [
-                    {"type": "text", "text": "Image A:"},
-                    {"type": "image_url", "image_url": {
-                        "url": f"data:image/png;base64,{gt_image}"}
-                    },
-                    {"type": "text", "text": "Image B:"},
-                    {"type": "image_url", "image_url": {
-                        "url": f"data:image/png;base64,{test_image}"}
-                    },
-                    {"type": "text", "text": REWADRING_PROMPT},
-                ]}
-            ],
-            temperature=1.0,
-        )
-        if "### Total Score:" in response.choices[0].message.content:
-            success = True
-        else:
-            retry += 1
-            if retry >= max_retry:
-                raise Exception("Failed to get response from the model.")
-    return int(response.choices[0].message.content.split("### Total Score:")[1].strip().split("/")[0])
+        messages = [
+            {"role": "system", "content": "You are a helpful assistant that responds in Markdown. Help me with my math homework!"},
+            {"role": "user", "content": [
+                {"type": "text", "text": "Image A:"},
+                {"type": "image_url", "image_url": {
+                    "url": f"data:image/png;base64,{gt_image}"}
+                },
+                {"type": "text", "text": "Image B:"},
+                {"type": "image_url", "image_url": {
+                    "url": f"data:image/png;base64,{test_image}"}
+                },
+                {"type": "text", "text": REWADRING_PROMPT},
+            ]}
+        ]
+        
+        try:
+            response = client.chat.completions.create(
+                model='gpt-4o-mini',
+                messages=messages,
+                temperature=1.0,
+            )
+            resp_content = response.choices[0].message.content
+            _log_vlm(messages, response_content=resp_content)
+
+            if "### Total Score:" in resp_content:
+                success = True
+            else:
+                retry += 1
+                if retry >= max_retry:
+                    _log_vlm(messages, error="Max retries reached. Model response did not contain '### Total Score:'")
+                    raise Exception("Failed to get response from the model.")
+        except Exception as e:
+            _log_vlm(messages, error=str(e))
+            raise e
+            
+    return int(resp_content.split("### Total Score:")[1].strip().split("/")[0])

@@ -1,0 +1,6 @@
+InvoiceNo,StockCode,Description,Quantity,InvoiceDate,UnitPrice,CustomerID,Country
+1,A,Prod A,10,2023-01-01,5,1.0,US
+2,B,Prod B,200,2023-01-02,20,2.0,UK
+3,C,Prod C,300,2023-01-03,30,3.0,US
+4,D,Prod D,10,2023-01-04,10,4.0,FR
+5,E,Prod E,500,2023-01-05,50,,FR

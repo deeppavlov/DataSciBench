@@ -129,7 +129,10 @@ class Planner(BaseModel):
         auto_run = auto_run or self.auto_run
         if not auto_run:
             context = self.get_useful_memories()
-            review, confirmed = await AskReview().run(
+            ask_review_action = AskReview(context=self.plan_writter.context if self.plan_writter else None)
+            if self.plan_writter and self.plan_writter.llm:
+                ask_review_action.set_llm(self.plan_writter.llm)
+            review, confirmed = await ask_review_action.run(
                 context=context[-review_context_len:], plan=self.plan, trigger=trigger
             )
             if not confirmed:

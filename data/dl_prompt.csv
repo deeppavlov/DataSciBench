@@ -1,0 +1,1533 @@
+,Prompt,Metrics,Original Prompt,Qualified (Y/N),Modified Prompt (If not qualified),data source type,
+0,"Write a Graph Recurrent Neural Network (GRNN) model based on attention mechanisms using Python for processing and analyzing time series data. Ensure to meet the following requirements:
+
+1. **Graph network design**: Create a graph network where each graph represents an aerial formation, and the number of nodes corresponds to the number of vehicles in the formation.
+   - **Output**: Graph structure representation file.
+   - **Output filename**: `graph_structure.json`
+
+2. **Data format**: The time series data of aerial target formations is stored in Excel files located in the '.data/' directory, where each Excel file contains multiple sheets, with each sheet representing the time series data of a vehicle.
+   - **Input**: Excel files from '.data/' directory.
+   - **Input filename**: from `data_1.xlsx` to `data_5.xlsx`
+
+3. **Data reading**: Read all Excel files from the '.data/' directory and extract the sheets for processing.
+   - **Output**: Combined time series data in a structured format.
+   - **Output filename**: `combined_data.csv`
+
+4. **Data segmentation**: Segment the time series data of each vehicle using a sliding window with length `l` and step size `s`.
+   - **Output**: Segmented time series data.
+   - **Output filename**: `segmented_data.csv`
+
+5. **Training and testing set division**: Divide the segmented data into training and testing sets with a 7:3 ratio.
+   - **Output**: Training and testing datasets.
+   - **Output filenames**: `train_data.csv`, `test_data.csv`
+
+6. **Labels**: The last column of each Excel file contains label data, which should be preserved during the reading and segmentation process.
+
+7. **Model training**: Train the GRNN model using the training set to identify the action intentions of aerial target formations.
+   - **Output**: Trained model file.
+   - **Output filename**: `trained_model.h5`
+
+8. **Training parameters**: Set the number of training epochs to 60, and record the loss value, accuracy, recall, and F1-Score for each epoch.
+   - **Output**: Training metrics log file.
+   - **Output filename**: `training_metrics.csv`
+
+9. **Model evaluation**: Evaluate the trained model with the test set and generate a classification report and confusion matrix.
+   - **Output**: Classification report and confusion matrix visualization.
+   - **Output filenames**: `classification_report.txt`, `confusion_matrix.png`
+
+Please provide a complete code implementation and ensure that the code structure is clear and well-commented for understanding and evaluation.","accuracy，recall，F1-Score,data integrity","Write a Graph Recurrent Neural Network (GRNN) model based on attention mechanisms using Python, for processing and analyzing time series data. Make sure to meet the following requirements:
+ 1. Graph network design: Each graph network represents an aerial formation, and the number of nodes in the graph network should be the same as the number of vehicles in the formation.
+ 2. Data format: The time series data of aerial target formations is stored in Excel files, where each Excel file contains multiple sheets, and each sheet represents the time series data of a vehicle. The number of sheets in each Excel file may vary.
+ 3. Data reading: Read all Excel files from the '.data/' directory.
+ 4. Data segmentation: Segment the time series data of each vehicle using a sliding window with length l and step size s.
+ 5. Training and testing set division: Divide the segmented data into training and testing sets with a 7:3 ratio.
+ 6. Labels: The last column of each Excel file contains label data.
+ 7. Model training: Train the GRNN model with the training set to identify the action intentions of aerial target formations.
+ 8. Training parameters: Set the number of training epochs to 60 and record the loss value, accuracy, recall, and F1-Score for each epoch.
+ 9. Model evaluation: Evaluate the trained model with the test set and generate a classification report and confusion matrix.
+Please provide a complete code implementation and ensure that the code structure is clear and well-commented for understanding and evaluation.",Y,,3=human written data,
+1,"Please write a SSA-BP Sparrow Algorithm in Python to optimize the code of a BP neural network for multivariate regression prediction. The specific requirements are as follows:
+
+1. **Dataset**: Use an Excel file named ""data.xlsx"" as the dataset, which includes 7 input features and 1 output variable.
+   - **Output**: None (input only)
+
+2. **Model Optimization**: Employ the SSA-BP Sparrow Algorithm to optimize the weights and biases of the BP neural network.
+   - **Output**: Save the optimized model parameters in a CSV file named ""model_parameters.csv"".
+
+3. **Performance Evaluation**: Output the model's evaluation metrics such as RMSE, MAPE, MAE, and R2 in the command window.
+   - **Output**: Save these evaluation metrics in a text file named ""performance_metrics.txt"".
+
+4. **File Organization**: Make sure all program codes, including the SSA-BP Sparrow Algorithm implementation, are stored in the same folder as the dataset ""data.xlsx"".
+   - **Output**: Organize the code in a Python script named ""ssa_bp_sparrow.py"".
+
+Please provide a complete code implementation and ensure that the code structure is clear with complete comments for understanding and evaluation.",rmse、mape、mae,"Please write a SSA-BP Sparrow Algorithm in Python to optimize the code of a BP neural network for multivariate regression prediction. The specific requirements are as follows:
+ 1. Dataset: Use an Excel file as the dataset, which includes 7 input features and 1 output variable.
+ 2. Model Optimization: Employ SSA-BP Sparrow Algorithm to optimize the weights and biases of the BP neural network.
+ 3. Performance Evaluation: Output the model's evaluation metrics such as RMSE, MAPE, MAE, and R2 in the command window.
+ 4. File Organization: Make sure all program codes and the dataset are stored in the same folder.
+Please provide a complete code implementation and ensure that the code structure is clear with complete comments for understanding and evaluation.",N,"""Please write a SSA-BP Sparrow Algorithm in Python to optimize the code of a BP neural network for multivariate regression prediction. The specific requirements are as follows:
+
+1. **Dataset**: Use an Excel file named """"data.xlsx"""" as the dataset, which includes 7 input features and 1 output variable.
+
+
+2. **Model Optimization**: Employ the SSA-BP Sparrow Algorithm to optimize the weights and biases of the BP neural network.
+- **Output**: Save the optimized model parameters in a CSV file named """"model_parameters.csv"""".
+
+3. **Performance Evaluation**: Output the model's evaluation metrics such as RMSE, MAPE, MAE, and R2 in the command window.
+- **Output**: Save these evaluation metrics in a text file named """"performance_metrics.txt"""".
+
+4. **File Organization**: Make sure all program codes, including the SSA-BP Sparrow Algorithm implementation, are stored in the same folder as the dataset """"data.xlsx"""".
+- **Output**: Organize the code in a Python script named """"ssa_bp_sparrow.py"""".
+
+Please provide a complete code implementation and ensure that the code structure is clear with complete comments for understanding and evaluation.""",3=human written data,
+2,"Please construct a deep residual convolutional neural network using Python to achieve a strong nonlinear mapping relationship between 500 sets of input and output samples. Each set of samples contains 119 inputs and 6 outputs. The specific requirements are as follows:
+
+1. **Network Architecture**: Use a deep residual convolutional neural network.  
+   **Output**: Model architecture summary in PDF format.  
+   **Output Filename**: ""model_architecture.pdf""
+
+2. **Optimizer**: Choose Adam as the optimizer.  
+   **Output**: Training history (loss and accuracy) saved in CSV format.  
+   **Output Filename**: ""training_history.csv""
+
+3. **Regularization**: Apply L1 and L2 regularization to prevent overfitting.  
+   **Input**: Training data file named ""data.csv"" containing input (119 features) and output (6 targets) samples.  
+   **Output**: Regularization performance metrics saved in CSV format.  
+   **Output Filename**: ""regularization_metrics.csv""
+
+4. **Loss Function**: Use mean squared error (MSE) as the loss function.  
+   **Output**: Final model evaluation metrics (MSE, R-squared) saved in CSV format.  
+   **Output Filename**: ""model_evaluation_metrics.csv""
+
+Please provide a complete code implementation with clear and well-commented code structure for understanding and evaluation.",mse,"Please construct a deep residual convolutional neural network using Python to achieve a strong nonlinear mapping relationship between 500 sets of input and output samples. Each set of samples contains 119 inputs and 6 outputs. The specific requirements are as follows:
+ 1. Network architecture: Use a deep residual convolutional neural network.
+ 2. Optimizer: Choose Adam as the optimizer.
+ 3. Regularization: Apply L1 and L2 regularization to prevent overfitting.
+ 4. Loss function: Use mean squared error (MSE) as the loss function.
+Provide a complete code implementation and ensure that the code structure is clear and well-commented for understanding and evaluation.",N,"
+
+""Please construct a deep residual convolutional neural network using Python to achieve a strong nonlinear mapping relationship between 500 sets of input and output samples. Each set of samples contains 119 inputs and 6 outputs. The specific requirements are as follows:
+
+1. **Network architecture**: Use a deep residual convolutional neural network.
+2. **Optimizer**: Choose Adam as the optimizer.
+3. **Regularization**: Apply L1 and L2 regularization to prevent overfitting.
+4. **Loss function**: Use mean squared error (MSE) as the loss function.
+
+**Additional Requirements**:
+
+1. **Input/Output Formats**: Ensure that the input samples are read from a xlsx file named `input_data.xlsx` and the output samples are read from a CSV file named `output_data.csv`. The code should save the model's predictions to a file named `predictions.csv`.
+2. **File Structure**: Ensure that the script outputs the trained model to a file named `trained_model.h5` and the training log to `training_log.csv`.
+3. **Batch Processing**: Structure the code to easily accommodate batch processing of multiple input files, specifying input and output file paths through command-line arguments or a configuration file.
+
+Provide a complete code implementation and ensure that the code structure is clear, modular, and well-commented for understanding and evaluation.""",3=human written data,
+3,"Please write code in Python to train an abstract model using reinforcement learning (RL). The goal is to generate high-quality summaries that include keywords and phrases from the document. The workflow is as follows:
+
+1. **Backbone network:** Use a BERT+LSTM+Sigmoid network as the backbone model to predict which sentences should be included in the summary. 
+   - **Input filename:** ""data.csv"" (contains the documents to be summarized)
+   - **Output filename:** ""backbone_model.h5"" (the trained backbone model)
+
+2. **Reinforcement learning fine-tuning:** Use RL and a reward model to fine-tune the backbone network, integrating semantics at the vocabulary, sentence, and keyword levels.
+   - **Input filename:** ""backbone_model.h5"" (the backbone model for fine-tuning)
+   - **Output filename:** ""fine_tuned_model.h5"" (the fine-tuned model)
+
+3. **Policy optimization:** Adopt the Proximal Policy Optimization (PPO) algorithm and use Kullback-Leibler (KL) divergence as an intermediate reward to guide the exploration policy towards the supervised model.
+   - **Input filename:** ""fine_tuned_model.h5"" (the fine-tuned model)
+   - **Output filename:** ""policy_optimization_results.csv"" (summary results from the policy optimization)
+
+Please provide a complete code implementation and ensure that the code structure is clear and well-commented for understanding and evaluation.","Feature Integrity,Feature Importance,Distance","Please write code in Python to train an abstract model using reinforcement learning (RL). The goal is to generate high-quality summaries that include keywords and phrases from the document. The workflow is as follows:
+ 1. Backbone network: Use a BERT+LSTM+Sigmoid network as the backbone model and predict through supervised training which sentences should be included in the summary.
+ 2. Reinforcement learning fine-tuning: Use RL and a reward model to fine-tune the backbone network, integrating semantics at the vocabulary, sentence, and keyword levels.
+ 3. Policy optimization: Adopt the Proximal Policy Optimization (PPO) algorithm and use Kullback-Leibler (KL) divergence as an intermediate reward to guide the exploration policy towards the supervised model.
+Please provide a complete code implementation and ensure that the code structure is clear and well-commented for understanding and evaluation.",N,"Please write Python code to train an abstract model using reinforcement learning (RL) with the following workflow:
+- **Input File:** `data.csv`.
+- **Output File:** Specify the path for saving the generated summaries  （`output_summaries.json`).
+1. **Backbone Network:** Use a BERT+LSTM+Sigmoid network as the backbone model. Train the model via supervised learning to predict which sentences should be included in the summary.
+   
+2. **Reinforcement Learning Fine-Tuning:** Fine-tune the backbone network using RL and a reward model. Ensure that the fine-tuning process integrates semantics at the vocabulary, sentence, and keyword levels.
+   
+3. **Policy Optimization:** Implement the Proximal Policy Optimization (PPO) algorithm, using Kullback-Leibler (KL) divergence as an intermediate reward to guide the exploration policy towards the supervised model.
+
+Please provide a complete code implementation, with clear and well-commented code for ease of understanding and evaluation. The code should read from the specified input file and save the generated summaries to the specified output file.",3=human written data,
+4,"Please use Python to write a Convolutional Neural Network (CNN) model for a binary classification task on images. You need to complete the following steps, including specific input and output requirements:
+
+1. **Data Preparation**: Divide the image data into training and testing sets. Ensure that the image format for each set is PNG or JPG.  
+   - **Input**: `images.zip` (contains all images)  
+   - **Output**: `training_set.csv` (list of training images), `testing_set.csv` (list of testing images)
+
+2. **Data Preprocessing**: Perform necessary scaling, cropping, or normalization on the images and apply data augmentation techniques.  
+   - **Input**: `training_set.csv`, `testing_set.csv`  
+   - **Output**: `preprocessed_training_images` (directory of preprocessed training images), `preprocessed_testing_images` (directory of preprocessed testing images)
+
+3. **Model Building**: Construct a CNN model using a deep learning framework (such as TensorFlow, Keras, PyTorch), including convolutional layers, pooling layers, and fully connected layers.  
+   - **Output**: `cnn_model_summary.pdf` (summary of the CNN architecture)
+
+4. **Compile the Model**: Choose an appropriate loss function and optimizer, and set evaluation metrics.  
+   - **Output**: `model_compilation_details.txt` (details of the compilation settings)
+
+5. **Train the Model**: Train the model using the training data set and set hyperparameters.  
+   - **Input**: `preprocessed_training_images`  
+   - **Output**: `training_history.csv` (training metrics such as loss and accuracy over epochs)
+
+6. **Model Evaluation**: Evaluate the model's performance using the testing data set, calculating accuracy, precision, recall, and F1 score.  
+   - **Input**: `preprocessed_testing_images`  
+   - **Output**: `evaluation_metrics.csv` (contains accuracy, precision, recall, F1 score)
+
+7. **Predict Classification**: Use the trained model to classify and predict the images in folder A.  
+   - **Input**: `folder_A` (contains images to be classified)  
+   - **Output**: `predictions.csv` (each image filename and corresponding predicted class)
+
+Please provide a complete code implementation and ensure that the code structure is clear and the comments are complete for understanding and evaluation.","Please use Python to write a Convolutional Neural Network (CNN) model for a binary classification task on images. You need to complete the following steps:
+ 1. Data Preparation: Divide the image data into training and testing sets, ensuring that the image format for each set is PNG or JPG.
+ 2. Data Preprocessing: Perform necessary scaling, cropping, or normalization on the images and apply data augmentation techniques.
+ 3. Model Building: Construct a CNN model using a deep learning framework (such as TensorFlow, Keras, PyTorch), including convolutional layers, pooling layers, and fully connected layers.
+ 4. Compile the Model: Choose an appropriate loss function and optimizer, and set evaluation metrics.
+ 5. Train the Model: Train the model using the training data set and set hyperparameters.
+ 6. Model Evaluation: Evaluate the model's performance using the testing data set, calculating accuracy, precision, recall, and F1 score.
+ 7. Predict Classification: Use the trained model to classify and predict the images in folder A.
+Please provide a complete code implementation and ensure that the code structure is clear and the comments are complete for understanding and evaluation.",,N,"Please use Python to write a Convolutional Neural Network (CNN) model for a binary classification task on images. You need to complete the following steps, including specific input and output requirements:
+
+1. **Data Preparation**: Divide the image data into training and testing sets. Ensure that the image format for each set is PNG or JPG.  
+   - **Input**: `data/0` and `data/1` corresponding to the two classes of images
+   - **Output**: `training_set.csv` (list of training images), `testing_set.csv` (list of testing images)
+
+2. **Data Preprocessing**: Perform necessary scaling, cropping, or normalization on the images and apply data augmentation techniques.  
+   - **Input**: `training_set.csv`, `testing_set.csv`  
+   - **Output**: `preprocessed_training_images` (directory of preprocessed training images), `preprocessed_testing_images` (directory of preprocessed testing images)
+
+3. **Model Building**: Construct a CNN model using a deep learning framework (such as TensorFlow, Keras, PyTorch), including convolutional layers, pooling layers, and fully connected layers.  
+   - **Output**: `cnn_model_summary.pdf` (summary of the CNN architecture)
+
+4. **Compile the Model**: Choose an appropriate loss function and optimizer, and set evaluation metrics.  
+   - **Output**: `model_compilation_details.txt` (details of the compilation settings)
+
+5. **Train the Model**: Train the model using the training data set and set hyperparameters.  
+   - **Input**: `preprocessed_training_images`  
+   - **Output**: `training_history.csv` (training metrics such as loss and accuracy over epochs)
+
+6. **Model Evaluation**: Evaluate the model's performance using the testing data set, calculating accuracy, precision, recall, and F1 score.  
+   - **Input**: `preprocessed_testing_images`  
+   - **Output**: `evaluation_metrics.csv` (contains accuracy, precision, recall, F1 score)
+
+7. **Predict Classification**: Use the trained model to classify and predict the images in folder A.  
+   - **Input**: `folder_A` (contains images to be classified)  
+   - **Output**: `predictions.csv` (each image filename and corresponding predicted class)
+
+Please provide a complete code implementation and ensure that the code structure is clear and the comments are complete for understanding and evaluation.",2=open source data,
+5,"Please use Python and the PyTorch framework to write a deep learning program to train a ResNet18 model. The dataset is the Pokémon dataset, which the program should automatically download. You need to complete the following tasks, specifying input and output requirements for each:
+
+1. Model selection: Use ResNet18 as the network model.
+   - Output: Code implementation file (output_model.py). 
+
+2. Optimizer comparison: Compare the effects of using BGD and Adam optimizers, visualizing the results with WandB.
+   - Input: Training dataset (data.csv).
+   - Output: Comparison results in a CSV file (optimizer_comparison.csv) and WandB visualizations.
+
+3. Dynamic learning rate: Implement a dynamic learning rate adjustment mechanism.
+   - Input: Training dataset (data.csv).
+   - Output: A CSV file containing learning rate adjustments (learning_rate_adjustments.csv).
+
+4. WandB visualization: Use WandB to record and visualize the training process and results.
+   - Input: Training and validation results from the model (results.json).
+   - Output: Generated visualizations saved as an image file (wandb_visualization.png).
+
+5. GPU usage: Run the program in a CUDA environment and limit GPU usage to 80%.
+   - Output: Log file detailing GPU usage and system performance (gpu_usage_log.txt).
+
+Please provide the complete code implementation and ensure that the code structure is clear and well-commented for understanding and evaluation.","Feature Integrity,Visualization","Please use Python and the PyTorch framework to write a deep learning program to train a ResNet18 model. The dataset is the Pokémon dataset, which the program should automatically download. You need to complete the following tasks:
+ 1. Model selection: Use ResNet18 as the network model.
+ 2. Optimizer comparison: Compare the effects of using BGD and Adam optimizers, visualize with WandB.
+ 3. Dynamic learning rate: Implement a dynamic learning rate adjustment mechanism.
+ 4. WandB visualization: Use WandB to record and visualize the training process and results.
+ 5. GPU usage: Run the program in a CUDA environment and limit GPU usage to 80%.
+Please provide the complete code implementation and ensure that the code structure is clear and well-commented for understanding and evaluation",Y,,2=open source data,
+6,"Please write a script in Python for data crawling, cleaning, analysis, and visualization. The specific requirements are as follows:
+
+1. **Data Crawling**: 
+   - **Input**: douban.
+   - **Output**: Save the crawled data to a CSV file named ""crawled_data.csv"".
+
+2. **Data Cleaning**: 
+   - **Input**: Use the ""crawled_data.csv"" file from the previous step. 
+   - **Output**: Save the cleaned data to a CSV file named ""cleaned_data.csv"" that has removed null values and duplicates and formatted the data correctly for analysis.
+
+3. **Feature Extraction**: 
+   - **Input**: Use the ""cleaned_data.csv"" file. 
+   - **Output**: Save the structured dataset with extracted features to a CSV file named ""structured_data.csv"".
+
+4. **Data Analysis**: 
+   - **Input**: Use the ""structured_data.csv"" file. 
+   - **Output**: Save the basic statistical analysis results to a CSV file named ""analysis_results.csv"" and generate visualizations saved as ""data_visualization.png"".
+
+5. **Data Correlation Analysis**: 
+   - **Input**: Use the ""structured_data.csv"" file. 
+   - **Output**: Save the correlation analysis results to a CSV file named ""correlation_results.csv"".
+
+6. **Clustering Analysis (optional)**: 
+   - **Input**: Use the ""structured_data.csv"" file. 
+   - **Output**: Save the clustering results to a CSV file named ""clustering_results.csv"".
+
+7. **Result Visualization**: 
+   - **Input**: Use the results from the data analysis and clustering analysis.
+   - **Output**: Save the visualization of analysis results as ""analysis_visualization.png"" and the clustering results as ""clustering_visualization.png"".
+
+Please provide a complete code implementation and ensure that the code structure is clear with complete comments for understanding and evaluation.","data quality,Feature integrity,statistics,Visualization,correlation coefficients","Please write a script in Python for data crawling, cleaning, analysis, and visualization. The specific requirements are as follows:
+ 1. Data Crawling: Choose a website (such as Douban), use modules like requests and beautifulsoup to crawl data, and store the data in a database or file.
+ 2. Data Cleaning: Remove null values and duplicate data from the crawled data, check and appropriately modify the data format to ensure it meets the requirements for subsequent analysis.
+ 3. Feature Extraction: Extract features as needed to build a structured dataset.
+ 4. Data Analysis: Use modules like Pandas, Numpy for basic statistical analysis of the data, and tools like matplotlib, seaborn for data visualization.
+ 5. Data Correlation Analysis: Perform correlation analysis on the data using methods like corr().
+ 6. Clustering Analysis (optional): Use modules like sklearn for clustering analysis of the data.
+ 7. Result Visualization: Use tools like matplotlib, seaborn to visually present the analysis results.
+Please provide a complete code implementation and ensure that the code structure is clear with complete comments for understanding and evaluation.",N,"Please write a script in Python for data crawling, cleaning, analysis, and visualization. The specific requirements are as follows:
+
+1. **Data Crawling**: 
+   - **Input**: https://movie.douban.com/chart.
+   - **Output**: Save the crawled data to a CSV file named ""crawled_data.csv"".
+
+2. **Data Cleaning**: 
+   - **Input**: Use the ""crawled_data.csv"" file from the previous step. 
+   - **Output**: Save the cleaned data to a CSV file named ""cleaned_data.csv"" that has removed null values and duplicates and formatted the data correctly for analysis.
+
+3. **Feature Extraction**: 
+   - **Input**: Use the ""cleaned_data.csv"" file. 
+   - **Output**: Save the structured dataset with extracted features to a CSV file named ""structured_data.csv"".
+
+4. **Data Analysis**: 
+   - **Input**: Use the ""structured_data.csv"" file. 
+   - **Output**: Save the basic statistical analysis results to a CSV file named ""analysis_results.csv"" and generate visualizations saved as ""data_visualization.png"".
+
+5. **Data Correlation Analysis**: 
+   - **Input**: Use the ""structured_data.csv"" file. 
+   - **Output**: Save the correlation analysis results to a CSV file named ""correlation_results.csv"".
+
+6. **Clustering Analysis (optional)**: 
+   - **Input**: Use the ""structured_data.csv"" file. 
+   - **Output**: Save the clustering results to a CSV file named ""clustering_results.csv"".
+
+7. **Result Visualization**: 
+   - **Input**: Use the results from the data analysis and clustering analysis.
+   - **Output**: Save the visualization of analysis results as ""analysis_visualization.png"" and the clustering results as ""clustering_visualization.png"".
+
+Please provide a complete code implementation and ensure that the code structure is clear with complete comments for understanding and evaluation.",1=no dependency,
+7,"Please use Python to write a code based on the Back Propagation (BP) neural network to predict future car ownership. The given training dataset consists of the annual car ownership from 2016 to 2022, which are [303325], [311081], [326997], [351846], [414281], [456097], [484550]. The following tasks need to be completed:
+
+1. **Model Training**: 
+   - Use the BP neural network algorithm to automatically find the optimal hyperparameters.
+   - **Input File**: Use the input training dataset from ""data.csv"".
+   - **Output Format**: Save the model's hyperparameters in a CSV file.
+   - **Output Filename**: ""hyperparameters.csv"".
+
+2. **Prediction Result**:
+   - Output the predicted annual car ownership for the years 2023 and beyond.
+   - **Input File**: Use the input training dataset from ""data.csv"".
+   - **Output Format**: Save the predictions in a CSV file.
+   - **Output Filename**: ""predictions.csv"".
+
+Please provide the complete code implementation, ensuring that the code structure is clear and the comments are complete for easy understanding and evaluation.","Feature integrity,(acc,mae?)","Please use Python to write a code based on the Back Propagation (BP) neural network to predict future car ownership. The given training dataset consists of the annual car ownership from 2016 to 2022, which are [303325], [311081], [326997], [351846], [414281], [456097], [484550]. Please complete the following tasks:
+ 1. Model training: Use the BP neural network algorithm to automatically find the optimal hyperparameters.
+ 2. Prediction result: Output the predicted annual car ownership from 2016 to 2022.
+Please provide the complete code implementation and ensure that the code structure is clear and the comments are complete for easy understanding and evaluation.",N,"""Please use Python to write a code based on the Back Propagation (BP) neural network to predict future car ownership. The given training dataset consists of the annual car ownership from 2016 to 2022, which are [303325], [311081], [326997], [351846], [414281], [456097], [484550]. The following tasks need to be completed:
+
+1. **Model Training**: 
+- Use the BP neural network algorithm to automatically find the optimal hyperparameters.
+- **Output Format**: Save the model's hyperparameters in a CSV file.
+- **Output Filename**: """"hyperparameters.csv"""".
+
+2. **Prediction Result**:
+- Output the predicted annual car ownership for the years 2023 and beyond.
+- **Output Format**: Save the predictions in a CSV file.
+- **Output Filename**: """"predictions.csv"""".
+
+Please provide the complete code implementation, ensuring that the code structure is clear and the comments are complete for easy understanding and evaluation.""",1=no dependency,
+8,"Please use Python to write a model based on Long Short-Term Memory (LSTM) neural networks to fit the data on car ownership. The given training dataset consists of the number of car ownerships from 2016 to 2022, which are [303325], [311081], [326997], [351846], [414281], [456097], [484550]. You need to complete the following tasks:
+
+1. **Model construction**: Establish an LSTM neural network model.
+   - **Output**: Save the model architecture in a JSON file.
+   - **Output filename**: `model_architecture.json`
+
+2. **Model training**: Train the model using the training dataset (input data will be provided in a CSV file).
+   - **Input**: Use the CSV file containing car ownership data.
+   - **Input filename**: `car_ownership_data.csv`
+   - **Output**: Save the trained model weights in an H5 file.
+   - **Output filename**: `trained_model.h5`
+
+3. **Fitted values output**: Output the fitted values of car ownerships from 2016 to 2022.
+   - **Output**: Save the fitted values in a CSV file.
+   - **Output filename**: `fitted_values.csv`
+
+Please provide the complete code implementation and ensure that the code structure is clear and the comments are complete for understanding and evaluation.","Feature integrity,(acc,mae?)","Please use Python to write a model based on Long Short-Term Memory (LSTM) neural networks to fit the data on car ownership. The given training dataset consists of the number of car ownerships from 2016 to 2022, which are [303325], [311081], [326997], [351846], [414281], [456097], [484550]. You need to complete the following tasks:
+ 1. Model construction: Establish an LSTM neural network model.
+ 2. Model training: Train the model using the training dataset.
+ 3. Fitted values output: Output the fitted values of car ownerships from 2016 to 2022.
+Please provide the complete code implementation and ensure that the code structure is clear and the comments are complete for understanding and evaluation.",N,"""Please use Python to write a model based on Long Short-Term Memory (LSTM) neural networks to fit the data on car ownership. The given training dataset consists of the number of car ownerships from 2016 to 2022, which are [303325], [311081], [326997], [351846], [414281], [456097], [484550]. You need to complete the following tasks:
+
+1. **Model construction**: Establish an LSTM neural network model.
+- **Output**: Save the model architecture in a JSON file.
+- **Output filename**: `model_architecture.json`
+
+2. **Model training**: Train the model using the training dataset (input data will be provided in a CSV file).
+- **Output**: Save the trained model weights in an H5 file.
+- **Output filename**: `trained_model.h5`
+
+3. **Fitted values output**: Output the fitted values of car ownerships from 2016 to 2022.
+- **Output**: Save the fitted values in a CSV file.
+- **Output filename**: `fitted_values.csv`
+
+Please provide the complete code implementation and ensure that the code structure is clear and the comments are complete for understanding and evaluation.""",1=no dependency,
+9,"Suppose you have a set of sales data in the following format:
+```
+Sales Time\tPurchase Quantity (pcs)\tTotal Amount (CNY)\tPayment Method\tRefund Amount (CNY)\tProduct Details\n
+2018-4-30 22:55\t1\t2.5\tAlipay\t0\tCoca-Cola;\n
+2018-4-29 14:43\t1\t3\tAlipay\t0\tSprite\n
+2018-4-29 1:09\t1\t2.5\tWeChat\t0\tCoca-Cola;\n
+2018-4-28 21:19\t1\t3\tWeChat\t0\tCoca-Cola;\n
+2018-4-28 21:04\t5\t2.5\tWeChat\t0\tSprite\n
+2018-4-27 19:52\t1\t2.5\tWeChat\t0\tCoca-Cola;\n
+2018-4-26 22:02\t1\t2.5\tWeChat\t0\tCoca-Cola;\n
+2018-4-26 16:04\t1\t2.5\tAlipay\t0\tSprite\n
+2018-4-26 0:57\t1\t2.5\tAlipay\t0\tCoca-Cola;\n
+2018-4-26 0:56\t1\t2.5\tAlipay\t0\tCoca-Cola;\n
+```
+You are required to use a neural network to predict the sales of a certain product for the next week. Here are the specific requirements:
+
+1. **Data Processing:** Convert the above data format into one suitable for neural network input.  
+   - **Input filename:** `sales_data.txt`  
+   - **Output format:** Processed CSV  
+   - **Output filename:** `processed_data.csv`  
+
+2. **Neural Network Construction:** Build a neural network model suitable for time series prediction.  
+   - **Output format:** Python script  
+   - **Output filename:** `neural_network_model.py`  
+
+3. **Model Training:** Train the model using historical sales data.  
+   - **Input filename:** `processed_data.csv` (from the previous step)  
+   - **Output format:** Model weights (H5 format)  
+   - **Output filename:** `sales_model.h5`  
+
+4. **Predict Future Sales:** Use the trained model to predict sales for the next week.  
+   - **Input filename:** `sales_model.h5` (from the previous step)  
+   - **Output format:** CSV with predictions  
+   - **Output filename:** `predicted_sales.csv`  
+
+Please provide the complete Python code implementation, and ensure that the code structure is clear and well-commented for understanding and evaluation.","data quality,data format,statistics","Suppose you have a set of sales data in the following format:
+ - Sales Time\tPurchase Quantity (pcs)\tTotal Amount (CNY)\tPayment Method\tRefund Amount (CNY)\tProduct Details\n2018-4-30 22:55\t1\t2.5\tAlipay\t0\tCoca-Cola;\n2018-4-29 14:43\t1\t3\tAlipay\t0\tSprite\n2018-4-29 1:09\t1\t2.5\tWeChat\t0\tCoca-Cola;\n2018-4-28 21:19\t1\t3\tWeChat\t0\tCoca-Cola;\n2018-4-28 21:04\t5\t2.5\tWeChat\t0\tSprite\n2018-4-27 19:52\t1\t2.5\tWeChat\t0\tCoca-Cola;\n2018-4-26 22:02\t1\t2.5\tWeChat\t0\tCoca-Cola;\n2018-4-26 16:04\t1\t2.5\tAlipay\t0\tSprite\n2018-4-26 0:57\t1\t2.5\tAlipay\t0\tCoca-Cola;\n2018-4-26 0:56\t1\t2.5\tAlipay\t0\tCoca-Cola;\n
+You are required to use a neural network to predict the sales of a certain product for the next week. Here are the specific requirements:
+ 1. Data Processing: Convert the above data format into one suitable for neural network input.
+ 2. Neural Network Construction: Build a neural network model suitable for time series prediction.
+ 3. Model Training: Train the model using historical sales data.
+ 4. Predict Future Sales: Use the trained model to predict sales for the next week.
+Please provide the complete Python code implementation, and ensure that the code structure is clear and well-commented for understanding and evaluation.",N,"""Suppose you have a set of sales data in the following format:
+```
+Sales Time\tPurchase Quantity (pcs)\tTotal Amount (CNY)\tPayment Method\tRefund Amount (CNY)\tProduct Details\n
+2018-4-30 22:55\t1\t2.5\tAlipay\t0\tCoca-Cola;\n
+2018-4-29 14:43\t1\t3\tAlipay\t0\tSprite\n
+2018-4-29 1:09\t1\t2.5\tWeChat\t0\tCoca-Cola;\n
+2018-4-28 21:19\t1\t3\tWeChat\t0\tCoca-Cola;\n
+2018-4-28 21:04\t5\t2.5\tWeChat\t0\tSprite\n
+2018-4-27 19:52\t1\t2.5\tWeChat\t0\tCoca-Cola;\n
+2018-4-26 22:02\t1\t2.5\tWeChat\t0\tCoca-Cola;\n
+2018-4-26 16:04\t1\t2.5\tAlipay\t0\tSprite\n
+2018-4-26 0:57\t1\t2.5\tAlipay\t0\tCoca-Cola;\n
+2018-4-26 0:56\t1\t2.5\tAlipay\t0\tCoca-Cola;\n
+```
+You are required to use a neural network to predict the sales of a certain product for the next week. Here are the specific requirements:
+
+1. **Data Processing:** Convert the above data format into one suitable for neural network input.  
+- **Input filename:** `data.csv`
+- **Output format:** Processed CSV  
+- **Output filename:** `processed_data.csv`  
+
+2. **Neural Network Construction:** Build a neural network model suitable for time series prediction.  
+- **Output format:** Python script  
+- **Output filename:** `neural_network_model.py`  
+
+3. **Model Training:** Train the model using historical sales data.  
+- **Input filename:** `processed_data.csv` (from the previous step)  
+- **Output format:** Model weights (H5 format)  
+- **Output filename:** `sales_model.h5`  
+
+4. **Predict Future Sales:** Use the trained model to predict sales for the next week.  
+- **Input filename:** `sales_model.h5` (from the previous step)  
+- **Output format:** CSV with predictions  
+- **Output filename:** `predicted_sales.csv`  
+
+Please provide the complete Python code implementation, and ensure that the code structure is clear and well-commented for understanding and evaluation.""",3=human written data,
+10,"Please write a Python code to predict the success rate of applying for overseas university study qualifications using data mining techniques. You need to use a dataset of master's program-related indicators for foreign universities downloaded from Kaggle, named ""data.csv"", to complete the following tasks:
+
+1. **Data Analysis**: Conduct exploratory data analysis (EDA) on the dataset to understand the distribution and characteristics of the data.  
+   **Output Format**: CSV  
+   **Output Filename**: ""eda_results.csv""  
+
+2. **Feature Engineering**: Based on the results of the data analysis, perform feature selection and preprocessing.  
+   **Output Format**: CSV  
+   **Output Filename**: ""processed_features.csv""  
+
+3. **Model Building**: Build a machine learning model to predict the success rate of study abroad applications.  
+   **Output Format**: Python Pickle (.pkl)  
+   **Output Filename**: ""success_rate_model.pkl""  
+
+4. **Model Evaluation**: Evaluate the performance of the model and output the prediction results.  
+   **Output Format**: CSV  
+   **Output Filename**: ""model_evaluation_results.csv""  
+
+Please provide the complete code implementation and ensure that the code structure is clear and the comments are comprehensive for understanding and evaluation.","Feature integrity, Feature importance,Evaluation metrics(acc,recall,f1……),data quality","Please write a Python code to predict the success rate of applying for overseas university study qualifications using data mining techniques. You need to use a dataset of master's program related indicators for foreign universities downloaded from Kaggle to complete the following tasks:
+ 1. Data Analysis: Conduct exploratory data analysis on the dataset to understand the distribution and characteristics of the data.
+ 2. Feature Engineering: Based on the results of the data analysis, perform feature selection and preprocessing.
+ 3. Model Building: Build a machine learning model to predict the success rate of study abroad applications.
+ 4. Model Evaluation: Evaluate the performance of the model and output the prediction results.
+Please provide the complete code implementation and ensure that the code structure is clear and the comments are complete for understanding and evaluation.",N,"""Please write a Python code to predict the success rate of applying for overseas university study qualifications using data mining techniques. You need to use a dataset of master's program-related indicators for foreign universities, named """"data.csv"""", to complete the following tasks:
+
+1. **Data Analysis**: Conduct exploratory data analysis (EDA) on the dataset to understand the distribution and characteristics of the data.  
+**Output Filename**: """"eda_results.csv""""  
+
+2. **Feature Engineering**: Based on the results of the data analysis, perform feature selection and preprocessing.  
+**Output Filename**: """"processed_features.csv""""  
+
+3. **Model Building**: Build a machine learning model to predict the success rate of study abroad applications.  
+**Output Filename**: """"success_rate_model.pkl""""  
+
+4. **Model Evaluation**: Evaluate the performance of the model and output the prediction results.  
+**Output Filename**: """"model_evaluation_results.csv""""  
+
+Please provide the complete code implementation and ensure that the code structure is clear and the comments are comprehensive for understanding and evaluation.""",2=open source data,
+11,"Please use the provided dataset (Admission_Predict_Ver1.1.csv) to complete the following tasks:
+
+1. **Data Preprocessing**: Analyze and preprocess the dataset, including handling missing values and outliers, as well as conducting feature scaling and feature engineering.  
+   **Input**: Admission_Predict_Ver1.1.csv  
+   **Output**: processed_data.csv  
+
+2. **Model Construction**: Construct three different machine learning models—linear regression, Naive Bayes, and KNN—to predict the success rate of master's admission in foreign universities.  
+   **Input**: processed_data.csv  
+   **Output**: models_summary.txt  
+
+3. **Model Optimization**: Optimize each model, including parameter tuning and feature selection.  
+   **Input**: models_summary.txt  
+   **Output**: optimized_models.txt  
+
+4. **Model Prediction**: Use the trained models to predict new samples.  
+   **Input**: optimized_models.txt, new_samples.csv  
+   **Output**: predictions.csv  
+
+5. **Performance Evaluation**: Evaluate the performance of the models using appropriate metrics.  
+   **Input**: predictions.csv  
+   **Output**: performance_report.pdf  
+
+6. **Model Summary**: Summarize the strengths and weaknesses of each model and propose suggestions for improvement.  
+   **Input**: performance_report.pdf  
+   **Output**: model_summary.txt  
+
+Please provide the following for understanding and evaluation:  
+- Complete code implementation, ensuring clear code structure and comprehensive comments.  
+- Experiment report, including dataset analysis, model construction and optimization, prediction results, model performance analysis, and summary.  
+The final experiment report should be saved as `experiment_report.pdf`.","data quality, Feature integrity, Outliers,Evaluation metrics(acc,recall,f1……)feature importance","Please use the provided dataset (Admission_Predict_Ver1.1) to complete the following tasks:
+ 1. Data Preprocessing: Analyze and preprocess the dataset, including handling missing values and outliers, as well as conducting feature scaling and feature engineering.
+ 2. Model Construction: Construct three different machine learning models—linear regression, Naive Bayes, and KNN—to predict the success rate of master's admission in foreign universities.
+ 3. Model Optimization: Optimize each model, including parameter tuning and feature selection.
+ 4. Model Prediction: Use the trained models to predict new samples.
+ 5. Performance Evaluation: Evaluate the performance of the models using appropriate metrics.
+ 6. Model Summary: Summarize the strengths and weaknesses of each model and propose suggestions for improvement.
+Please provide the following for understanding and evaluation:
+ - Complete code implementation, ensuring clear code structure and comprehensive comments.
+ - Experiment report, including dataset analysis, model construction and optimization, prediction results, model performance analysis, and summary.",N,"""Please use the provided dataset (Admission_Predict_Ver1.1.csv) to complete the following tasks:
+
+1. **Data Preprocessing**: Analyze and preprocess the dataset, including handling missing values and outliers, as well as conducting feature scaling and feature engineering.  
+**Input**: Admission_Predict_Ver1.1.csv  
+**Output**: processed_data.csv  
+
+2. **Model Construction**: Construct three different machine learning models—linear regression, Naive Bayes, and KNN—to predict the success rate of master's admission in foreign universities.  
+**Input**: processed_data.csv  
+**Output**: models_summary.txt  
+
+3. **Model Optimization**: Optimize each model, including parameter tuning and feature selection.  
+**Input**: models_summary.txt  
+**Output**: optimized_models.txt  
+
+4. **Model Prediction**: Use the trained models to predict new samples.  
+**Input**: optimized_models.txt, new_samples.csv  
+**Output**: predictions.csv  
+
+5. **Performance Evaluation**: Evaluate the performance of the models using appropriate metrics,Summarize the strengths and weaknesses of each model and propose suggestions for improvement.  
+**Input**: predictions.csv  
+**Output**: performance_report.pdf  
+
+Please provide the following for understanding and evaluation:  
+- Complete code implementation, ensuring clear code structure and comprehensive comments.  
+- Experiment report, including dataset analysis, model construction and optimization, prediction results, model performance analysis, and summary.  
+The final experiment report should be saved as `experiment_report.pdf`.""",2=open source data,
+12,"Please implement a three-layer Convolutional Neural Network (CNN) model using Python with the following structural requirements, and adhere to the specified input and output requirements:
+
+1. The first layer is a convolutional layer with bias terms, containing 32 filters of size 5x5, and using zero-padding of 2 pixels.
+   - Input: `data.csv` (contains training data in a format suitable for CNN)
+   - Output: `layer1_output.csv` (feature maps after the first layer)
+
+2. The second layer is a ReLU activation function.
+   - Input: `layer1_output.csv`
+   - Output: `layer2_output.csv` (activated feature maps after ReLU)
+
+3. The third layer is a convolutional layer with bias terms, containing 16 filters of size 3x3, and using zero-padding of 1 pixel.
+   - Input: `layer2_output.csv`
+   - Output: `layer3_output.csv` (feature maps after the second convolutional layer)
+
+4. The fourth layer is a ReLU activation function.
+   - Input: `layer3_output.csv`
+   - Output: `layer4_output.csv` (activated feature maps after the second ReLU)
+
+5. The fifth layer is a fully connected layer to compute scores for 10 classes.
+   - Input: `layer4_output.csv`
+   - Output: `scores_output.csv` (classification scores for the 10 classes)
+
+Please provide the complete code implementation clearly structured with comprehensive comments for understanding and evaluation.",feature integrity,"Please implement a three-layer Convolutional Neural Network (CNN) model using Python, with the following structural requirements:
+ 1. The first layer is a convolutional layer with bias terms, containing 32 filters of size 5x5, and using zero-padding of 2 pixels.
+ 2. The second layer is a ReLU activation function.
+ 3. The third layer is a convolutional layer with bias terms, containing 16 filters of size 3x3, and using zero-padding of 1 pixel.
+ 4. The fourth layer is a ReLU activation function.
+ 5. The fifth layer is a fully connected layer to compute scores for 10 classes.
+Please provide the complete code implementation and ensure that the code structure is clear with complete comments for understanding and evaluation.""",N,"""Please implement a three-layer Convolutional Neural Network (CNN) model using Python with the following structural requirements, and adhere to the specified input and output requirements:
+
+1. The first layer is a convolutional layer with bias terms, containing 32 filters of size 5x5, and using zero-padding of 2 pixels.
+- Input: `X.npy` and `y.npy`
+
+2. The second layer is a ReLU activation function.
+
+3. The third layer is a convolutional layer with bias terms, containing 16 filters of size 3x3, and using zero-padding of 1 pixel.
+
+4. The fourth layer is a ReLU activation function.
+
+5. The fifth layer is a fully connected layer to compute scores for 10 classes.
+- Output: `scores_output.csv` (classification scores for the 10 classes)
+
+Please provide the complete code implementation clearly structured with comprehensive comments for understanding and evaluation.""",3=human written data,
+13,"Implement a linear regression model y = wx + b, where w = 0.8 and b = 0.7. You need to:
+
+1. Build the model using Tensorflow. 
+   - Input: ""data.csv"" (the training dataset)
+   - Output: ""model.py"" (complete code implementation with clear structure and comments)
+
+2. Train the model for 500 steps.
+   - Input: ""model.py"" (the model code)
+   - Output: ""training_log.csv"" (log of the training progress, including loss values at each step)
+
+3. Observe the data flow graph of the model using Tensorboard. 
+   - Input: ""model.py"" (the model file)
+   - Output: ""tensorboard_screenshot.png"" (a screenshot of the data flow graph showcasing the model's structure and training process)
+
+Please ensure all outputs reflect the quality of completion for each subtask, facilitating further evaluation.",visualization,"Implement a linear regression model y = wx + b, where w = 0.8 and b = 0.7. You need to:
+ 1. Build the model using Tensorflow.
+ 2. Train the model for 500 steps.
+ 3. Observe the data flow graph of the model using Tensorboard.
+Please provide the following for understanding and evaluation:
+ - Complete code implementation with clear structure and complete comments.
+ - A screenshot of the data flow graph from Tensorboard, showcasing the model's structure and training process.",N,"Implement a linear regression model y = wx + b, where w = 0.8 and b = 0.7. You need to:
+
+1. Build the model using Tensorflow. 
+   - Input: ""X.npy"" and ""y.npy"" (the training dataset)
+   - Output: ""model.py"" (complete code implementation with clear structure and comments)
+
+2. Train the model for 500 steps.
+   - Input: ""model.py"" (the model code)
+   - Output: ""training_log.csv"" (log of the training progress, including loss values at each step)
+
+3. Observe the data flow graph of the model using Tensorboard. 
+   - Input: ""model.py"" (the model file)
+   - Output: ""tensorboard_screenshot.png"" (a screenshot of the data flow graph showcasing the model's structure and training process)
+
+Please ensure all outputs reflect the quality of completion for each subtask, facilitating further evaluation.",3=human written data,
+14,"Methods for manipulating multi-dimensional arrays and matrices using the NumPy library. Please complete the following tasks with specified input and output requirements:
+
+1. **Generate Arrays:**
+   - Input: None
+   - Output: A CSV file named 'array_c.csv' containing the 5-element arithmetic sequence between 0-10, and a CSV file named 'matrix_d.csv' containing a randomly generated 5x4 matrix with elements between 1-100.
+
+2. **Adjust Shape & Extract Elements:**
+   - Input: 'matrix_d.csv'
+   - Output: A CSV file named 'matrix_a_first_row_col.csv' containing the first row and first column elements of the merged 5x5 matrix 'a'.
+
+3. **Find Index Positions:**
+   - Input: 'matrix_a_first_row_col.csv'
+   - Output: A CSV file named 'indices_greater_than_50.csv' containing the index positions of numbers greater than 50 in matrix 'a' and the corresponding elements according to those indices.
+
+4. **Calculate Square Root:**
+   - Input: 'matrix_a_first_row_col.csv'
+   - Output: A CSV file named 'matrix_a_sqrt.csv' with the matrix 'a' elements displayed in floating-point representation with 3 decimal places and their square root calculated.
+
+5. **Statistics Calculation:**
+   - Input: 'matrix_a_sqrt.csv'
+   - Output: A CSV file named 'row_0_statistics.csv' containing the mean, variance, and standard deviation of the 0th row in matrix 'a'.
+
+6. **Normalization:**
+   - Input: 'matrix_a_sqrt.csv'
+   - Output: A CSV file named 'normalized_matrix_a.csv' containing the normalized result of matrix 'a'.
+
+**Requirements for the Experimental Report:**
+1. Include the source program in the report.
+2. Display the author's full name in the appropriate section and provide a screenshot of the running results.
+3. Implement exception handling mechanisms to manage possible user input errors.
+4. Add comments to the program to explain each operation and its results.
+
+Please provide a complete experimental report that includes the source code, running results, and necessary comments.","mean,std,data consistency,visualization","Methods for manipulating multi-dimensional arrays and matrices using the numpy library. Please complete the following steps:
+ 1. Generate an array of a 5-element arithmetic sequence between 0-10 named 'c', and randomly generate a 5*4 matrix 'd' with elements being random numbers between 1-100.
+ 2. Adjust the shape of matrix 'd' so that it can be merged with array 'c' into a 5*5 matrix 'a'. Output the first row and first column elements of matrix 'a'.
+ 3. Find the index positions of numbers greater than 50 in matrix 'a' and output the corresponding elements according to the index.
+ 4. Set the floating-point representation precision of the matrix to 3 decimal places and calculate the square root of all elements in matrix 'a'.
+ 5. Calculate the mean, variance, and standard deviation of the 0th row in matrix 'a'.
+ 6. Normalize matrix 'a' and output the result after normalization.
+Requirements for the experimental report:
+ 1. Include the source program in the experimental report.
+ 2. Display the author's full name in the appropriate place and provide a screenshot of the running results.
+ 3. Use exception handling mechanisms to deal with possible user input errors.
+ 4. Add comments to the program to explain each step of the operation and results.
+Please provide a complete experimental report, including the source code, running results, and necessary comments.",N,"""Methods for manipulating multi-dimensional arrays and matrices using the NumPy library. Please complete the following tasks with specified input and output requirements:
+
+1. **Generate Arrays:** Output a CSV file named 'array_c.csv' containing the 5-element arithmetic sequence between 0-10, and a CSV file named 'matrix_d.csv' containing a randomly generated 5x4 matrix with elements between 1-100.
+
+2. **Adjust Shape & Extract Elements:**
+- Input: 'matrix_d.csv'
+- Output: A CSV file named 'matrix_a_first_row_col.csv' containing the first row and first column elements of the merged 5x5 matrix 'a'.
+
+3. **Find Index Positions:**
+- Input: 'matrix_a_first_row_col.csv'
+- Output: A CSV file named 'indices_greater_than_50.csv' containing the index positions of numbers greater than 50 in matrix 'a' and the corresponding elements according to those indices.
+
+4. **Calculate Square Root:**
+- Input: 'matrix_a_first_row_col.csv'
+- Output: A CSV file named 'matrix_a_sqrt.csv' with the matrix 'a' elements displayed in floating-point representation with 3 decimal places and their square root calculated.
+
+5. **Statistics Calculation:**
+- Input: 'matrix_a_sqrt.csv'
+- Output: A CSV file named 'row_0_statistics.csv' containing the mean, variance, and standard deviation of the 0th row in matrix 'a'.
+
+6. **Normalization:**
+- Input: 'matrix_a_sqrt.csv'
+- Output: A CSV file named 'normalized_matrix_a.csv' containing the normalized result of matrix 'a'.
+
+
+Please provide a complete experimental report that includes the source code, running results, and necessary comments.""",1=no dependency,
+15,"Please use PyTorch to build a neural network model and complete the following tasks:
+
+1. **Model definition**: Define a neural network structure using PyTorch's nn.Module class.  
+   **Output**: Provide the complete PyTorch code in a file named ""model_definition.py"".  
+
+2. **Model training**: Train the network model with your training dataset (input: ""data.csv""). Choose an appropriate optimizer (such as SGD, Adam, etc.) to update the network parameters.  
+   **Output**: Save the trained model weights to a file named ""trained_model.pth"".  
+
+3. **Calculate L1 norm**: After training, calculate the L1 norm of each weight in the network. This is the sum of the absolute values of the elements in the weight vector.  
+   **Output**: Save the L1 norms in a CSV file named ""l1_norms.csv"".  
+
+4. **Weight pruning**:  
+   1. Set a threshold or pruning ratio to determine the weights that need to be pruned.  
+   2. Sort the weights based on their L1 norms and select the weights with smaller L1 norms for pruning.  
+   3. Set the selected weights to zero to achieve pruning of network connections.  
+   **Output**: Save the pruned model weights in a file named ""pruned_model.pth"".
+
+5. **Model fine-tuning**: Fine-tune the pruned model to recover or enhance model performance. You can continue training the pruned model with the optimizer used in previous training.  
+   **Output**: Save the fine-tuned model weights to a file named ""fine_tuned_model.pth"".  
+
+Please provide the following:
+- Complete PyTorch code implementation, including model definition, training process, L1 norm calculation, weight pruning, and model fine-tuning, all integrated within ""model_definition.py"".
+- Comments in the code should clearly explain the purpose and implementation of each step.","Feature Integrity,Feature Importance,L1范数","Please use PyTorch to build a neural network model and complete the following tasks:
+ Model definition: Define a neural network structure using PyTorch's nn.Module class.
+ Model training: Train the network model with your training dataset. Choose an appropriate optimizer (such as SGD, Adam, etc.) to update the network parameters.
+ Calculate L1 norm: After training, calculate the L1 norm of each weight in the network, which is the sum of the absolute values of the elements in the weight vector.
+ Weight pruning:
+ 1. Set a threshold or pruning ratio to determine the weights that need to be pruned.
+ 2. Sort the weights based on their L1 norms and select the weights with smaller L1 norms for pruning.
+ 3. Set the selected weights to zero to achieve pruning of network connections.
+ Model fine-tuning: Fine-tune the pruned model to recover or enhance model performance. You can continue training the pruned model with the optimizer used in previous training.
+Please provide the following:
+ - Complete PyTorch code implementation, including model definition, training process, L1 norm calculation, weight pruning, and model fine-tuning.
+ - Comments in the code should clearly explain the purpose and implementation of each step.",N,"""Please use PyTorch to build a neural network model and complete the following tasks:
+
+1. **Model definition**: Define a neural network structure using PyTorch's nn.Module class.  
+**Output**: Provide the complete PyTorch code in a file named """"model_definition.py"""".  
+
+2. **Model training**: Train the network model with your training dataset (input: """"train.csv"" and ""test.csv""""). Choose an appropriate optimizer (such as SGD, Adam, etc.) to update the network parameters.  
+**Output**: Save the trained model weights to a file named """"trained_model.pth"""".  
+
+3. **Calculate L1 norm**: After training, calculate the L1 norm of each weight in the network. This is the sum of the absolute values of the elements in the weight vector.  
+**Output**: Save the L1 norms in a CSV file named """"l1_norms.csv"""".  
+
+4. **Weight pruning**:  
+1. Set a threshold or pruning ratio to determine the weights that need to be pruned.  
+2. Sort the weights based on their L1 norms and select the weights with smaller L1 norms for pruning.  
+3. Set the selected weights to zero to achieve pruning of network connections.  
+**Output**: Save the pruned model weights in a file named """"pruned_model.pth"""".
+
+5. **Model fine-tuning**: Fine-tune the pruned model to recover or enhance model performance. You can continue training the pruned model with the optimizer used in previous training.  
+**Output**: Save the fine-tuned model weights to a file named """"fine_tuned_model.pth"""".  
+
+Please provide the following:
+- Complete Python code implementation, including model definition, training process, L1 norm calculation, weight pruning, and model fine-tuning, all integrated within """"model_definition.py"""".
+- Comments in the code should clearly explain the purpose and implementation of each step.""",3=human written data,
+16,"Implement a function for the kmeans clustering algorithm that accepts the following parameters:
+- Two lists: representing the x and y coordinates of the population, respectively (input: ""data.csv"").
+- A list containing six floating-point numbers: representing the x and y coordinates of three points (two numbers per pair).
+
+The tasks of the function are as follows:
+1. Use these three points as the initial clustering centers to perform kmeans clustering on the population.
+   - Output: Clustering results saved in ""clustering_results.csv"" with six lists (three clusters, each containing x and y coordinates).
+   
+2. Divide the clustering results into six lists, each storing the x and y coordinates of points in the three categories.
+   - Output: Six lists saved in ""grouped_coordinates.csv"" in CSV format. Each list corresponds to one of the clusters.
+
+3. Use data visualization techniques to plot a scatter plot, where points from different categories are represented with different shapes and colors.
+   - Output: Scatter plot saved as ""scatter_plot.png"".
+
+Please provide the following:
+- The code for the function that implements the kmeans algorithm, ensuring it includes necessary comments to explain the algorithm steps.
+- The code for plotting the scatter plot, including comments to elucidate the visualization process.","distance,visualization","Implement a function for the kmeans clustering algorithm that accepts the following parameters:
+ - Two lists: representing the x and y coordinates of the population, respectively.
+ - A list containing six floating-point numbers: representing the x and y coordinates of three points (two numbers per pair).
+The tasks of the function are as follows:
+ 1. Use these three points as the initial clustering centers to perform kmeans clustering on the population.
+ 2. Divide the clustering results into six lists, each storing the x and y coordinates of points in the three categories.
+ 3. Use data visualization techniques to plot a scatter plot, where points from different categories are represented with different shapes and colors.
+Please provide the following:
+ - The code for the function that implements the kmeans algorithm.
+ - The code for plotting the scatter plot.
+ - Ensure that the code includes necessary comments to explain the algorithm steps and the visualization process.",Y,,3=human written data,
+17,"Build a deep learning model that can accept barcode images as input and predict the number of bars and blanks (num) as well as the sequence of bar-to-blank ratio widths (widthSequence). Here are the specific requirements:
+
+1. Input: Barcode images (input filename: ""barcode_images.zip""), the number of bars and blanks (num).
+2. Output: The bar-to-blank ratio width sequence (widthSequence), to be regarded as continuous values for regression prediction (output filename: ""width_sequence.csv"").
+3. Example of dataset label format: `<barcode> <num>13</num> <widthSequence>1:1:1:3:1:2:2:1:3:1:1:1:4</widthSequence> </barcode>`
+
+Please complete the following tasks:
+
+- Choose an appropriate deep learning model architecture.  
+   **Output Format:** Text explanation (output filename: ""model_architecture.txt"").
+
+- Explain in detail how to design the model to output the bar-to-blank ratio sequence.  
+   **Output Format:** Text explanation (output filename: ""model_design_explanation.txt"").
+
+- Provide the model code implemented using PyTorch.  
+   **Output Format:** Python code (output filename: ""model_code.py"").","data quality,feature importance","Build a deep learning model that can accept barcode images as input and predict the number of bars and blanks (num) as well as the sequence of bar-to-blank ratio widths (widthSequence). Here are the specific requirements:
+ 1. Input: Barcode images, the number of bars and blanks (num).
+ 2. Output: The bar-to-blank ratio width sequence (widthSequence), to be regarded as continuous values for regression prediction.
+ 3. Example of dataset label format: <barcode> <num>13</num> <widthSequence>1:1:1:3:1:2:2:1:3:1:1:1:4</widthSequence> </barcode>
+Please complete the following tasks:
+ - Choose an appropriate deep learning model architecture.
+ - Explain in detail how to design the model to output the bar-to-blank ratio sequence.
+ - Provide the model code implemented using PyTorch.",Y,,4=not sure,需要条形码图片数目，舍弃该prompt
+18,"Complete an image generation task using Generative Adversarial Networks (GAN) to produce realistic images. Here are the recommended steps to implement this task, along with input and output requirements:
+
+1. **Prepare the dataset**: 
+   - Input: Use ""data.csv"" which contains paths to images for preprocessing and data loading.
+   - Output: Save the preprocessed dataset to ""preprocessed_data.csv"".
+
+2. **Build the generator model**: 
+   - Output: Export the generator model architecture to ""generator_model.json"".
+
+3. **Build the discriminator model**: 
+   - Output: Export the discriminator model architecture to ""discriminator_model.json"".
+
+4. **Define the loss function**: 
+   - Output: Save the chosen loss function details in ""loss_function.txt"".
+
+5. **Train the model**: 
+   - Output: Save the training progress and metrics in ""training_progress.csv"".
+
+6. **Evaluate the model**: 
+   - Output: Save evaluation metrics related to image quality and diversity to ""evaluation_metrics.csv"".
+
+7. **Adjust and improve**: 
+   - Output: Document adjustments and improvements made during tuning in ""model_improvements.txt"".
+
+8. **Generate images**: 
+   - Input: Use the trained generator model from the previous steps.
+   - Output: Save generated images in ""generated_images.png"" (or multiple images as needed).
+
+Please complete the following based on the steps above:
+- Implement the Python code for the steps mentioned above.
+- Ensure that the code includes necessary comments explaining the model design and training process.","data format,data quality,feature importance,Model performance
+","Complete an image generation task using Generative Adversarial Networks (GAN) to produce realistic images. Here are the recommended steps to implement this task:
+ 1. Prepare the dataset: Select a specific type of image dataset (such as faces, animals, or natural scene images), and perform necessary preprocessing and data loading.
+ 2. Build the generator model: Design and implement a generator model that can produce realistic image samples. You can use Convolutional Neural Networks (CNN) or transpose convolution layers.
+ 3. Build the discriminator model: Design and implement a discriminator model that can distinguish between real images and generated fake images. CNNs can be used again for this purpose.
+ 4. Define the loss function: Choose appropriate loss functions for both the generator and discriminator, such as cross-entropy loss or Wasserstein distance.
+ 5. Train the model: Alternately train the generator and discriminator to improve their performance.
+ 6. Evaluate the model: Use evaluation metrics (like the quality and diversity of the generated images) to assess the model's performance.
+ 7. Adjust and improve: Tune the model architecture, hyperparameters, or training strategies based on the evaluation results.
+ 8. Generate images: Use the trained generator model to produce new image samples.
+Please complete the following based on the steps above:
+ - Implement the Python code for the steps mentioned above.
+ - Ensure that the code includes necessary comments explaining the model design and training process.",N,"Complete an image generation task using Generative Adversarial Networks (GAN) to produce realistic images. Here are the recommended steps to implement this task, along with input and output requirements:
+
+1. **Prepare the dataset**: 
+   - Input: Image files in cats directory.
+
+2. **Build the generator model**: 
+   - Output: Export the generator model architecture to ""generator_model.json"".
+
+3. **Build the discriminator model**: 
+   - Output: Export the discriminator model architecture to ""discriminator_model.json"".
+
+4. **Define the loss function**: 
+   - Output: Save the chosen loss function details in ""loss_function.txt"".
+
+5. **Train the model**: 
+   - Output: Save the training progress and metrics in ""training_progress.csv"".
+
+6. **Evaluate the model**: 
+   - Output: Save evaluation metrics related to image quality and diversity to ""evaluation_metrics.csv"".
+
+7. **Adjust and improve**: 
+   - Output: Document adjustments and improvements made during tuning in ""model_improvements.txt"".
+
+8. **Generate images**: 
+   - Input: Use the trained generator model from the previous steps.
+   - Output: Save generated images in ""generated_images.png"" (or multiple images as needed).
+
+Please complete the following based on the steps above:
+- Implement the Python code for the steps mentioned above.
+- Ensure that the code includes necessary comments explaining the model design and training process.",2=open source data,
+19,"Please perform data preprocessing on the facial image files in the 'profile_images1' directory, and save the processed images to the 'processed_images' folder. The specific preprocessing steps include:
+
+1. **Image Resizing:**
+   - **Input File:** 'profile_images1/*.jpg'
+   - **Output Format:** Image
+   - **Output Filename:** 'resized_image_{index}.jpg'
+
+2. **Image Normalization:**
+   - **Input File:** 'profile_images1/*.jpg'
+   - **Output Format:** Image
+   - **Output Filename:** 'normalized_image_{index}.jpg'
+
+3. **Image Data Augmentation:**
+   - **Input File:** 'profile_images1/*.jpg'
+   - **Output Format:** Image
+   - **Output Filename:** 'augmented_image_{index}.jpg'
+
+After preprocessing is completed, please save all processed images to the 'processed_images' folder.","data format,data quality,feature integrity","Please perform data preprocessing on the facial image files in the '/dataset/profile_images1' directory, and save the processed images to the specified folder. The specific preprocessing steps include:\n1. Image resizing: Resize the images to the same appropriate size to improve the training speed of the model.\n2. Image normalization: Normalize the pixel values of the images to between 0 and 1 to enhance the training effect of the model.\n3. Image data augmentation: Apply data augmentation to the images, such as rotation, flipping, cropping, etc., to improve the generalization ability of the model.\nAfter preprocessing is completed, please save the processed images to the '/output/processed_images' folder.",N,"""Please perform data preprocessing on the facial image files in the 'profile_images1' directory, and save the processed images to the 'processed_images' folder. The specific preprocessing steps include:
+
+1. **Image Resizing:**
+- **Input File:** pgm files in 'profile_images1/s{index}'(index from 1 to 40) directory.
+- **Output Filename:** 'resized_image_{original_name}.jpg'
+
+2. **Image Normalization:**
+- **Input File:** pgm files in 'profile_images1/s{index}'(index from 1 to 40) directory.
+- **Output Filename:** 'normalized_image_{original_name}.jpg'
+
+3. **Image Data Augmentation:**
+- **Input File:** pgm files in 'profile_images1/s{index}'(index from 1 to 40) directory.
+- **Output Filename:** 'augmented_image_{original_name}.jpg'
+
+After preprocessing is completed, please save all processed images to the 'processed_images' folder.""
+Please complete the Python code for the steps mentioned above.",2=open source data,
+20,"We provide a set of real-time photovoltaic power measurement time series data, recorded at 15-minute intervals, covering a period of 3 months. 
+
+1. **Input File**: Use the raw data from the file `solar_power_data.csv`, which includes two columns: 'Time_Forecast' (time) and 'Power_Active' (power).  
+   **Output**: Implement a Generative Adversarial Network (GAN) with a DCGAN architecture. Save your code in `code.py` and place it in the `./output/` directory.
+
+2. **Output File**: After running the provided code, save your prediction results in a CSV format titled `predicted_power_data.csv` in the `./output/` directory. The predicted results should include timestamps for every 15 minutes in the next 3 days along with their corresponding predicted power values.
+
+Ensure that the output files allow for further evaluation of the model's performance and the code is executable.","data format，Model performance，feature integrity
+","We provide a set of real-time photovoltaic power measurement time series data, recorded at 15-minute intervals, covering a period of 3 months. Please use machine learning or deep learning techniques to predict the power data for every 15 minutes in the next 3 days. The raw data includes two columns: 'Time_Forecast' (time) and 'Power_Active' (power). Please employ a Generative Adversarial Network (GAN), where both the generator and the discriminator use the DCGAN architecture, and provide the corresponding code. Run the code you provide to obtain the prediction results. The dataset path is `./datasets/solar_power_data.csv`. Please save your code to the `./output/code` directory and save the prediction results to `./output/predicted_power_data.csv`.",N,"""We provide a set of real-time photovoltaic power measurement time series data, recorded at 15-minute intervals, covering a period of 3 months. 
+
+1. **Input File**: Use the raw data from the file `solar_power_data.csv`, which includes two columns: 'Time_Forecast' (time) and 'Power_Active' (power).  
+**Output**: Implement a Generative Adversarial Network (GAN) with a DCGAN architecture. Save your code in `code.py`.
+
+2. **Output File**: After running the provided code, save your prediction results in a CSV format titled `predicted_power_data.csv` . The predicted results should include timestamps for every 15 minutes in the next 3 days along with their corresponding predicted power values.
+
+Ensure that the output files allow for further evaluation of the model's performance and the code is executable.""",3=human written data,
+21,"Please write a complete code process to perform a Numpy analysis of the Iris dataset, ensuring that the feature engineering and model building parts include visualization. Here are the detailed steps with input and output specifications:
+
+1. **Data Reading and Cleaning**
+   - **Input:** Read the dataset located at `iris.data`.
+   - **Output:** Save the cleaned dataset as `cleaned_iris.csv` after removing unnecessary spaces and correcting data formats.
+
+2. **Data Preprocessing**
+   - **Input:** Use the `cleaned_iris.csv` file.
+   - **Output:** Save the preprocessed data (after handling outliers, missing values, and duplicates) as `preprocessed_iris.csv`.
+
+3. **Feature Engineering and Metric Selection**
+   - **Input:** Use the `preprocessed_iris.csv` file.
+   - **Output:** Save the correlation matrix visualization as `correlation_matrix.png` and the selected features for model building as `selected_features.csv`. 
+
+4. **Model Building**
+   - **Input:** Use the `selected_features.csv` file.
+   - **Output:** Save the visualization of the model building process as `model_building_process.png`.
+
+5. **Model Prediction and Analysis**
+   - **Input:** Use the trained model and `selected_features.csv` for making predictions.
+   - **Output:** Save the analysis results, including accuracy and confusion matrix visualizations, in `iris_analysis_report.pdf`. Save additional charts as `predictions_visualization.png`.
+
+Please include necessary comments in the code to ensure that each step is clear and easy for subsequent automation and result auditing.","Data quality,data consistency,feature integrity,visualization,statistics","Please write a complete code process to perform a Numpy analysis of the Iris dataset, ensuring that the feature engineering and model building parts include visualization. Here are the detailed steps:
+ 1. Data Reading and Cleaning
+ - Read the dataset located at `/datasets/iris/iris.data`.
+ - Observe the data structure and read the necessary data fields.
+ - Perform simple data cleaning, such as removing unnecessary spaces and correcting data formats.
+ 2. Data Preprocessing
+ - Check and handle outliers, missing values, and delete duplicate data.
+ 3. Feature Engineering and Metric Selection
+ - Study the relationships between feature data, which can be displayed using correlation matrices or scatter plots.
+ - Based on feature importance, decide which features to select as metrics for model building and visualize the feature selection process.
+ 4. Model Building
+ - Use the selected metrics from the previous step to build a predictive model. If the model has trainable parameters, train the model; if not, use it directly.
+ - Visualize the process of model building.
+ 5. Model Prediction and Analysis
+ - Use the built model to make predictions on the data.
+ - Analyze the prediction results, including accuracy, confusion matrix, and visualization of the results.
+ - Save the analysis results to the path `/results/iris_analysis/`, including charts and statistical reports.
+Please include necessary comments in the code to ensure that each step is clear and easy for subsequent automation and result auditing.",N,"""Please write a complete code process to perform a Numpy analysis of the Iris dataset, ensuring that the feature engineering and model building parts include visualization. Here are the detailed steps with input and output specifications:
+
+1. **Data Reading and Cleaning**
+- **Input:** Read the dataset located at `iris.csv`.
+- **Output:** Save the cleaned dataset as `cleaned_iris.csv` after removing unnecessary spaces and correcting data formats.
+
+2. **Data Preprocessing**
+- **Input:** Use the `cleaned_iris.csv` file.
+- **Output:** Save the preprocessed data (after handling outliers, missing values, and duplicates) as `preprocessed_iris.csv`.
+
+3. **Feature Engineering and Metric Selection**
+- **Input:** Use the `preprocessed_iris.csv` file.
+- **Output:** Save the correlation matrix visualization as `correlation_matrix.png` and the selected features for model building as `selected_features.csv`. 
+
+4. **Model Building**
+- **Input:** Use the `selected_features.csv` file.
+- **Output:** Save the visualization of the model building process as `model_building_process.png`.
+
+5. **Model Prediction and Analysis**
+- **Input:** Use the trained model and `selected_features.csv` for making predictions.
+- **Output:** Save the analysis results, including accuracy and confusion matrix visualizations, in `iris_analysis_report.pdf`. Save additional charts as `predictions_visualization.png`.
+
+Please include necessary comments in the code to ensure that each step is clear and easy for subsequent automation and result auditing.""",2=open source data,
+22,"Please design and implement a movie recommendation system based on online user preferences with the following subtasks:
+
+1. **Data Integration**
+   - **Input:** title.basics.tsv, title.principals.tsv, title.ratings.tsv
+   - **Output:** consolidated_data.csv
+   - **Description:** Merge the datasets to create a consolidated dataset that includes relevant movie and user information.
+
+2. **Feature Engineering**
+   - **Input:** consolidated_data.csv
+   - **Output:** features.csv
+   - **Description:** Perform feature engineering for movies (e.g., genre, release year), users (e.g., viewing history, rating preferences), and context (e.g., viewing time, device type) to extract meaningful features.
+
+3. **Feature Fusion and Selection**
+   - **Input:** features.csv
+   - **Output:** selected_features.csv
+   - **Description:** Apply feature fusion and selection techniques to retain the most representative and predictive features for the recommendation model.
+
+4. **Model Optimization**
+   - **Input:** selected_features.csv
+   - **Output:** optimized_model.pkl
+   - **Description:** Optimize the selected features to enhance the model's performance, saving the trained model for future use.
+
+5. **Recommendation System Implementation**
+   - **Input:** optimized_model.pkl, selected_features.csv
+   - **Output:** recommendations.csv
+   - **Description:** Use the optimized model and features to generate movie recommendations based on user preferences, outputting the results in a structured format.
+
+Ensure that the entire process is detailed, comprehensive, and complete, and all outputs allow for further evaluation of each subtask.","feature integrity,feature importance,data quality","Please design and implement a movie recommendation system based on online user preferences. First, perform data integration using the title.basics.tsv, title.principals.tsv, and title.ratings.tsv datasets to consolidate movie and user data. Next, conduct feature engineering, including movie feature engineering (such as genre, release year, etc.), user feature engineering (such as viewing history, rating preferences, etc.), and context feature engineering (such as viewing time, device type, etc.). After that, proceed with feature fusion and selection to ensure the most representative and predictive features are chosen. Then, optimize and adjust the features to enhance the model's performance. Write code in Python within the PyCharm environment, using theoretical methods such as collaborative filtering algorithms, content-based recommendation algorithms, and deep learning to implement the recommendation system. Ensure that the entire process is detailed, comprehensive, and complete.",Y,,2=open source data,
+23,"Please process and analyze the iris data according to the following requirements and save the results. Ensure that the file paths are normalized, with the dataset path set to 'iris.csv' and the data analysis results saved to the specified output formats. 
+
+1. Data cleaning: 
+   - Input: 'iris.csv' (iris dataset)
+   - Output: 'X.csv' (cleaned dataset with species mean values)
+
+2. Data sampling: 
+   - Input: 'X.csv' (cleaned dataset)
+   - Output: 'X_sub.csv' (subset containing 90 samples, 30 from each flower category)
+
+3. Data transformation: 
+   - Input: 'X_sub.csv' (subset of data)
+   - Output: 'X_sub_norm.csv' (standardized dataset after z-score normalization)
+
+4. Correlation analysis: 
+   - Input: 'X_sub_norm.csv' (standardized dataset)
+   - Output: 'covariance_matrix.csv' (covariance matrix between attributes)
+
+5. Dimensionality reduction: 
+   5.1 PCA analysis: 
+   - Input: 'X_sub_norm.csv' (standardized dataset)
+   - Output: 'pca_variance_histogram.png' (histogram of the variance contribution of the principal components)
+
+   5.2 PCA dimensionality reduction: 
+   - Input: 'X_sub_norm.csv' (standardized dataset)
+   - Output: 'X_sub_norm_3d.csv' (dataset reduced to 3 dimensions)
+
+   5.3 3D scatter plot drawing: 
+   - Input: 'X_sub_norm_3d.csv' (3D reduced dataset)
+   - Output: '3d_scatter_plot.png' (3D scatter plot with color categorization)
+
+6. Data recovery: 
+   - Input: 'X_sub_norm_3d.csv' (3D reduced dataset)
+   - Output: 'recovery_loss.txt' (calculated relative loss using the inverse transformation formula)","data quality,data format,statistics,visualization,distance","Please process and analyze the iris data according to the following requirements and save the results. Ensure that the file paths are normalized, with the dataset path set to '/datasets/iris/iris.xlsx' and the data analysis results saved to '/results/iris_analysis/'. \n1. Data cleaning: For the iris dataset located at '/datasets/iris/iris.xlsx', replace the default values of a species with the mean value of that species attribute, obtaining a cleaned dataset named 'X'.\n2. Data sampling: Perform stratified random sampling on dataset 'X' by flower category, extracting 30 samples for each type of flower, creating a subset of 90 samples named 'X_sub', and save the result to '/results/iris_analysis/X_sub.csv'. \n3. Data transformation: Apply z-score normalization to dataset 'X_sub' to standardize it, obtaining a standardized dataset named 'X_sub_norm' and save the result to '/results/iris_analysis/X_sub_norm.csv'. \n4. Correlation analysis: Calculate the covariance matrix between attributes of dataset 'X_sub_norm', analyze the correlation between attributes, and save the result to '/results/iris_analysis/covariance_matrix.csv'. \n5. Dimensionality reduction: \n5.1 PCA analysis: Perform PCA analysis on dataset 'X_sub_norm', obtain the variance contribution of the four principal components, and plot a histogram saved to '/results/iris_analysis/pca_variance_histogram.png'. \n5.2 PCA dimensionality reduction: Train a PCA dimensionality reduction model using dataset 'X_sub_norm', reduce the dimensionality of the entire dataset to 3 dimensions, obtaining the reduced dataset named 'X_sub_norm_3d', and save the result to '/results/iris_analysis/X_sub_norm_3d.csv'. \n5.3 3D scatter plot drawing: Use the matplotlib library to draw a 3D scatter plot of the reduced dataset 'X_sub_norm_3d', with different categories of data represented by different colors, and save the graph to '/results/iris_analysis/3d_scatter_plot.png'. \n6. Data recovery: Use PCA inverse transformation to recover the reduced dataset 'X_sub_norm_3d' to its original dimensionality, naming it 'X_recovered', calculate the relative loss caused by the dimensionality reduction process, with the formula '||recovered data - original data|| / ||original data||', and save the calculation result to '/results/iris_analysis/recovery_loss.txt'.",N,"Please process and analyze the iris data according to the following requirements and save the results. Ensure that the file paths are normalized, with the dataset path set to 'iris.csv' and the data analysis results saved to the specified output formats. 
+
+1. Data cleaning: 
+   - Input: 'iris.csv' (iris dataset)
+   - Output: 'X.csv' (cleaned dataset with species mean values)
+
+2. Data sampling: 
+   - Input: 'X.csv' (cleaned dataset)
+   - Output: 'X_sub.csv' (subset containing 90 samples, 30 from each flower category)
+
+3. Data transformation: 
+   - Input: 'X_sub.csv' (subset of data)
+   - Output: 'X_sub_norm.csv' (standardized dataset after z-score normalization)
+
+4. Correlation analysis: 
+   - Input: 'X_sub_norm.csv' (standardized dataset)
+   - Output: 'covariance_matrix.csv' (covariance matrix between attributes)
+
+5. Dimensionality reduction: 
+   5.1 PCA analysis: 
+   - Input: 'X_sub_norm.csv' (standardized dataset)
+   - Output: 'pca_variance_histogram.png' (histogram of the variance contribution of the principal components)
+
+   5.2 PCA dimensionality reduction: 
+   - Input: 'X_sub_norm.csv' (standardized dataset)
+   - Output: 'X_sub_norm_3d.csv' (dataset reduced to 3 dimensions)
+
+   5.3 3D scatter plot drawing: 
+   - Input: 'X_sub_norm_3d.csv' (3D reduced dataset)
+   - Output: '3d_scatter_plot.png' (3D scatter plot with color categorization)
+
+6. Data recovery: 
+   - Input: 'X_sub_norm_3d.csv' (3D reduced dataset)
+   - Output: 'recovery_loss.txt' (calculated relative loss using the inverse transformation formula)",2=open source data,input output用相对路径好点
+24,"Develop a deep learning-based facial recognition system and investigate two different algorithms: a facial recognition algorithm based on deep autoencoders and a facial recognition algorithm based on deep convolutional neural networks (CNN). The system should include the following steps:
+
+1. **Facial preprocessing**  
+   - **Input**: ""data.csv"" (containing raw facial images).  
+   - **Output**: ""preprocessed_images.csv"" (listing standardized and preprocessed image file paths).  
+
+2. **Feature learning**  
+   - **Input**: ""preprocessed_images.csv"".  
+   - **Output**: ""features_cnn.csv"" (containing extracted features from facial images using CNN).  
+
+3. **Feature comparison**  
+   - **Input**: ""features_cnn.csv"".  
+   - **Output**: ""facial_recognition_results.csv"" (containing recognition results with matching pairs and confidence scores).  
+
+Ensure that the technical details of the entire process are complete, including data preparation, model training, testing, and evaluation aspects.  
+
+Dataset path: /datasets/facial_recognition  
+Final results path: /results/facial_recognition  ","data quality,model performance,feature importance","Develop a deep learning-based facial recognition system and investigate two different algorithms: a facial recognition algorithm based on deep autoencoders and a facial recognition algorithm based on deep convolutional neural networks (CNN). The system should include the following steps:
+ 1. Facial preprocessing: Standardize and preprocess the input facial images to improve recognition accuracy.
+ 2. Feature learning: Use deep convolutional neural networks (CNN) to extract and learn features from facial images. This step is crucial for facial recognition.
+ 3. Feature comparison: Compare the extracted features to achieve facial matching and recognition.
+Ensure that the technical details of the entire process are complete, including data preparation, model training, testing, and evaluation aspects.
+Dataset path: /datasets/facial_recognition
+Final results path: /results/facial_recognition",N,"""Develop a deep learning-based facial recognition system and investigate two different algorithms: a facial recognition algorithm based on deep autoencoders and a facial recognition algorithm based on deep convolutional neural networks (CNN). The system should include the following steps:
+
+1. **Facial preprocessing**  
+- **Input**: """"att_faces"""" (each sub directory in att_faces directory has several pgm files of one same person).  
+- **Output**: """"preprocessed_images.csv"""" (listing standardized and preprocessed image file paths).  
+
+2. **Feature learning**  
+- **Input**: """"preprocessed_images.csv"""".  
+- **Output**: """"features_cnn.csv"""" (containing extracted features from facial images using CNN).  
+
+3. **Feature comparison**  
+- **Input**: """"features_cnn.csv"""".  
+- **Output**: """"facial_recognition_results.csv"""" (containing recognition results with matching pairs and confidence scores).  
+
+Please provide the complete python code implementation clearly structured with comprehensive comments for understanding and evaluation.",2=open source data,
+25,"I have a Big Lotto historical winning number data CSV file and want to create a software based on this data to predict the winning numbers for the next draw. I hope to use Python tools for development. The specific requirements are as follows:
+
+1. Data Import and Cleaning:
+    - Import the historical winning number data from ""lotto_data.csv"", clean and normalize the data to avoid reading errors.
+    - Output cleaned data to ""cleaned_data.csv"".
+
+2. Data Processing and Node Combination:
+    - Consider each winning number as a node and combine all nodes in an orderly manner (combine the front area and the back area separately).
+    - Each combination should include: a number and the corresponding draw date (with the date as a note).
+    - Store the combined data in ""combinations_2_nodes.csv"", ""combinations_3_nodes.csv"", etc., based on the number of nodes.
+
+3. Data Visualization:
+    - Visualize the node combination data to create graphs.
+    - The graph should connect nodes by position, with the X-axis as the number node and the Y-axis as the draw date. The front area includes numbers 1-35, and the back area includes numbers 1-12.
+    - Store the generated association graphs in ""graphs/2_node_graph.png"", ""graphs/3_node_graph.png"", etc., classified by the number of nodes.
+
+4. Data Screening and Deduplication:
+    - Screen all data and associated graphs, remove duplicates, and keep only one sample.
+    - Output the deduplicated data to ""deduplicated_data.csv"".
+
+5. Prediction Model Construction:
+    - Use the backpropagation method to learn and predict using the new issue number as the label and the node association graph as the feature.
+    - Set up an entry for a new winning number, clean, combine, and screen it, then add it to the basic data and graphs as new learning data.
+    - Continuously input new data for learning to improve the accuracy of predicting the next draw and output the updated learning dataset to ""updated_learning_data.csv"".
+
+Dataset path: /datasets/lottery_numbers  
+Final result path: /results/lottery_predictions","data quality,visualization,model performance","I have a Big Lotto historical winning number data CSV file and want to create a software based on this data to predict the winning numbers for the next draw. I hope to use Python tools for development. The specific requirements are as follows:
+ 1. Data Import and Cleaning:
+ - Import the historical winning number data and clean and normalize the data to avoid reading errors.
+ - Enter the cleaned data into the program.
+ 2. Data Processing and Node Combination:
+ - Consider each winning number as a node and combine all nodes in an orderly manner (combine the front area and the back area separately).
+ - Each combination should include: a number and the corresponding draw date (with the date as a note).
+ - Store the combined data in different folders based on the number of nodes (for example, combinations of 2 nodes in one folder, combinations of 3 nodes in another folder, and so on).
+ 3. Data Visualization:
+ - Visualize the node combination data to create graphs.
+ - The graph should connect nodes by position, with the X-axis as the number node and the Y-axis as the draw date. The front area includes numbers 1-35, and the back area includes numbers 1-12.
+ - Store the generated association graphs in folders classified by the number of nodes (for example, the connection graph of 2 nodes in one folder, and the polygon graph of 3 or more nodes in another folder).
+ 4. Data Screening and Deduplication:
+ - Screen all data and associated graphs, remove duplicates, and keep only one sample.
+ 5. Prediction Model Construction:
+ - Use the backpropagation method to learn and predict using the new issue number as the label and the node association graph as the feature.
+ - Set up an entry for a new winning number, clean, combine, and screen it, then add it to the basic data and graphs as new learning data.
+ - Continuously input new data for learning to improve the accuracy of predicting the next draw.
+Dataset path: /datasets/lottery_numbers
+Final result path: /results/lottery_predictions",N,"""I have a Big Lotto historical winning number data CSV file and want to create a software based on this data to predict the winning numbers for the next draw. I hope to use Python tools for development. The specific requirements are as follows:
+
+1. Data Import and Cleaning:
+- Import the historical winning number data from """"lotto_data.csv"""", clean and normalize the data to avoid reading errors.
+- Output cleaned data to """"cleaned_data.csv"""".
+
+2. Data Processing and Node Combination:
+- Consider each winning number as a node and combine all nodes in an orderly manner (combine the front area and the back area separately).
+- Each combination should include: a number and the corresponding draw date (with the date as a note).
+- Store the combined data in """"combinations_2_nodes.csv"""", """"combinations_3_nodes.csv"""", etc., based on the number of nodes.
+
+3. Data Visualization:
+- Visualize the node combination data to create graphs.
+- The graph should connect nodes by position, with the X-axis as the number node and the Y-axis as the draw date. The front area includes numbers 1-35, and the back area includes numbers 1-12.
+- Store the generated association graphs in """"graphs/2_node_graph.png"""", """"graphs/3_node_graph.png"""", etc., classified by the number of nodes.
+
+4. Data Screening and Deduplication:
+- Screen all data and associated graphs, remove duplicates, and keep only one sample.
+- Output the deduplicated data to """"deduplicated_data.csv"""".
+
+5. Prediction Model Construction:
+- Use the backpropagation method to learn and predict using the new issue number as the label and the node association graph as the feature.
+- Set up an entry for a new winning number, clean, combine, and screen it, then add it to the basic data and graphs as new learning data.
+- Continuously input new data for learning to improve the accuracy of predicting the next draw and output the updated learning dataset to """"updated_learning_data.csv"""".
+
+Please provide the complete python code implementation clearly structured with comprehensive comments for understanding and evaluation.",3=human written data,
+26,"Write code for a BP neural network with an additional momentum term and adaptive learning rate adjustment for facial recognition. The specific requirements are as follows:
+
+1. **Data Paths**:
+    - Input: 
+        - Training set path: `/datasets/facial_recognition/train` (contains .pgm facial images)
+        - Test set path: `/datasets/facial_recognition/test` (contains .pgm facial images)
+
+2. **Preprocessing Stage**:
+    - Subtask: Grayscale and normalization processing
+        - Output: `preprocessed_images.csv` (A CSV file with paths to the preprocessed images)
+    - Subtask: Use PCA and SVD for feature extraction, retaining 20% of the principal components
+        - Input: `preprocessed_images.csv`
+        - Output: `features.csv` (A CSV file containing the extracted features)
+    - Subtask: Calculate the covariance matrix
+        - Input: `features.csv`
+        - Output: `covariance_matrix.csv` (A CSV file containing the covariance matrix)
+
+3. **BP Neural Network Architecture Design**:
+    - Subtask: Implement the BP neural network with specified architecture and parameters
+        - Input: `features.csv`, `covariance_matrix.csv`
+        - Output: `training_results.pdf` (A PDF file containing training performance metrics and plots)
+
+4. **Runtime Display**:
+    - Subtask: Ensure the total runtime is displayed while the code is running
+        - Output: `runtime_log.txt` (A text file logging the runtime of the process)
+
+5. **Chinese Comments**:
+    - Each line of code should include Chinese comments for clarity.
+
+Final result path:
+- Output final results will be saved to `/results/facial_recognition` which includes all output files as specified above.","data format, data quality, feature integrity,support","Write code for a BP neural network with additional momentum term and adaptive learning rate adjustment for facial recognition. The specific requirements are as follows:
+ 1. Data paths:
+ - The training set and test set paths are both folders, and the format of the facial images read is .pgm.
+ 2. Preprocessing stage:
+ - Include grayscale and normalization processing.
+ - Use PCA and SVD theorems for feature extraction, retaining 20% of the principal components.
+ - Calculate the covariance matrix.
+ 3. BP neural network architecture design:
+ - The number of nodes in the input layer is 20.
+ - The number of nodes in the hidden layer is 30.
+ - The number of nodes in the output layer is 40.
+ - The number of iterations is 1000.
+ - Add momentum term and adaptive adjustment of learning rate.
+ 4. Runtime display:
+ - The total runtime must be displayed while the code is running.
+ 5. Chinese comments:
+ - Each line of code should include Chinese comments.
+Dataset paths:
+ - Training set path: /datasets/facial_recognition/train
+ - Test set path: /datasets/facial_recognition/test
+Final result path:
+ - Result path: /results/facial_recognition",N,"""Write code for a BP neural network with an additional momentum term and adaptive learning rate adjustment for facial recognition. The specific requirements are as follows:
+
+1. **Data Paths**:
+- Input: 
+- Dataset path: `att_faces` (each sub directory in att_faces directory contains .pgm facial images from one same person)
+
+2. **Preprocessing Stage**:
+- Subtask: Grayscale and normalization processing
+- Output: `preprocessed_images.csv` (A CSV file with paths to the preprocessed images)
+- Subtask: Use PCA and SVD for feature extraction, retaining 20% of the principal components
+- Input: `preprocessed_images.csv`
+- Output: `features.csv` (A CSV file containing the extracted features)
+- Subtask: Calculate the covariance matrix
+- Input: `features.csv`
+- Output: `covariance_matrix.csv` (A CSV file containing the covariance matrix)
+
+3. **BP Neural Network Architecture Design**:
+- Subtask: Implement the BP neural network with specified architecture and parameters
+- Input: `features.csv`, `covariance_matrix.csv`
+- Output: `training_results.pdf` (A PDF file containing training performance metrics and plots)
+
+
+Final result path:
+- Output final results will be saved to `/results/facial_recognition` which includes all output files as specified above.""",2=open source data,
+27,"Design a minute-level futures quantitative backtesting framework. If you have obtained futures minute-level data, the data format is: datetime, open, high, low, close, volume, hold. Here is an example of the data:
+
+```
+2024/2/28 9:13, 5962, 5966, 5962, 5964, 1811, 981016
+```
+
+Perform the following subtasks related to data preprocessing, strategy development, backtesting, and result analysis:
+
+1. **Data Cleaning**
+   - **Input**: ""data.csv"" (minute-level futures data)
+   - **Output**: ""cleaned_data.csv"" (cleaned data after handling missing values and outliers)
+
+2. **Feature Engineering**
+   - **Input**: ""cleaned_data.csv""
+   - **Output**: ""features_data.csv"" (data with additional features for strategy development)
+
+3. **Strategy Development**
+   - **Input**: ""features_data.csv""
+   - **Output**: ""strategy_code.py"" (Python code implementing the trading strategy)
+
+4. **Backtesting**
+   - **Input**: ""features_data.csv"" and ""strategy_code.py""
+   - **Output**: ""backtest_results.csv"" (results of the backtesting including metrics such as total return, Sharpe ratio, etc.)
+
+5. **Result Analysis**
+   - **Input**: ""backtest_results.csv""
+   - **Output**: ""result_analysis.pdf"" (PDF containing detailed analysis of backtesting results, such as performance charts and key statistics)
+
+Please ensure that all outputs reflect the quality of task completion and allow for further evaluation.","data format, data quality","Design a minute-level futures quantitative backtesting framework. If you have obtained futures minute-level data, the data format is: datetime, open, high, low, close, volume, hold. Here is an example of the data:
+
+ ```
+ 2024/2/28 9:13, 5962, 5966, 5962, 5964, 1811, 981016
+ ```
+
+ What kind of data preprocessing is needed to apply it to modules such as strategy development, strategy backtesting, and result analysis? Please perform the data preprocessing and provide the code implementation.",Y,,3=human written data,
+28,"Generate the following code for dataset preprocessing. The original lung CT scan images in the dataset not only contain the lung parenchyma in the nodule detection area but also include other irrelevant tissue around the lungs. To save computing resources and improve detection efficiency, it is necessary to remove the irrelevant tissue using morphological image methods before detecting nodules. The processing of lung parenchyma includes the following steps:
+
+1. **Resampling**: All CT image voxels are to be resampled to 1 mm × 1 mm × 1 mm to eliminate differences between different CT images.  
+   - Input: *data.mhd* (input filename containing original CT images)  
+   - Output: *resampled_data.np* (output filename for resampled data in numpy format)
+
+2. **Thresholding**: Retain the Hounsfield Unit (HU) threshold of the CT image in the range of [-1200, 600]. Normalize the 8-bit digital image data to 0 to 255.  
+   - Input: *resampled_data.np*  
+   - Output: *thresholded_data.np* (output filename for thresholded data in numpy format)
+
+3. **Mask processing**: Dilate the corresponding CT image mask and set the data outside the mask to 170.  
+   - Input: *thresholded_data.np*  
+   - Output: *masked_data.np* (output filename for data after mask processing in numpy format)
+
+4. **Save results**: Obtain the processed lung parenchyma and save it in the form of a *.npy file.  
+   - Input: *masked_data.np*  
+   - Output: *lung_parenchyma_processed.npy* (output filename for the final processed lung parenchyma data in numpy format)
+
+An example of the change in CT images before and after lung parenchyma processing is shown in the reference figure. Please generate code to implement the above data preprocessing steps for files in mhd and raw formats located at: G:\\LUNA 2016\\subset\\subset0. Dataset path: /datasets/lung_ct. Preprocessed data path: /preprocessed_data/lung_ct.","data format,feature integrity,data quality,statistics","Generate the following code for dataset preprocessing. The original lung CT scan images in the dataset not only contain the lung parenchyma in the nodule detection area but also include other irrelevant tissue around the lungs. To save computing resources and improve detection efficiency, it is necessary to remove the irrelevant tissue using morphological image methods before detecting nodules. The processing of lung parenchyma includes the following steps:
+ 1. Resampling: Since the CT images used for model detection are obtained from different scanning instruments, all CT image voxels are resampled to 1 mm × 1 mm × 1 mm to eliminate differences between different CT images.
+ 2. Thresholding: According to the characteristics of CT scanning of human tissue, the Hounsfield Unit (HU) threshold of the CT image is retained in the range of [-1200, 600], and voxels outside this range are filled with -1200 or 600. Normalize the 8-bit digital image data to 0 to 255.
+ 3. Mask processing: Dilate the corresponding CT image mask, and after using the new mask on the CT image, set the data outside the mask to 170, indicating that the outside of the lung parenchyma is water.
+ 4. Save results: Obtain the processed lung parenchyma and save it in the form of a *.npy file.
+An example of the change in CT images before and after lung parenchyma processing is shown in Figure 1. In Figure 1, the first row is the original CT image, and the second row is the processed CT image. It can be seen that after a series of processing, the CT image removes the irrelevant areas and tissues outside the lung parenchyma, while enhancing the internal details of the lung parenchyma, making the CT image clearer and easier to detect.
+Please generate code to implement the above data preprocessing steps for files in mhd and raw formats. The file path is: G:\\LUNA 2016\\subset\\subset0.
+Dataset path: /datasets/lung_ct
+Preprocessed data path: /preprocessed_data/lung_ct",N,"Generate the following code for dataset preprocessing. The original lung CT scan images in the dataset not only contain the lung parenchyma in the nodule detection area but also include other irrelevant tissue around the lungs. To save computing resources and improve detection efficiency, it is necessary to remove the irrelevant tissue using morphological image methods before detecting nodules. The processing of lung parenchyma includes the following steps:
+
+1. **Resampling**: All CT image voxels are to be resampled to 1 mm × 1 mm × 1 mm to eliminate differences between different CT images.  
+- Input: *.mhd and .raw files in subset0* (input filename containing original CT images)  
+- Output: *resampled_data.np* (output filename for resampled data in numpy format)
+
+2. **Thresholding**: Retain the Hounsfield Unit (HU) threshold of the CT image in the range of [-1200, 600]. Normalize the 8-bit digital image data to 0 to 255.  
+- Input: *resampled_data.np*  
+- Output: *thresholded_data.np* (output filename for thresholded data in numpy format)
+
+3. **Mask processing**: Dilate the corresponding CT image mask and set the data outside the mask to 170.  
+- Input: *thresholded_data.np*  
+- Output: *masked_data.np* (output filename for data after mask processing in numpy format)
+
+4. **Save results**: Obtain the processed lung parenchyma and save it in the form of a *.npy file.  
+- Input: *masked_data.np*  
+- Output: *lung_parenchyma_processed.npy* (output filename for the final processed lung parenchyma data in numpy format)
+",2=open source data,
+29,"Perform data preprocessing using Python. The dataset contains detailed information about earthquake events, including fields such as event number, occurrence time, epicenter latitude, epicenter longitude, focal depth, and PGA (Peak Ground Acceleration) and PGV (Peak Ground Velocity) in various directions. The data example is as follows:
+ 
+ Event Number | Occurrence Time | Epicenter Latitude | Epicenter Longitude | Focal Depth | North-South PGA | Vertical PGA | East-West PGV | North-South PGV | Vertical PGV
+ 0 | 20240411025351 | 2024/4/11 2:53 | 41.99 | 82.54 | 13 | 44.115807 | 15.443830 | 0.421184 | 0.446715 | 0.391444
+ 1 | 20240411025351 | 2024/4/11 2:53 | 41.99 | 82.54 | 13 | 12.957160 | 4.473771 | 0.419080 | 0.461351 | 0.167867
+ 2 | 20240411025351 | 2024/4/11 2:53 | 41.99 | 82.54 | 13 | 1.717575 | 1.116228 | 0.080873 | 0.118283 | 0.060749
+ 3 | 20240411025351 | 2024/4/11 2:53 | 41.99 | 82.54 | 13 | 5.402580 | 3.334297 | 0.168636 | 0.134010 | 0.116516
+ 4 | 20240411025351 | 2024/4/11 2:53 | 41.99 | 82.54 | 13 | 2.755653 | 1.750937 | 0.200505 | 0.096464 | 0.137154
+
+The following steps need to be taken for data preprocessing:
+
+1. Data Import: Read the raw data file.
+   - **Input:** `earthquake_data.csv`
+   - **Output:** None (intermediate step)
+
+2. Handling Missing Values: Check for missing values in the data and handle them.
+   - **Input:** `earthquake_data.csv`
+   - **Output:** `missing_values_report.csv`
+
+3. Data Type Conversion: Convert the occurrence time to a standard datetime format.
+   - **Input:** `earthquake_data.csv`
+   - **Output:** `data_with_datetime.csv`
+
+4. Feature Extraction and Generation:
+   - Calculate the maximum PGA and PGV for each earthquake event.
+     - **Input:** `earthquake_data.csv`
+     - **Output:** `max_features.csv`
+   - Generate new feature columns, such as the average and standard deviation of PGA and PGV in different directions.
+     - **Input:** `earthquake_data.csv`
+     - **Output:** `derived_features.csv`
+
+5. Data Standardization: Standardize numerical data for subsequent analysis and modeling.
+   - **Input:** `earthquake_data.csv`
+   - **Output:** `standardized_data.csv`
+
+6. Data Saving: Save the preprocessed data as a new CSV file for ease of subsequent analysis.
+   - **Input:** `earthquake_data.csv`
+   - **Output:** `preprocessed_earthquake_data.csv`","data quality data consistency,feature importance,statistics","Perform data preprocessing using Python. The dataset contains detailed information about earthquake events, including fields such as event number, occurrence time, epicenter latitude, epicenter longitude, focal depth, and PGA (Peak Ground Acceleration) and PGV (Peak Ground Velocity) in various directions. The data example is as follows:
+ Event Number Occurrence Time Epicenter Latitude Epicenter Longitude Focal Depth North-South PGA Vertical PGA East-West PGV North-South PGV Vertical PGV
+ 0 20240411025351 2024/4/11 2:53 41.99 82.54 13 44.115807 15.443830 0.421184 0.446715 0.391444
+ 1 20240411025351 2024/4/11 2:53 41.99 82.54 13 12.957160 4.473771 0.419080 0.461351 0.167867
+ 2 20240411025351 2024/4/11 2:53 41.99 82.54 13 1.717575 1.116228 0.080873 0.118283 0.060749
+ 3 20240411025351 2024/4/11 2:53 41.99 82.54 13 5.402580 3.334297 0.168636 0.134010 0.116516
+ 4 20240411025351 2024/4/11 2:53 41.99 82.54 13 2.755653 1.750937 0.200505 0.096464 0.137154
+
+The following steps need to be taken for data preprocessing:
+ 1. Data Import: Read the raw data file.
+ 2. Handling Missing Values: Check for missing values in the data and handle them.
+ 3. Data Type Conversion: Convert the occurrence time to a standard datetime format.
+ 4. Feature Extraction and Generation:
+ - Calculate the maximum PGA and PGV for each earthquake event.
+ - Generate new feature columns, such as the average and standard deviation of PGA and PGV in different directions.
+ 5. Data Standardization: Standardize numerical data for subsequent analysis and modeling.
+ 6. Data Saving: Save the preprocessed data as a new CSV file for ease of subsequent analysis.
+Dataset Path: /datasets/earthquake_data
+Preprocessed Data Path: /preprocessed_data/earthquake_data",N,"""Perform data preprocessing using Python. The dataset contains detailed information about earthquake events, including fields such as event number, occurrence time, epicenter latitude, epicenter longitude, focal depth, and PGA (Peak Ground Acceleration) and PGV (Peak Ground Velocity) in various directions. The data example is as follows:
+ 
+Event Number | Occurrence Time | Epicenter Latitude | Epicenter Longitude | Focal Depth | North-South PGA | Vertical PGA | East-West PGV | North-South PGV | Vertical PGV
+0 | 20240411025351 | 2024/4/11 2:53 | 41.99 | 82.54 | 13 | 44.115807 | 15.443830 | 0.421184 | 0.446715 | 0.391444
+1 | 20240411025351 | 2024/4/11 2:53 | 41.99 | 82.54 | 13 | 12.957160 | 4.473771 | 0.419080 | 0.461351 | 0.167867
+2 | 20240411025351 | 2024/4/11 2:53 | 41.99 | 82.54 | 13 | 1.717575 | 1.116228 | 0.080873 | 0.118283 | 0.060749
+3 | 20240411025351 | 2024/4/11 2:53 | 41.99 | 82.54 | 13 | 5.402580 | 3.334297 | 0.168636 | 0.134010 | 0.116516
+4 | 20240411025351 | 2024/4/11 2:53 | 41.99 | 82.54 | 13 | 2.755653 | 1.750937 | 0.200505 | 0.096464 | 0.137154
+
+The following steps need to be taken for data preprocessing:
+
+1. Data Import: Read the raw data .
+- **Output:** : `earthquake_data.csv`
+
+2. Data Type Conversion: Convert the occurrence time to a standard datetime format.
+- **Input:** `earthquake_data.csv`
+- **Output:** `data_with_datetime.csv`
+
+3. Feature Extraction and Generation:
+- Calculate the maximum PGA and PGV for each earthquake event.
+- **Input:** `earthquake_data.csv`
+- **Output:** `max_features.csv`
+- Generate new feature columns, such as the average and standard deviation of PGA and PGV in different directions.
+- **Input:** `earthquake_data.csv`
+- **Output:** `derived_features.csv`
+
+4. Data Standardization: Standardize numerical data for subsequent analysis and modeling.
+- **Input:** `earthquake_data.csv`
+- **Output:** `standardized_data.csv`
+
+5. Data Saving: Save the preprocessed data as a new CSV file for ease of subsequent analysis.
+- **Input:** `earthquake_data.csv`
+- **Output:** `preprocessed_earthquake_data.csv`"" ",3=human written data,
+30,"Conduct a simple linear regression problem and solve it using the gradient descent method. Please generate code and write an experimental report based on the following requirements:
+
+1. **Dataset**: Choose a dataset yourself, with a sample size of at least more than 100.  
+   - **Input Filename**: ""data.csv""  
+   - **Output Format**: None specified for this task.
+
+2. **Code Implementation**: The code should implement the basic functions and include the following content:  
+   - Perform simple linear regression using the gradient descent method.  
+     - **Output Filename**: ""linear_regression_code.py""  
+     - **Output Format**: Python script.
+   - Visualize the training data and regression results.  
+     - **Output Filename**: ""training_results.png""  
+     - **Output Format**: Image (PNG).
+   - Plot the relationship between the cost function and the number of iterations.  
+     - **Output Filename**: ""cost_function_plot.png""  
+     - **Output Format**: Image (PNG).
+   - Plot the 3D relationship graph of parameters (w, b) and the cost function, as well as the 2D contour graph.  
+     - **Output Filename**: ""3D_contour_plot.png""  
+     - **Output Format**: Image (PNG).
+
+3. **Experimental Report**: Write an experimental report with a detailed description of:  
+   - The selection and processing of the dataset.  
+   - The implementation steps of the gradient descent method.  
+   - Analysis and discussion of the regression results.  
+   - Interpretation of the visualization charts.  
+   - **Output Filename**: ""experimental_report.pdf""  
+   - **Output Format**: PDF.
+
+Final result save path: /results/linear_regression.","visualization,Interpretability metrics","Conduct a simple linear regression problem and solve it using the gradient descent method. Please generate code and write an experimental report based on the following requirements:
+ 1. Dataset: Choose a dataset yourself, with a sample size of at least more than 100.
+ 2. Code Implementation: The code should implement the basic functions and include the following content:
+ - Perform simple linear regression using the gradient descent method.
+ - Visualize the training data and regression results.
+ - Plot the relationship between the cost function and the number of iterations.
+ - Plot the 3D relationship graph of parameters (w, b) and the cost function, as well as the 2D contour graph.
+ 3. Experimental Report: Write an experimental report with a detailed description of:
+ - The selection and processing of the dataset.
+ - The implementation steps of the gradient descent method.
+ - Analysis and discussion of the regression results.
+ - Interpretation of the visualization charts.
+Final result save path: /results/linear_regression""",N,"""Conduct a simple linear regression problem and solve it using the gradient descent method. Please generate code and write an experimental report based on the following requirements:
+
+
+- **Input Filename**: """"data.csv""""  
+
+1. **Code Implementation**: The code should implement the basic functions and include the following content:  
+- Perform simple linear regression using the gradient descent method.  
+- **Output Filename**: """"linear_regression_code.py""""  
+- Visualize the training data and regression results.  
+- **Output Filename**: """"training_results.png""""  
+- Plot the relationship between the cost function and the number of iterations.  
+- **Output Filename**: """"cost_function_plot.png""""  
+- Plot the 3D relationship graph of parameters (w, b) and the cost function, as well as the 2D contour graph.  
+- **Output Filename**: """"3D_contour_plot.png""""  
+
+2. **Experimental Report**: Write an experimental report with a detailed description of:  
+- The selection and processing of the dataset.  
+- The implementation steps of the gradient descent method.  
+- Analysis and discussion of the regression results.  
+- Interpretation of the visualization charts.  
+- **Output Filename**: """"experimental_report.pdf""""  ",3=human written data,
+31,"Import the historical data file **data.txt** of the Double Color Ball lottery, and use the Convolutional Neural Network (CNN) model to predict the next issue's 7 numbers based on historical data. The specific requirements are as follows:
+
+1. **Data Import**: Read the historical data from the **data.txt** file, which should include the first 6 red ball numbers and the 7th blue ball number for each issue. 
+   - **Output**: Cleaned data in **cleaned_data.csv** format.
+
+2. **Data Preprocessing**: Clean and preprocess the imported data, including: 
+   - Restricting the red ball numbers to a range of 1 to 33.
+   - Restricting the blue ball number to a range of 1 to 16.
+   - Dividing the data into training and test sets.
+   - **Output**: Preprocessed training and test sets in **train_set.csv** and **test_set.csv** formats.
+
+3. **Model Building**: Use Convolutional Neural Networks (CNN) to build a prediction model, which will output 7 predicted numbers, the first 6 being red balls and the 7th being the blue ball. 
+   - **Output**: Model architecture summary in **model_summary.pdf** format.
+
+4. **Model Training**: Train the model with the training set and perform hyperparameter tuning to improve model performance.
+   - **Output**: Training logs in **training_log.csv** format.
+
+5. **Model Evaluation**: Evaluate the prediction accuracy of the model using the test set and output the evaluation results.
+   - **Output**: Evaluation metrics in **evaluation_results.csv** format.
+
+6. **Result Prediction**: Use the trained model to predict the next issue's 7 numbers.
+   - **Output**: Predicted numbers in **predicted_numbers.csv** format.","data quality,model performance","Import the historical data file data.txt of the Double Color Ball lottery, and use the Convolutional Neural Network (CNN) model to predict the next issue's 7 numbers based on historical data. The specific requirements are as follows:
+ 1. Data Import: Read the historical data from the data.txt file, which should include the first 6 red ball numbers and the 7th blue ball number for each issue.
+ 2. Data Preprocessing: Clean and preprocess the imported data, including:
+ - Restricting the red ball numbers to a range of 1 to 33.
+ - Restricting the blue ball number to a range of 1 to 16.
+ - Dividing the data into training and test sets.
+ 3. Model Building: Use Convolutional Neural Networks (CNN) to build a prediction model, which will output 7 predicted numbers, the first 6 being red balls and the 7th being the blue ball.
+ 4. Model Training: Train the model with the training set and perform hyperparameter tuning to improve model performance.
+ 5. Model Evaluation: Evaluate the prediction accuracy of the model using the test set and output the evaluation results.
+ 6. Result Prediction: Use the trained model to predict the next issue's 7 numbers.
+Dataset path: /datasets/lottery_data
+Results save path: /results/lottery_predictions",Y,,3=human written data,相对路径

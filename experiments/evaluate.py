@@ -39,7 +39,8 @@ class FinalResultOutput:
 
 
 def get_result_output_dir(model_name):
-    return os.path.join("evaluation_results", model_name+"_results.csv")
+    # Fix: Put results directly in evaluation_results/results so calculate_final_metric.py finds it
+    return os.path.join("evaluation_results", "results", model_name+"_results.csv")
 
 
 def main(requirement: str, plan: list, args):

@@ -87,6 +87,9 @@ class LLMConfig(YamlModel):
     # For Network
     proxy: Optional[str] = None
 
+    # Multiple API keys for round-robin rotation
+    api_keys: Optional[list] = None
+
     # Cost Control
     calc_usage: bool = True
 

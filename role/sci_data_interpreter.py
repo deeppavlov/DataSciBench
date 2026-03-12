@@ -60,6 +60,7 @@ class SciDataInterpreter(Role):
     error_counter_list: list[int] = [] # a list of error counter for each plan
     hard_retry: bool = False
     max_retry: int = 3
+    _task_attempts: dict[str, int] = {}
     # config: Config
 
     # def __init__(self, config):
@@ -141,6 +142,17 @@ class SciDataInterpreter(Role):
 
     async def _act_on_task(self, current_task: Task) -> TaskResult:
         """Useful in 'plan_and_act' mode. Wrap the output in a TaskResult for review and confirmation."""
+
+        task_id = current_task.task_id
+        if task_id not in self._task_attempts:
+            self._task_attempts[task_id] = 0
+            
+        self._task_attempts[task_id] += 1
+        
+        if self._task_attempts[task_id] > 5:
+            logger.error(f"Task {task_id} has exceeded the maximum limit of 5 attempts. Raising RuntimeError to abort early.")
+            raise RuntimeError(f"Maximum task attempts (5) exceeded for task_id: {task_id}")
+
         code, result, is_success = await self._write_and_exec_code(max_retry=self.max_retry)
         task_result = TaskResult(code=code, result=result, is_success=is_success)
         self.update_react_results_for_eval(task_result)
@@ -228,7 +240,9 @@ class SciDataInterpreter(Role):
         ):
             return
         logger.info("Check updated data")
-        code = await CheckData().run(self.planner.plan)
+        check_data_action = CheckData(context=self.context)
+        check_data_action.set_llm(self.llm)
+        code = await check_data_action.run(self.planner.plan)
         if not code.strip():
             return
         result, success = await self.execute_code.run(code)

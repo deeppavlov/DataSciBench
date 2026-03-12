@@ -5,6 +5,8 @@ from role import SciDataInterpreter
 from src.logs import create_logger, get_model_name
 from metagpt.logs import logger
 import os
+os.environ["MPLBACKEND"] = "Agg" # Disable matplotlib GUI popups
+
 from src.utils import change_dir, change_metalog_path
 import argparse
 import time
@@ -95,6 +97,11 @@ if __name__ == "__main__":
     # folders = list(reversed(filtered_folders))
     # print(folders)
     for id, folder in enumerate(folders):
+        if 'bcb' in folder and args.skip_bcb:
+            continue
+        if args.data_type not in folder:
+            continue
+            
         prompt_file = os.path.join(data_dir, folder, "prompt.json")
         # separately save each run
         for sub_idx in range(args.max_runs):
@@ -135,18 +142,9 @@ if __name__ == "__main__":
             output_dict_path = os.path.join(run_dir, f"{model_name}_outputs.jsonl")
             output_dict_path = os.path.abspath(output_dict_path)
             # specify where to load data and save data
-            if not prompt_data["data_source_type"].startswith("1"):
-                requirement = SPECIFY_PATH_PROMPT + prompt_data["prompt"]
-            else:
-                requirement = prompt_data["prompt"]
+            requirement = SPECIFY_PATH_PROMPT + prompt_data["prompt"]
             # if 'bcb' in folder:
             #     requirement = BCB_OUTPUT_PROMPT + requirement
-            if 'bcb' in folder and args.skip_bcb:
-                print(f"Skipping {folder}")
-                continue
-            if args.data_type not in folder:
-                print(f"Skipping {folder}")
-                continue
             if args.gt_prompt is not None:
                 requirement = args.gt_prompt + '\n' + requirement
             # with change_dir(log_dir):
@@ -161,7 +159,18 @@ if __name__ == "__main__":
                     try:
                         temp_logger.info(f"Processing {folder} ({id}/{num_folders})")
                         temp_logger.info(f"Prompt:\n{requirement}")
-                        
+
+                        temp_logger.info(f"=== ENVIRONMENT DIAGNOSTICS ===")
+                        temp_logger.info(f"CWD: {os.getcwd()}")
+                        temp_logger.info(f"Files in CWD: {os.listdir('.')}")
+                        try:
+                            temp_logger.info(f"Files in parent dir: {os.listdir('..')}")
+                        except Exception as e:
+                            temp_logger.info(f"Cannot list parent dir: {e}")
+                        temp_logger.info(f"data_source_type: {prompt_data.get('data_source_type', 'N/A')}")
+                        temp_logger.info(f"SPECIFY_PATH_PROMPT added: {not prompt_data['data_source_type'].startswith('1')}")
+                        temp_logger.info(f"=== END DIAGNOSTICS ===")
+
                         time_logger.info(f"Processing {folder} ({id}/{num_folders})")
                         start_time = time.time()
                         plan_list, cost_list, error_counter_list = asyncio.run(main(requirement, args))

@@ -1,0 +1,5 @@
+llm:
+  api_type: "ollama"
+  base_url: "http://127.0.0.1:11434/api"
+  model: "deepseek-coder-v2:16b-lite-instruct-q2_K"
+  api_key: "sk-dummy"

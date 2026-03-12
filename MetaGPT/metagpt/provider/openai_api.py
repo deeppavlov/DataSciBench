@@ -27,7 +27,7 @@ from tenacity import (
 from metagpt.configs.llm_config import LLMConfig, LLMType
 from metagpt.const import USE_CONFIG_TIMEOUT
 from metagpt.logs import log_llm_stream, logger
-from metagpt.provider.base_llm import BaseLLM
+from metagpt.provider.base_llm import BaseLLM, RepetitionError
 from metagpt.provider.constant import GENERAL_FUNCTION_SCHEMA
 from metagpt.provider.llm_provider_registry import register_provider
 from metagpt.utils.common import CodeParser, decode_image, log_and_reraise
@@ -60,6 +60,8 @@ class OpenAILLM(BaseLLM):
         self._init_client()
         self.auto_max_tokens = False
         self.cost_manager: Optional[CostManager] = None
+        self._api_keys = config.api_keys or []
+        self._key_index = 0
 
     def _init_client(self):
         """https://github.com/openai/openai-python#async-usage"""
@@ -86,12 +88,15 @@ class OpenAILLM(BaseLLM):
 
         return params
 
+
     async def _achat_completion_stream(self, messages: list[dict], timeout=USE_CONFIG_TIMEOUT) -> str:
         response: AsyncStream[ChatCompletionChunk] = await self.aclient.chat.completions.create(
             **self._cons_kwargs(messages, timeout=self.get_timeout(timeout)), stream=True
         )
         usage = None
         collected_messages = []
+        chunk_counter = 0
+        repetition_detected = False
         async for chunk in response:
             chunk_message = chunk.choices[0].delta.content or "" if chunk.choices else ""  # extract the message
             finish_reason = (
@@ -99,6 +104,28 @@ class OpenAILLM(BaseLLM):
             )
             log_llm_stream(chunk_message)
             collected_messages.append(chunk_message)
+            chunk_counter += 1
+
+            if len(collected_messages) > 0 and len("".join(collected_messages)) >= 800:
+                current_text = "".join(collected_messages)
+                if self._detect_repetition(current_text):
+                    logger.warning(
+                        f"Repetition loop detected after {chunk_counter} chunks "
+                        f"({len(current_text)} chars). Stopping generation."
+                    )
+                    repetition_detected = True
+                    # FIX: The implicit aclose() from `break` hangs due to httpx deadlocks when the server is aggressively streaming.
+                    # We patch the aclose methods to dummy functions and forcefully close the underlying socket.
+                    import asyncio
+                    if hasattr(response, "aclose"):
+                        response.aclose = lambda: asyncio.sleep(0)
+                    if hasattr(response, "response"):
+                        if hasattr(response.response, "aclose"):
+                            response.response.aclose = lambda: asyncio.sleep(0)
+                        if hasattr(response.response, "stream") and hasattr(response.response.stream, "close"):
+                            response.response.stream.close()  # Force synchronous socket teardown
+                    break
+
             if finish_reason:
                 if hasattr(chunk, "usage") and chunk.usage is not None:
                     # Some services have usage as an attribute of the chunk, such as Fireworks
@@ -115,6 +142,11 @@ class OpenAILLM(BaseLLM):
 
         log_llm_stream("\n")
         full_reply_content = "".join(collected_messages)
+        logger.info(f"Stream completed: {chunk_counter} chunks, {len(full_reply_content)} chars")
+
+        if repetition_detected:
+            raise RepetitionError(f"Repetition loop in stream after {chunk_counter} chunks ({len(full_reply_content)} chars)")
+
         if not usage:
             # Some services do not provide the usage attribute, such as OpenAI or OpenLLM
             usage = self._calc_usage(messages, full_reply_content)
@@ -124,17 +156,27 @@ class OpenAILLM(BaseLLM):
 
     def _cons_kwargs(self, messages: list[dict], timeout=USE_CONFIG_TIMEOUT, **extra_kwargs) -> dict:
         print('_'*100, f"using model {self.model}\n", '_'*100)
+
+        if self._api_keys:
+            self.config.api_key = self._api_keys[self._key_index % len(self._api_keys)]
+            self._key_index += 1
+            self._init_client()
+            print(f"Rotated to API key index {(self._key_index - 1) % len(self._api_keys)}")
+
         if self.model == 'o1-mini':
             print("using o1-mini\n")
             for i in range(len(messages)):
                 if messages[i]['role'] == "system":
                     messages[i]['role'] = "assistant"
 
+        if self.model and "gemma" in self.model.lower():
+            for i in range(len(messages)):
+                if messages[i]['role'] == "system":
+                    messages[i]['role'] = "user"
+
         kwargs = {
             "messages": messages,
             "max_tokens": self._get_max_tokens(messages),
-            # "n": 1,  # Some services do not provide this parameter, such as mistral
-            # "stop": None,  # default it's None and gpt4-v can't have this one
             "temperature": self.config.temperature,
             "model": self.model,
             "timeout": self.get_timeout(timeout),
@@ -163,15 +205,11 @@ class OpenAILLM(BaseLLM):
         retry_error_callback=log_and_reraise,
     )
     async def acompletion_text(self, messages: list[dict], stream=False, timeout=USE_CONFIG_TIMEOUT) -> str:
-        """when streaming, print each token in place."""
         if self.model == 'o1-mini':
-            stream = False
-
-        if stream:
-            return await self._achat_completion_stream(messages, timeout=timeout)
-
-        rsp = await self._achat_completion(messages, timeout=self.get_timeout(timeout))
-        return self.get_choice_text(rsp)
+            return self.get_choice_text(
+                await self._achat_completion(messages, timeout=self.get_timeout(timeout))
+            )
+        return await self._achat_completion_stream(messages, timeout=timeout)
 
     async def _achat_completion_function(
             self, messages: list[dict], timeout: int = USE_CONFIG_TIMEOUT, **chat_configs

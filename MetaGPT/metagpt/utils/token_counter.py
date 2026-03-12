@@ -324,6 +324,7 @@ SPARK_TOKENS = {
 
 
 def count_input_tokens(messages, model="gpt-3.5-turbo-0125"):
+    return 0 # not needed for DeepPavlov
     """Return the number of tokens used by a list of messages."""
     try:
         encoding = tiktoken.encoding_for_model(model)
@@ -402,6 +403,7 @@ def count_input_tokens(messages, model="gpt-3.5-turbo-0125"):
 
 
 def count_output_tokens(string: str, model: str) -> int:
+    return 0 # not needed for DeepPavlov
     """
     Returns the number of tokens in a text string.
 

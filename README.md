@@ -7,6 +7,23 @@
 <a href="https://datascibench.github.io/" target="_blank">[Website]</a> <br> <br>
 </p>
 
+## Fork Changes
+
+This is a fork of [THUDM/DataSciBench](https://github.com/THUDM/DataSciBench) with significant optimizations for faster benchmark execution and improved reliability. Key changes include:
+
+- **3x faster runs** — reduced the number of runs per task from 10 to 3
+- **Early stopping** — agents are limited to 5 attempts per sub-task to prevent infinite retry loops
+- **Repetition loop detection** — custom detector that aborts LLM generation when output starts looping
+- **Forced streaming** — all LLM calls now use streaming mode to enable real-time repetition detection
+- **API key rotation** — automatic round-robin across multiple API keys
+- **Bug fixes** — corrected metric calculations, path handling, regex escaping, and matplotlib backend issues
+
+For the full list of changes and benchmark results, see [CHANGELOG.md](CHANGELOG.md).
+
+## Benchmark Generator
+
+We added a `benchmark_generator` module for automatic generation of new benchmark tasks from an arbitrary codebase using LLM. The pipeline includes prompt generation, automated solving, human review, and packing into the benchmark format. See [benchmark_generator/README.md](benchmark_generator/README.md) for details.
+
 ## Introduction
 
 ### Install MetaGPT

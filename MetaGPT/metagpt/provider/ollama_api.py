@@ -6,8 +6,8 @@ import json
 
 from metagpt.configs.llm_config import LLMConfig, LLMType
 from metagpt.const import USE_CONFIG_TIMEOUT
-from metagpt.logs import log_llm_stream
-from metagpt.provider.base_llm import BaseLLM
+from metagpt.logs import log_llm_stream, logger
+from metagpt.provider.base_llm import BaseLLM, RepetitionError
 from metagpt.provider.general_api_requestor import GeneralAPIRequestor
 from metagpt.provider.llm_provider_registry import register_provider
 from metagpt.utils.cost_manager import TokenCostManager
@@ -76,13 +76,27 @@ class OllamaLLM(BaseLLM):
 
         collected_content = []
         usage = {}
+        chunk_counter = 0
+        repetition_detected = False
         async for raw_chunk in stream_resp:
             chunk = self._decode_and_load(raw_chunk)
 
             if not chunk.get("done", False):
                 content = self.get_choice_text(chunk)
-                collected_content.append(content)
-                log_llm_stream(content)
+                if content:
+                    collected_content.append(content)
+                    log_llm_stream(content)
+                    chunk_counter += 1
+
+                if len(collected_content) > 0 and len("".join(collected_content)) >= 800:
+                    current_text = "".join(collected_content)
+                    if self._detect_repetition(current_text):
+                        logger.warning(
+                            f"Repetition loop detected after {chunk_counter} chunks "
+                            f"({len(current_text)} chars). Stopping generation."
+                        )
+                        repetition_detected = True
+                        break
             else:
                 # stream finished
                 usage = self.get_usage(chunk)
@@ -90,4 +104,8 @@ class OllamaLLM(BaseLLM):
 
         self._update_costs(usage)
         full_content = "".join(collected_content)
+        
+        if repetition_detected:
+            raise RepetitionError(f"Repetition loop in stream after {chunk_counter} chunks ({len(full_content)} chars)")
+
         return full_content

@@ -29,6 +29,9 @@ from metagpt.schema import Message
 from metagpt.utils.common import log_and_reraise
 from metagpt.utils.cost_manager import CostManager, Costs
 
+class RepetitionError(Exception):
+    pass
+
 
 class BaseLLM(ABC):
     """LLM API abstract class, requiring all inheritors to provide a series of standard capabilities"""
@@ -101,6 +104,29 @@ class BaseLLM(ABC):
 
     def _default_system_msg(self):
         return self._system_msg(self.system_prompt)
+
+    @staticmethod
+    def _detect_repetition(text: str, window_size: int = 3000) -> bool:
+        if len(text) < 800:
+            return False
+        tail = text[-window_size:]
+        lines = [line.strip() for line in tail.split('\n') if len(line.strip()) >= 10]
+        
+        if tail.count("```") >= 30:
+            return True
+
+        if not lines:
+            return False
+        from collections import Counter
+        counts = Counter(lines)
+        for line, count in counts.most_common(5):
+            if len(line) >= 40 and count >= 6:
+                return True
+            if len(line) >= 15 and count >= 15:
+                return True
+            if len(line) >= 10 and count >= 25:
+                return True
+        return False
 
     def _update_costs(self, usage: Union[dict, BaseModel], model: str = None, local_calc_usage: bool = True):
         """update each request's token cost
@@ -197,11 +223,7 @@ class BaseLLM(ABC):
     async def acompletion_text(
         self, messages: list[dict], stream: bool = False, timeout: int = USE_CONFIG_TIMEOUT
     ) -> str:
-        """Asynchronous version of completion. Return str. Support stream-print"""
-        if stream:
-            return await self._achat_completion_stream(messages, timeout=self.get_timeout(timeout))
-        resp = await self._achat_completion(messages, timeout=self.get_timeout(timeout))
-        return self.get_choice_text(resp)
+        return await self._achat_completion_stream(messages, timeout=self.get_timeout(timeout))
 
     def get_choice_text(self, rsp: dict) -> str:
         """Required to provide the first text of choice"""

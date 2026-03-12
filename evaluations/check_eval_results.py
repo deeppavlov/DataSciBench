@@ -16,6 +16,7 @@ def main(all_args):
     output_dir = 'data'
     model_id = all_args.model_id
     task_id = all_args.task_id
+    MAX_RUNS = 3
     for dir_ in os.listdir(output_dir):
         if os.path.isdir(os.path.join(output_dir, dir_)) and task_id in dir_:
             print(f"Verifying Prompt ID: --{dir_}--\n")
@@ -26,9 +27,9 @@ def main(all_args):
                 # skip
                 print("No output data found, skipping...")
                 continue
-            if len(output_datas) > 10:
-                print(f"More than 10 results found, using first 10 results...")
-                output_datas = output_datas[:10]
+            if len(output_datas) > MAX_RUNS:
+                print(f"More than {MAX_RUNS} results found, using first {MAX_RUNS} results...")
+                output_datas = output_datas[:MAX_RUNS]
             for output_data in output_datas:
                 completion_text = output_data['completion']
                 cr = output_data['cr']

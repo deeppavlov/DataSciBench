@@ -1,5 +1,4 @@
 seaborn
-metagpt
 imbalanced-learn
 reportlab
 wandb
@@ -11,3 +10,10 @@ datasets
 jellyfish
 scikit-image
 pydot
+ipykernel
+pydantic
+protobuf<5.0.0,>=4.21.6
+scikit-learn==1.3.2
+tqdm==4.66.2
+PyPDF2
+httpx==0.27.2

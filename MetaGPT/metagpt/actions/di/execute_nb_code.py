@@ -34,12 +34,12 @@ class ExecuteNbCode(Action):
     nb_client: NotebookClient
     console: Console
     interaction: str
-    timeout: int = 600
+    timeout: int = 300
 
     def __init__(
         self,
         nb=nbformat.v4.new_notebook(),
-        timeout=600,
+        timeout=300,
     ):
         super().__init__(
             nb=nb,

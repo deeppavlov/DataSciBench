@@ -1,0 +1,41 @@
+Model Summary and Results
+=========================
+
+Model Architecture and Training Summary:
+----------------------------------------
+Model Architecture:
+Hidden Layers: (100,)
+Max Iterations: 300
+
+Training Summary:
+              precision    recall  f1-score   support
+
+           0       0.79      0.81      0.80        99
+           1       0.64      0.62      0.63        55
+
+    accuracy                           0.74       154
+   macro avg       0.72      0.71      0.71       154
+weighted avg       0.74      0.74      0.74       154
+
+
+10-Fold Cross-Validation Accuracy Results:
+------------------------------------------
+ Fold  Accuracy
+    1  0.766234
+    2  0.701299
+    3  0.688312
+    4  0.818182
+    5  0.753247
+    6  0.701299
+    7  0.792208
+    8  0.766234
+    9  0.776316
+   10  0.736842
+
+Overall Average Accuracy: 0.7500
+
+Insights:
+---------
+- The model uses a neural network with a single hidden layer of 100 neurons.
+- The average accuracy across 10 folds is approximately 75%.
+- The model may benefit from hyperparameter tuning or additional data preprocessing to improve convergence and accuracy.

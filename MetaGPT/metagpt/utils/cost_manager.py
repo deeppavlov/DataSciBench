@@ -33,6 +33,7 @@ class CostManager(BaseModel):
     token_costs: dict[str, dict[str, float]] = TOKEN_COSTS  # different model's token cost
 
     def update_cost(self, prompt_tokens, completion_tokens, model):
+        return # not needed for DeepPavlov
         """
         Update the total cost, prompt tokens, and completion tokens.
 
@@ -95,6 +96,7 @@ class TokenCostManager(CostManager):
     """open llm model is self-host, it's free and without cost"""
 
     def update_cost(self, prompt_tokens, completion_tokens, model):
+        return # not needed for DeepPavlov
         """
         Update the total cost, prompt tokens, and completion tokens.
 
@@ -128,6 +130,7 @@ class FireworksCostManager(CostManager):
         return token_costs
 
     def update_cost(self, prompt_tokens: int, completion_tokens: int, model: str):
+        return # not needed for DeepPavlov
         """
         Refs to `https://app.fireworks.ai/pricing` **Developer pricing**
         Update the total cost, prompt tokens, and completion tokens.
