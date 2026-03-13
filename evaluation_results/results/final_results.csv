@@ -1,2 +1,0 @@
-Model,Pass@1,Average CR,VLM,F1,F2,F3,F4,F5,Pass@1 (Human),Pass@1 (DL),Pass@1 (CSV),Avg. CR (Human),Avg. CR (DL),Avg. CR (CSV)
-Qwen3-30B-A3B,12.73,13.93,1.57,61.31,0.00,26.67,54.17,33.33,14.67,6.67,13.33,12.85,13.99,15.45

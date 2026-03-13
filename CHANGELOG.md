@@ -129,7 +129,7 @@ Results were obtained on the standard DataSciBench set (55 tasks: 25 human, 20 c
 | Model | Pass@1 | Avg CR | VLM |
 |---|---|---|---|
 | Qwen3-30B-A3B | 12.73 | 13.93 | 1.57 |
-| Qwen3.5 | — | — | — |
+| Qwen3.5-27B | 13.94 | 11.28 | 0.94 |
 
 ---
 
@@ -140,3 +140,4 @@ Results were obtained on the standard DataSciBench set (55 tasks: 25 human, 20 c
 - [ ] **Test hypotheses** — modify agent behavior code to improve benchmark performance
 - [ ] **Add LLM-as-Judge** — new verification function for open-ended answers
 - [ ] **Add professional Python development tools** — ruff, mypy, uv, and others
+- [ ] Replace MetaGPT with our code

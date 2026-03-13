@@ -3,11 +3,14 @@ from openai import OpenAI
 import json
 from datetime import datetime
 
-API_KEY = "InnPracAutoIntent:Sergey_Malyshev:b63f0e572df646e18bd678be43c59ca1"
+try:
+    from .vlm_config import API_KEY, BASE_URL
+except (ImportError, ValueError):
+    from vlm_config import API_KEY, BASE_URL
 
 client = OpenAI(
     api_key=API_KEY,
-    base_url="http://31.56.222.86:8002/api/providers/openai/v1",
+    base_url=BASE_URL,
 )
 
 def _log_vlm(request_messages, response_content=None, error=None):

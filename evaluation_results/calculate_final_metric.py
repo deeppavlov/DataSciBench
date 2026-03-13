@@ -19,8 +19,9 @@ model_list = [
                 # "Qwen/Qwen2.5-Coder-7B-Instruct", 
                 # "Qwen/Qwen2.5-Coder-1.5B-Instruct",
                 # "Meta-Llama-3.1-70B-Instruct", 
-                # "gemma-3-27b-it"
-                "Qwen3-30B-A3B"
+                # "gemma-3-27b-it",
+                "Qwen3-30B-A3B",
+                "Qwen3.5-27B"
                 ]
 # write the header to the final csv file
 df = pd.DataFrame({
