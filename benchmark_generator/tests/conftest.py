@@ -43,49 +43,40 @@ def sample_metrics_py():
         import sys
         import traceback
 
+        METRICS = []
 
-        METRICS = [
-            {
-                "task_name": "Predictive modeling",
-                "function": "Model Accuracy",
-                "metric": "Model Accuracy",
-                "ground_truth": "prediction_output.npy",
-                "code": (
-                    "def model_accuracy(ground_truth):\\n"
-                    "    import numpy as np\\n"
-                    "    y_pred = np.load('prediction_output.npy')\\n"
-                    "    y_gt = np.load(ground_truth)\\n"
-                    "    return bool(np.mean(y_pred == y_gt) > 0.9)\\n"
-                ),
-            },
-            {
-                "task_name": "Data exploration",
-                "function": "File Existence",
-                "metric": "Report Exists",
-                "ground_truth": None,
-                "code": (
-                    "def report_exists(ground_truth):\\n"
-                    "    import os\\n"
-                    "    return os.path.exists('data_analysis.txt')\\n"
-                ),
-            },
-        ]
+        def metric(task_name, function, metric_name, ground_truth=None):
+            def decorator(func):
+                func.task_name = task_name
+                func.function = function
+                func.metric = metric_name
+                func.ground_truth = ground_truth
+                METRICS.append(func)
+                return func
+            return decorator
 
+        @metric(task_name="Predictive modeling", function="Model Accuracy", metric_name="Model Accuracy", ground_truth="prediction_output.npy")
+        def model_accuracy(ground_truth):
+            import numpy as np
+            y_pred = np.load('prediction_output.npy')
+            y_gt = np.load(ground_truth)
+            return bool(np.mean(y_pred == y_gt) > 0.9)
+
+        @metric(task_name="Data exploration", function="File Existence", metric_name="Report Exists", ground_truth=None)
+        def report_exists(ground_truth):
+            import os
+            return os.path.exists('data_analysis.txt')
 
         def run_all():
             gt_dir = os.path.join(os.path.dirname(__file__), "gt")
             passed = 0
             failed = 0
-            for entry in METRICS:
-                name = entry["metric"]
-                gt_file = entry.get("ground_truth")
+            for func in METRICS:
+                name = func.metric
+                gt_file = func.ground_truth
                 gt_path = os.path.join(gt_dir, gt_file) if gt_file else None
-                code = entry["code"]
                 try:
-                    local_ns = {}
-                    exec(code, {}, local_ns)
-                    func = list(local_ns.values())[0]
-                    result = func(gt_path) if gt_path else func()
+                    result = func(gt_path)
                     if result:
                         print(f"  PASS: {name}")
                         passed += 1
@@ -98,7 +89,6 @@ def sample_metrics_py():
                     failed += 1
             print(f"\\nResults: {passed} passed, {failed} failed")
             return failed == 0
-
 
         if __name__ == "__main__":
             ok = run_all()

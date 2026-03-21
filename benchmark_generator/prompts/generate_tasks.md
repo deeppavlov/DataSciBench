@@ -10,7 +10,8 @@ Each task must be a self-contained prompt that describes a Data Science problem.
 2. Specify input files if needed (CSV, Excel, NPY, etc.) with their format description
 3. Specify expected output files with exact filenames
 4. Break the work into numbered steps with clear input/output for each step
-5. Be detailed enough that an LLM agent can solve it without additional context
+5. Include an explicit instruction naming the specific framework/library that the solver MUST use for this task.
+6. Be detailed enough that an LLM agent can solve it without additional context
 
 ## Examples of good tasks
 

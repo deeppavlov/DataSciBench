@@ -15,27 +15,28 @@ logger = logging.getLogger(__name__)
 
 def _parse_metrics_py(metrics_path: Path) -> list[dict]:
     content = metrics_path.read_text(encoding="utf-8")
+    tree = ast.parse(content)
 
-    match = re.search(r"^METRICS\s*=\s*\[", content, re.MULTILINE)
-    if not match:
-        raise ValueError(f"Cannot find METRICS list in {metrics_path}")
+    metrics = []
+    for node in tree.body:
+        if isinstance(node, ast.FunctionDef):
+            for decor in node.decorator_list:
+                if isinstance(decor, ast.Call) and getattr(decor.func, "id", "") == "metric":
+                    entry = {}
+                    for kw in decor.keywords:
+                        if isinstance(kw.value, ast.Constant):
+                            key = kw.arg
+                            if key == "metric_name":
+                                key = "metric"
+                            entry[key] = kw.value.value
+                    source = ast.get_source_segment(content, node)
+                    if source:
+                        entry["code"] = source
+                    metrics.append(entry)
 
-    start = match.start()
-    bracket_count = 0
-    end = start
-    for i in range(start, len(content)):
-        if content[i] == "[":
-            bracket_count += 1
-        elif content[i] == "]":
-            bracket_count -= 1
-            if bracket_count == 0:
-                end = i + 1
-                break
+    if not metrics:
+        raise ValueError(f"Cannot find any @metric decorators in {metrics_path}")
 
-    metrics_str = content[start + len("METRICS = "):]
-    metrics_str = content[match.end() - 1: end]
-
-    metrics = ast.literal_eval(metrics_str)
     return metrics
 
 
