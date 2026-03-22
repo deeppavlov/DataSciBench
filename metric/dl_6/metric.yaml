@@ -48,7 +48,7 @@
   Please write a script in Python for data crawling, cleaning, analysis, and visualization. The specific requirements are as follows:
 
   1. **Data Crawling**: 
-     - **Input**: Specify the target website (e.g., Douban).
+     - **Input**: https://movie.douban.com/chart (If the website is inaccessible or blocks requests, please use the local file 'crawled_data.csv' which contains the same data).
      - **Output**: Save the crawled data to a CSV file named "crawled_data.csv".
 
   2. **Data Cleaning**: 

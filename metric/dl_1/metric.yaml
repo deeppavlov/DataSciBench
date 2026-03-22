@@ -22,26 +22,26 @@
     def model_mean_absolute_error(ground_truth):
         from sklearn.metrics import mean_absolute_error
         import pandas as pd
-        output = pd.read_csv("model_parameters.csv")
+        output = pd.read_csv("predictions.csv")
         predictions = output.iloc[:, 0].tolist()  # Assuming the predictions are stored there
-        gt_output = pd.read_csv(ground_truth)
-        gt = gt_output.iloc[:, 0].tolist()
-        return bool(mean_absolute_error(gt_output, predictions)<=0.1)  # MAE calculation
+        gt_output = pd.read_excel(ground_truth)
+        gt = gt_output['output'].tolist()
+        return bool(mean_absolute_error(gt, predictions)<=10.0)  # MAE calculation
   "function": |-
     Mean Absolute Error
   "metric": |-
     Model Mean Absolute Error (MAE)
   "task_name": |-
     Predictive modeling
-  ground_truth: model_parameters.csv
+  ground_truth: data.xlsx
 - "code": |-
     def r_squared(ground_truth):
         from sklearn.metrics import r2_score
         import pandas as pd
-        output = pd.read_csv("model_parameters.csv")
+        output = pd.read_csv("predictions.csv")
         predictions = output.iloc[:, 0].tolist()  # Assuming the predictions are stored there
-        gt_output = pd.read_csv(ground_truth)
-        gt = gt_output.iloc[:, 0].tolist()
+        gt_output = pd.read_excel(ground_truth)
+        gt = gt_output['output'].tolist()
         return bool(r2_score(gt, predictions)>=0.9)  # R-squared calculation
   "function": |-
     Result Quality
@@ -49,15 +49,15 @@
     R-squared Value
   "task_name": |-
     Interpretability and report generation
-  ground_truth: model_parameters.csv
+  ground_truth: data.xlsx
 "prompt": |-
   "Please write a SSA-BP Sparrow Algorithm in Python to optimize the code of a BP neural network for multivariate regression prediction. The specific requirements are as follows:
 
   1. **Dataset**: Use an Excel file named ""data.xlsx"" as the dataset, which includes 7 input features and 1 output variable.
-
+  - **Output**: Save the cleaned dataset in an Excel file named ""cleaned_data.xlsx"".
 
   2. **Model Optimization**: Employ the SSA-BP Sparrow Algorithm to optimize the weights and biases of the BP neural network.
-  - **Output**: Save the optimized model parameters in a CSV file named ""model_parameters.csv"".
+  - **Output**: Save the optimized model parameters in a CSV file named ""model_parameters.csv"" and the model predictions in a CSV file named ""predictions.csv"".
 
   3. **Performance Evaluation**: Output the model's evaluation metrics such as RMSE, MAPE, MAE, and R2 in the command window.
   - **Output**: Save these evaluation metrics in a text file named ""performance_metrics.txt"".

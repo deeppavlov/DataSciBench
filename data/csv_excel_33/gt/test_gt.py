@@ -44,14 +44,14 @@ filtered_df['clus'] = best_labels
 df['clus'] = np.nan  # Initialize the 'clus' column with NaN
 df.loc[filtered_df.index, 'clus'] = filtered_df['clus']
 
-# **Subtask 1 Output:** Write the DataFrame to '1combine_land.csv' after clustering
-df.to_csv('1combine_land.csv', index=False)
-print("\nSubtask 1 completed: 'clus' column added and results saved to '1combine_land.csv'.")
+# **Subtask 1 Output:** Write the DataFrame to 'combine_land.csv' after clustering
+df.to_csv('combine_land.csv', index=False)
+print("\nSubtask 1 completed: 'clus' column added and results saved to 'combine_land.csv'.")
 
 # **Subtask 2 Processing:**
 
-# Read the intermediate file '1combine_land.csv'
-df = pd.read_csv('1combine_land.csv')
+# Read the intermediate file 'combine_land.csv'
+df = pd.read_csv('combine_land.csv')
 
 # Ensure the 'clus' column is correctly read (especially if NaNs are present)
 df['clus'] = pd.to_numeric(df['clus'], errors='coerce')
@@ -85,10 +85,6 @@ for cluster in clusters_to_sample:
 # Ensure the original sorting order is maintained
 df.sort_index(inplace=True)
 
-# **Subtask 2 Output:** Write the updated DataFrame to '1combine_land.csv'
-df.to_csv('1combine_land.csv', index=False)
-print("\nSubtask 2 completed: 'keep' column added and results updated in '1combine_land.csv'.")
-
-# **Final Output:** Write the completed DataFrame to 'combine_land.csv' with 'clus' and 'keep' columns
+# **Subtask 2 Output:** Write the updated DataFrame to 'combine_land.csv'
 df.to_csv('combine_land.csv', index=False)
-print("\nFinal output saved to 'combine_land.csv' with 'clus' and 'keep' columns.")
+print("\nSubtask 2 completed: 'keep' column added and results updated in 'combine_land.csv'.")

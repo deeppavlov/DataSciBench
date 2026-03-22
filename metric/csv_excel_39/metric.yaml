@@ -135,8 +135,8 @@
 - "code": |-
     def correlation_aqi_wencha_validation(ground_truth):
         import pandas as pd
-        output = pd.read_csv("output_corr_aqi_wencha.csv", header=None)
-        gt_output = pd.read_csv(ground_truth, header=None)
+        output = pd.read_csv("output_corr_aqi_wencha.csv")
+        gt_output = pd.read_csv(ground_truth)
         print(gt_output)
         return bool(output.equals(gt_output))
   "function": |-
@@ -167,7 +167,7 @@
      
   2. Look up the weather conditions on March 1, 2018.
      - Input: beijing_tianqi_2018.csv (csv)
-     - Output: output_march_01_2018.csv (csv)
+     - Output: output_march_01_2018.csv (csv, should be a single-row DataFrame format with header and index)
 
   3. Replace the temperature units with ℃ removed.
      - Input: beijing_tianqi_2018.csv (csv)
@@ -189,18 +189,18 @@
      - Input: beijing_tianqi_2018.csv (csv)
      - Output: output_wencha_added.csv (csv)
    
-  8. Add a new column 'wenduType' (marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise normal temperature).
+  8. Add a new column 'wenduType' (marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise 正常温度).
      - Input: beijing_tianqi_2018.csv (csv)
      - Output: output_wenduType_added.csv (csv)
 
   9. How many types of 'fengxiang' are there in the whole year of 2018? How many days does each type correspond to?
      - Input: beijing_tianqi_2018.csv (csv)
-     - Output: output_fengxiang_counts.csv (csv)
+     - Output: output_fengxiang_counts.csv (csv with columns 'fengxiang' and 'Days')
 
   10. What is the correlation coefficient between air quality 'aqi' and maximum temperature?
       - Input: beijing_tianqi_2018.csv (csv)
-      - Output: output_corr_aqi_max_temp.csv (csv)
+      - Output: output_corr_aqi_max_temp.csv (csv with single value under column 'Correlation' and index labeled 'aqi and bWendu')
 
   11. What is the correlation coefficient between air quality 'aqi' and temperature difference 'wencha'?
       - Input: beijing_tianqi_2018.csv (csv)
-      - Output: output_corr_aqi_wencha.csv (csv)
+      - Output: output_corr_aqi_wencha.csv (csv with single value under column 'Correlation' and index labeled 'aqi and wencha')
