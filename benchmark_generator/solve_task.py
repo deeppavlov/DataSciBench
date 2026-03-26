@@ -53,10 +53,6 @@ def _generate_metrics_py(metrics: MetricsList, prompt_text: str) -> str:
     parts = [
         '"""Auto-generated metrics. Run: python metrics.py"""',
         "",
-        "import os",
-        "import sys",
-        "import traceback",
-        "",
         "METRICS = []",
         "",
         "def metric(task_name, function, metric_name, ground_truth=None):",
@@ -83,6 +79,8 @@ def _generate_metrics_py(metrics: MetricsList, prompt_text: str) -> str:
 
     run_all_code = textwrap.dedent("""\
         def run_all():
+            import os
+            import traceback
             gt_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gt")
             passed = 0
             failed = 0
@@ -106,6 +104,7 @@ def _generate_metrics_py(metrics: MetricsList, prompt_text: str) -> str:
             return failed == 0
 
         if __name__ == "__main__":
+            import sys
             ok = run_all()
             sys.exit(0 if ok else 1)
     """)

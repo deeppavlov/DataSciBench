@@ -6,6 +6,7 @@ Each metric is a Python function that checks if a specific output file is correc
 - Takes one argument: `ground_truth` (path to the gt file)
 - Reads the output file from the current directory
 - Returns a boolean (True if correct, False otherwise)
+- **CRITICAL**: All necessary imports (e.g., `import os`, `import pandas as pd`) MUST be placed **inside** the function body. Do not put imports at the top of the code snippet.
 
 ## Metric types
 
@@ -16,6 +17,8 @@ Common metric patterns:
 - **Value comparison**: compare specific values or ranges
 - **Model accuracy**: load model, run predictions, check accuracy threshold
 - **Completeness**: check that all expected columns/rows exist
+- **VLM-as-a-judge (Visualization Quality)**: for generated plots (e.g., PNG). Use `from src.vlm_utils import vlm_vis_quality` and return `float(vlm_vis_quality(ground_truth, "output.png"))`.
+- **LLM-as-a-judge (Text Quality)**: for open-ended text answers, analysis, or reports (e.g., MD, TXT). Use `from src.llm_utils import llm_text_quality` and return `float(llm_text_quality(ground_truth, "output.txt"))`.
 
 ## Output format
 
