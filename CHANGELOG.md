@@ -135,7 +135,7 @@ Results were obtained on the standard DataSciBench set (55 tasks: 25 human, 20 c
 
 ## 5. TODO
 
-- [ ] **Clean dataset of errors** — incorrect paths, imports, etc. Ensure each error is a bug of the model being tested, not the benchmark itself
+- [x] **Clean dataset of errors** — incorrect paths, imports, etc. Ensure each error is a bug of the model being tested, not the benchmark itself
 - [ ] **Create new examples addition pipeline** — based on `benchmark_generator`
 - [ ] **Test hypotheses** — modify agent behavior code to improve benchmark performance
 - [ ] **Add LLM-as-Judge** — new verification function for open-ended answers
