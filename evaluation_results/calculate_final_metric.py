@@ -30,6 +30,7 @@ df = pd.DataFrame({
     # "Pass@1 (Fail)": ["Pass@1 (Fail)"],
     "Average CR": ["Average CR"],
     "VLM": ["VLM"],
+    "LLM": ["LLM"],
     "F1": ["F1"],
     "F2": ["F2"],
     "F3": ["F3"],
@@ -221,13 +222,16 @@ for model in model_list:
     print('-'*100)
     # %%
     vlm_list = []
+    llm_list = []
     for index, row in df.iterrows():
-        # Make sure result_type is not NaN and is 'single task (int)'
         if pd.notna(row['result_type']) and row['result_type'] == "single task (int)":
             try:
-                # Convert the result_value to float (it could be '3.0' or '3')
                 val = float(row['result_value'])
-                vlm_list.append(val)
+                metric = str(row.get('metric_name', ''))
+                if 'LLM' in metric:
+                    llm_list.append(val)
+                else:
+                    vlm_list.append(val)
             except ValueError:
                 pass
 
@@ -237,6 +241,12 @@ for model in model_list:
         vlm_score = 0.0
     print("VLM: ", vlm_score)
 
+    try:
+        llm_score = sum(llm_list) / len(llm_list) if len(llm_list) > 0 else 0.0
+    except:
+        llm_score = 0.0
+    print("LLM: ", llm_score)
+
     # store all the above metircs to a csv file by model name. All float should be converted to .4f
     df = pd.DataFrame({
         "Model": [model],
@@ -244,6 +254,7 @@ for model in model_list:
         # "Pass@1 (Fail)": [f"{total_fail:.2f}"],
         "Average CR": [f"{avg_cr:.2f}"],
         "VLM": [f"{vlm_score:.2f}"],
+        "LLM": [f"{llm_score:.2f}"],
         "F1": [f"{f_list[0]:.2f}"],
         "F2": [f"{f_list[1]:.2f}"],
         "F3": [f"{f_list[2]:.2f}"],

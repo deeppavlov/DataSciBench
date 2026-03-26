@@ -53,6 +53,10 @@ def _generate_metrics_py(metrics: MetricsList, prompt_text: str) -> str:
     parts = [
         '"""Auto-generated metrics. Run: python metrics.py"""',
         "",
+        "import sys",
+        "import os",
+        'sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..")))',
+        "",
         "METRICS = []",
         "",
         "def metric(task_name, function, metric_name, ground_truth=None):",
@@ -80,6 +84,7 @@ def _generate_metrics_py(metrics: MetricsList, prompt_text: str) -> str:
     run_all_code = textwrap.dedent("""\
         def run_all():
             import os
+            import sys
             import traceback
             gt_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "gt")
             passed = 0
@@ -186,7 +191,8 @@ def solve_single_task(task_dir: Path, codebase_text: str | None = None):
     logger.info("Saved chat_log.txt")
 
     logger.info("Running metrics.py to verify...")
-    metrics_output = _run_script(metrics_path, cwd=task_dir)
+    # Run in gt_dir because the generated verification output files are there
+    metrics_output = _run_script(metrics_path, cwd=gt_dir)
     verify_log = task_dir / "verify_log.txt"
     verify_log.write_text(metrics_output, encoding="utf-8")
     logger.info("Verification:\n%s", metrics_output)

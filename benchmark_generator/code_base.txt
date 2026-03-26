@@ -1,0 +1,77 @@
+# Standard Data Science Toolkit
+
+A collection of widely-used Python libraries for data manipulation, machine learning, statistical analysis, and visualization.
+
+---
+## pandas (import pandas as pd)
+Tabular data processing.
+- `pd.read_csv(path)`, `pd.read_excel(path)` — load data
+- `df.to_csv(path)`, `df.to_excel(path)` — save data
+- `df.describe()`, `df.info()`, `df.dtypes` — inspect data
+- `df.dropna()`, `df.fillna(value)` — handle missing values
+- `df.drop_duplicates()` — remove duplicates
+- `df.groupby(col).agg(...)` — aggregation
+- `df.merge(other, on=col)`, `df.join(other)` — joins
+- `df.pivot_table(...)` — pivot tables
+- `df.apply(func)`, `df.map(func)` — transformations
+- `df.corr()` — correlation matrix
+
+---
+## numpy (import numpy as np)
+Numerical computations.
+- `np.array(...)`, `np.zeros(...)`, `np.ones(...)` — array creation
+- `np.mean()`, `np.std()`, `np.median()`, `np.percentile()` — statistics
+- `np.random.seed()`, `np.random.rand()`, `np.random.randint()` — random generation
+- `np.linalg.norm()`, `np.dot()` — linear algebra
+- `np.argsort()`, `np.unique()`, `np.where()` — utility
+
+---
+## scikit-learn (import sklearn)
+Machine learning.
+- `sklearn.datasets.load_iris()`, `load_wine()`, `load_breast_cancer()`, `make_classification()`, `make_regression()` — datasets
+- `sklearn.model_selection.train_test_split()`, `cross_val_score()`, `GridSearchCV` — model selection
+- `sklearn.preprocessing.StandardScaler`, `MinMaxScaler`, `LabelEncoder`, `OneHotEncoder` — preprocessing
+- `sklearn.ensemble.RandomForestClassifier`, `RandomForestRegressor`, `GradientBoostingClassifier` — ensemble models
+- `sklearn.linear_model.LogisticRegression`, `LinearRegression`, `Ridge`, `Lasso` — linear models
+- `sklearn.tree.DecisionTreeClassifier`, `DecisionTreeRegressor` — decision trees
+- `sklearn.cluster.KMeans`, `DBSCAN` — clustering
+- `sklearn.decomposition.PCA` — dimensionality reduction
+- `sklearn.metrics.accuracy_score`, `precision_score`, `recall_score`, `f1_score`, `roc_auc_score`, `mean_squared_error`, `r2_score`, `classification_report`, `confusion_matrix` — evaluation
+- `sklearn.pipeline.Pipeline` — pipelines
+- `sklearn.feature_selection.SelectKBest` — feature selection
+
+---
+## xgboost (import xgboost as xgb)
+Gradient boosting.
+- `xgb.XGBClassifier(...)` — classification
+- `xgb.XGBRegressor(...)` — regression
+- `model.feature_importances_` — feature importance
+
+---
+## matplotlib (import matplotlib.pyplot as plt)
+Plotting.
+- `plt.figure()`, `plt.subplots()` — create figures
+- `plt.plot()`, `plt.scatter()`, `plt.bar()`, `plt.barh()`, `plt.hist()` — plot types
+- `plt.xlabel()`, `plt.ylabel()`, `plt.title()`, `plt.legend()` — labels
+- `plt.savefig(path, dpi=150, bbox_inches="tight")` — save to file
+- `plt.tight_layout()`, `plt.close()` — layout
+
+---
+## seaborn (import seaborn as sns)
+Statistical visualization.
+- `sns.heatmap(data, annot=True)` — heatmaps
+- `sns.histplot()`, `sns.kdeplot()` — distributions
+- `sns.boxplot()`, `sns.violinplot()` — categorical plots
+- `sns.pairplot(df)` — pairwise relationships
+- `sns.scatterplot()`, `sns.lineplot()` — relational plots
+- `sns.countplot()` — count plots
+
+---
+## scipy (from scipy import stats)
+Statistical testing.
+- `stats.pearsonr(x, y)` — Pearson correlation
+- `stats.spearmanr(x, y)` — Spearman correlation
+- `stats.ttest_ind(a, b)` — independent t-test
+- `stats.f_oneway(*groups)` — one-way ANOVA
+- `stats.chi2_contingency(table)` — chi-squared test
+- `stats.normaltest(data)` — normality test
