@@ -3,11 +3,11 @@ import logging
 import shutil
 from pathlib import Path
 
-from .config import get_settings
-from .generate_tasks import generate_tasks
-from .mcp_tools import discover_tools, generate_api_doc, generate_wrapper_module
-from .solve_task import solve_single_task, solve_tasks, _run_script
-from .pack_task import pack_single_task, pack_all_tasks
+from ..core.config import get_settings
+from ..tools.generate_tasks import generate_tasks
+from ..core.mcp_tools import discover_tools, generate_api_doc, generate_wrapper_module
+from ..tools.solve_task import solve_single_task, solve_tasks, _run_script
+from ..tools.pack_task import pack_single_task, pack_all_tasks
 
 logger = logging.getLogger(__name__)
 
@@ -23,7 +23,7 @@ async def run_pipeline():
     settings = get_settings()
     print("Интерактивный пайплайн Benchmark Generator (code mode)")
 
-    mcp_config = Path(ask("mcp_servers.json", str(settings.mcp_config or "benchmark_generator/mcp_servers.json")))
+    mcp_config = Path(ask("mcp_servers.json", str(settings.mcp_config)))
     topic = Path(ask("topic", str(settings.topic_file)))
     count = int(ask("count", "10"))
     output_dir = Path(ask("output_dir", str(settings.output_dir)))

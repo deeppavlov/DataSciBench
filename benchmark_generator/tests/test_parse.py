@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from benchmark_generator.models import GeneratedTask, TaskList
+from benchmark_generator.core.models import GeneratedTask, TaskList
 
 
 class TestPromptMdGeneration:

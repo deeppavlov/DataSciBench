@@ -7,9 +7,9 @@ import sys
 import textwrap
 from pathlib import Path
 
-from benchmark_generator.models import MetricEntry, MetricsList
-from benchmark_generator.solve_task import _generate_metrics_py
-from benchmark_generator.pack_task import _parse_metrics_py
+from benchmark_generator.core.models import MetricEntry, MetricsList
+from benchmark_generator.tools.solve_task import _generate_metrics_py
+from benchmark_generator.tools.pack_task import _parse_metrics_py
 
 
 def _make_metrics_list(*entries: dict) -> MetricsList:

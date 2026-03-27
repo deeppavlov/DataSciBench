@@ -18,7 +18,7 @@ export OPENAI_API_KEY=sk-...
 ### 1. Prompt Generation
 
 ```bash
-python -m benchmark_generator.generate_tasks \
+python -m benchmark_generator.tools.generate_tasks \
   --codebase ./context.txt \
   --count 5 \
   --output_dir ./benchmark_generator/output
@@ -34,13 +34,13 @@ After generation, you can:
 
 ```bash
 # All tasks in the directory:
-python -m benchmark_generator.solve_task --output_dir ./benchmark_generator/output
+python -m benchmark_generator.tools.solve_task --output_dir ./benchmark_generator/output
 
 # A single task:
-python -m benchmark_generator.solve_task --task_dir ./benchmark_generator/output/task_001
+python -m benchmark_generator.tools.solve_task --task_dir ./benchmark_generator/output/task_001
 
 # Recreate the solution (even if it already exists):
-python -m benchmark_generator.solve_task --output_dir ./benchmark_generator/output --force
+python -m benchmark_generator.tools.solve_task --output_dir ./benchmark_generator/output --force
 ```
 
 For each task, the following will be created:
@@ -67,12 +67,12 @@ For each task:
 
 ```bash
 # All tasks:
-python -m benchmark_generator.pack_task \
+python -m benchmark_generator.tools.pack_task \
   --output_dir ./benchmark_generator/output \
   --prefix custom
 
 # A single task:
-python -m benchmark_generator.pack_task \
+python -m benchmark_generator.tools.pack_task \
   --task_dir ./benchmark_generator/output/task_001 \
   --task_id custom_001
 ```

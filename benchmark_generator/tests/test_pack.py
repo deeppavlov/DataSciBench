@@ -3,7 +3,7 @@ from pathlib import Path
 
 import yaml
 
-from benchmark_generator.pack_task import (
+from benchmark_generator.tools.pack_task import (
     _parse_metrics_py,
     _prompt_md_to_json,
     _metrics_to_yaml,

@@ -1,10 +1,10 @@
 import logging
 from pathlib import Path
 
-from .config import get_settings
-from .generate_tasks import generate_tasks
-from .solve_task import solve_single_task, solve_tasks, _run_script
-from .pack_task import pack_single_task, pack_all_tasks
+from ..core.config import get_settings
+from ..tools.generate_tasks import generate_tasks
+from ..tools.solve_task import solve_single_task, solve_tasks, _run_script
+from ..tools.pack_task import pack_single_task, pack_all_tasks
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,7 @@ def main():
     settings = get_settings()
     print("Интерактивный пайплайн Benchmark Generator (standard mode)")
 
-    codebase = Path(ask("codebase", "benchmark_generator/code_base.txt"))
+    codebase = Path(ask("codebase", str(settings.codebase_file)))
     count = int(ask("count", "10"))
     output_dir = Path(ask("output_dir", str(settings.output_dir)))
     topic = Path(ask("topic", str(settings.topic_file)))

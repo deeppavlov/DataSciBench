@@ -8,13 +8,13 @@ import tempfile
 import textwrap
 from pathlib import Path
 
-from .config import get_settings
-from .llm import call_llm, call_llm_multi
-from .models import MetricsList, Solution
+from ..core.config import get_settings
+from ..core.llm import call_llm, call_llm_multi
+from ..core.models import MetricsList, Solution
 
 logger = logging.getLogger(__name__)
 
-PROMPTS_DIR = Path(__file__).parent / "prompts"
+PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
 
 
 def _load_prompt(name: str) -> str:

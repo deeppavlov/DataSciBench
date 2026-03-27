@@ -14,8 +14,9 @@ class Settings(BaseSettings):
     benchmark_root: Path = Path(".")
     output_dir: Path = Path("benchmark_generator/output")
     code_timeout: int = 300
-    topic_file: Path = Path("benchmark_generator/topic.md")
-    mcp_config: Path | None = None
+    topic_file: Path = Path("benchmark_generator/resources/topic.md")
+    codebase_file: Path = Path("benchmark_generator/resources/code_base.txt")
+    mcp_config: Path = Path("benchmark_generator/resources/mcp_servers.json")
 
 
 @lru_cache

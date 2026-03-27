@@ -2,13 +2,13 @@ import argparse
 import logging
 from pathlib import Path
 
-from .config import get_settings
-from .llm import call_llm
-from .models import TaskList
+from ..core.config import get_settings
+from ..core.llm import call_llm
+from ..core.models import TaskList
 
 logger = logging.getLogger(__name__)
 
-PROMPTS_DIR = Path(__file__).parent / "prompts"
+PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
 
 
 def load_system_prompt(code_mode: bool = False) -> str:

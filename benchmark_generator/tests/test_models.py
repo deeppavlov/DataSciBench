@@ -1,4 +1,4 @@
-from benchmark_generator.models import (
+from benchmark_generator.core.models import (
     GeneratedTask,
     MetricEntry,
     MetricsList,

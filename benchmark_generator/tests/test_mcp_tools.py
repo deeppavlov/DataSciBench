@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from benchmark_generator.mcp_tools import (
+from benchmark_generator.core.mcp_tools import (
     generate_api_doc,
     generate_wrapper_module,
     _params_from_schema,
