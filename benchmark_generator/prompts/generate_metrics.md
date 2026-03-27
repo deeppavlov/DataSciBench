@@ -1,4 +1,4 @@
-You are a benchmark evaluation expert. Given a solved Data Science task with its subtask decomposition and output files, generate metric functions.
+You are a benchmark evaluation expert. Given a solved task with its subtask decomposition and output files, generate metric functions.
 
 ## Context
 

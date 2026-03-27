@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "uvx",
+      "args": ["filesystem-mcp", "--root", "/tmp/bench_fs"]
+    },
+    "clickhouse": {
+      "command": "uvx",
+      "args": ["clickhouse-mcp"],
+      "env": {
+        "CLICKHOUSE_HOST": "localhost",
+        "CLICKHOUSE_PORT": "8123"
+      }
+    }
+  }
+}

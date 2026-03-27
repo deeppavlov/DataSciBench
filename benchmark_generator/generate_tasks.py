@@ -11,20 +11,34 @@ logger = logging.getLogger(__name__)
 PROMPTS_DIR = Path(__file__).parent / "prompts"
 
 
-def load_system_prompt() -> str:
-    return (PROMPTS_DIR / "generate_tasks.md").read_text(encoding="utf-8")
+def load_system_prompt(code_mode: bool = False) -> str:
+    name = "generate_tasks_code_mode.md" if code_mode else "generate_tasks.md"
+    return (PROMPTS_DIR / name).read_text(encoding="utf-8")
 
 
-def generate_tasks(codebase_path: Path, count: int, output_dir: Path) -> list[Path]:
+def generate_tasks(
+    codebase_path: Path,
+    count: int,
+    output_dir: Path,
+    topic_path: Path | None = None,
+    code_mode: bool = False,
+) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     codebase_text = codebase_path.read_text(encoding="utf-8")
-    system_prompt = load_system_prompt()
-    user_prompt = (
-        f"Generate exactly {count} Data Science benchmark tasks "
-        f"based on the following codebase description:\n\n"
-        f"---\n{codebase_text}\n---"
-    )
+    system_prompt = load_system_prompt(code_mode)
+
+    topic_text = ""
+    if topic_path and topic_path.exists():
+        topic_text = topic_path.read_text(encoding="utf-8")
+
+    parts = [f"Generate exactly {count} benchmark tasks."]
+    if topic_text:
+        parts.append(f"Topic:\n---\n{topic_text}\n---")
+    codebase_label = "Available API" if code_mode else "Codebase description"
+    parts.append(f"{codebase_label}:\n---\n{codebase_text}\n---")
+
+    user_prompt = "\n\n".join(parts)
 
     task_list: TaskList = call_llm(system_prompt, user_prompt, response_model=TaskList)
 
@@ -58,13 +72,16 @@ def generate_tasks(codebase_path: Path, count: int, output_dir: Path) -> list[Pa
 def main():
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
-    parser = argparse.ArgumentParser(description="Generate benchmark tasks from a codebase description")
-    parser.add_argument("--codebase", type=Path, required=True, help="Path to codebase description text file")
-    parser.add_argument("--count", type=int, default=5, help="Number of tasks to generate")
-    parser.add_argument("--output_dir", type=Path, default=get_settings().output_dir, help="Output directory")
+    settings = get_settings()
+    parser = argparse.ArgumentParser(description="Generate benchmark tasks")
+    parser.add_argument("--codebase", type=Path, required=True)
+    parser.add_argument("--count", type=int, default=5)
+    parser.add_argument("--output_dir", type=Path, default=settings.output_dir)
+    parser.add_argument("--topic", type=Path, default=settings.topic_file)
+    parser.add_argument("--code_mode", action="store_true")
     args = parser.parse_args()
 
-    dirs = generate_tasks(args.codebase, args.count, args.output_dir)
+    dirs = generate_tasks(args.codebase, args.count, args.output_dir, args.topic, args.code_mode)
     print(f"Generated {len(dirs)} tasks in {args.output_dir}")
     for d in dirs:
         print(f"  {d.name}/")

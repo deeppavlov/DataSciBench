@@ -1,8 +1,10 @@
 import argparse
 import json
 import logging
+import os
 import subprocess
 import sys
+import tempfile
 import textwrap
 from pathlib import Path
 
@@ -19,16 +21,50 @@ def _load_prompt(name: str) -> str:
     return (PROMPTS_DIR / name).read_text(encoding="utf-8")
 
 
-def _run_script(script_path: Path, cwd: Path, timeout: int | None = None) -> str:
+def _run_script(
+    script_path: Path,
+    cwd: Path,
+    timeout: int | None = None,
+    code_mode: bool = False,
+    mcp_tools_path: Path | None = None,
+) -> str:
     if timeout is None:
         timeout = get_settings().code_timeout
-    result = subprocess.run(
-        [sys.executable, str(script_path.resolve())],
-        cwd=str(cwd),
-        capture_output=True,
-        text=True,
-        timeout=timeout,
-    )
+
+    env = None
+    run_path = script_path.resolve()
+
+    if code_mode and mcp_tools_path:
+        env = os.environ.copy()
+        tools_dir = str(mcp_tools_path.parent.resolve())
+        env["PYTHONPATH"] = tools_dir + ":" + env.get("PYTHONPATH", "")
+
+        original_code = script_path.read_text(encoding="utf-8")
+        wrapper_code = "from _mcp_tools import *\n" + original_code
+        tmp = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".py", dir=str(cwd), delete=False
+        )
+        tmp.write(wrapper_code)
+        tmp.flush()
+        tmp.close()
+        run_path = Path(tmp.name)
+
+    try:
+        result = subprocess.run(
+            [sys.executable, str(run_path)],
+            cwd=str(cwd),
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            env=env,
+        )
+    except subprocess.TimeoutExpired:
+        logger.warning("Script %s timed out after %d seconds", script_path.name, timeout)
+        return f"ERROR: Script timed out after {timeout} seconds"
+    finally:
+        if code_mode and mcp_tools_path and run_path != script_path.resolve():
+            run_path.unlink(missing_ok=True)
+
     output = result.stdout
     if result.stderr:
         output += "\n--- stderr ---\n" + result.stderr
@@ -118,7 +154,12 @@ def _generate_metrics_py(metrics: MetricsList, prompt_text: str) -> str:
     return "\n".join(parts)
 
 
-def solve_single_task(task_dir: Path, codebase_text: str | None = None):
+def solve_single_task(
+    task_dir: Path,
+    codebase_text: str | None = None,
+    code_mode: bool = False,
+    mcp_tools_path: Path | None = None,
+):
     prompt_path = task_dir / "prompt.md"
     if not prompt_path.exists():
         logger.warning("No prompt.md in %s, skipping", task_dir)
@@ -136,15 +177,17 @@ def solve_single_task(task_dir: Path, codebase_text: str | None = None):
         output = _run_script(input_data_path, cwd=task_dir)
         logger.debug("input_data.py output: %s", output)
 
-    system_prompt = _load_prompt("solve_task.md")
-    
+    prompt_name = "solve_task_code_mode.md" if code_mode else "solve_task.md"
+    system_prompt = _load_prompt(prompt_name)
+
     user_prompt = prompt_text
     if codebase_text:
+        label = "Available API" if code_mode else "Framework/codebase"
         user_prompt += (
-            f"\n\nYou MUST use the following framework/codebase to solve this task:\n\n"
+            f"\n\nYou MUST use the following {label} to solve this task:\n\n"
             f"---\n{codebase_text}\n---"
         )
-        
+
     solve_messages = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
@@ -156,7 +199,10 @@ def solve_single_task(task_dir: Path, codebase_text: str | None = None):
     logger.info("Saved solution.py")
 
     logger.info("Running solution.py...")
-    exec_output = _run_script(solution_path, cwd=gt_dir)
+    exec_output = _run_script(
+        solution_path, cwd=gt_dir,
+        code_mode=code_mode, mcp_tools_path=mcp_tools_path,
+    )
     logger.info("Solution output:\n%s", exec_output)
 
     generated_files = [f.name for f in gt_dir.iterdir() if f.is_file()]
@@ -191,14 +237,18 @@ def solve_single_task(task_dir: Path, codebase_text: str | None = None):
     logger.info("Saved chat_log.txt")
 
     logger.info("Running metrics.py to verify...")
-    # Run in gt_dir because the generated verification output files are there
     metrics_output = _run_script(metrics_path, cwd=gt_dir)
     verify_log = task_dir / "verify_log.txt"
     verify_log.write_text(metrics_output, encoding="utf-8")
     logger.info("Verification:\n%s", metrics_output)
 
 
-def solve_tasks(output_dir: Path, codebase_text: str | None = None):
+def solve_tasks(
+    output_dir: Path,
+    codebase_text: str | None = None,
+    code_mode: bool = False,
+    mcp_tools_path: Path | None = None,
+):
     task_dirs = sorted(d for d in output_dir.iterdir() if d.is_dir() and d.name.startswith("task_"))
     if not task_dirs:
         logger.warning("No task directories found in %s", output_dir)
@@ -208,7 +258,7 @@ def solve_tasks(output_dir: Path, codebase_text: str | None = None):
         if (task_dir / "solution.py").exists():
             logger.info("Skipping %s (already solved)", task_dir.name)
             continue
-        solve_single_task(task_dir, codebase_text)
+        solve_single_task(task_dir, codebase_text, code_mode, mcp_tools_path)
 
 
 def main():
@@ -216,10 +266,12 @@ def main():
 
     parser = argparse.ArgumentParser(description="Solve benchmark tasks and generate gt + metrics")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--task_dir", type=Path, help="Path to a single task directory")
-    group.add_argument("--output_dir", type=Path, help="Path to output directory (process all tasks)")
-    parser.add_argument("--force", action="store_true", help="Re-solve already solved tasks")
-    parser.add_argument("--codebase", type=Path, help="Path to codebase description to enforce usage of the framework")
+    group.add_argument("--task_dir", type=Path)
+    group.add_argument("--output_dir", type=Path)
+    parser.add_argument("--force", action="store_true")
+    parser.add_argument("--codebase", type=Path)
+    parser.add_argument("--code_mode", action="store_true")
+    parser.add_argument("--mcp_tools_path", type=Path)
     args = parser.parse_args()
 
     codebase_text = None
@@ -227,14 +279,14 @@ def main():
         codebase_text = args.codebase.read_text(encoding="utf-8")
 
     if args.task_dir:
-        solve_single_task(args.task_dir, codebase_text)
+        solve_single_task(args.task_dir, codebase_text, args.code_mode, args.mcp_tools_path)
     else:
         if args.force:
             task_dirs = sorted(d for d in args.output_dir.iterdir() if d.is_dir() and d.name.startswith("task_"))
             for td in task_dirs:
-                solve_single_task(td, codebase_text)
+                solve_single_task(td, codebase_text, args.code_mode, args.mcp_tools_path)
         else:
-            solve_tasks(args.output_dir, codebase_text)
+            solve_tasks(args.output_dir, codebase_text, args.code_mode, args.mcp_tools_path)
 
 
 if __name__ == "__main__":

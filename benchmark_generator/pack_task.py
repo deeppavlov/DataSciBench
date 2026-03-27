@@ -129,11 +129,12 @@ def main():
 
     parser = argparse.ArgumentParser(description="Pack generated tasks into benchmark format")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--task_dir", type=Path, help="Path to a single task directory")
-    group.add_argument("--output_dir", type=Path, help="Path to output directory (pack all tasks)")
-    parser.add_argument("--task_id", type=str, help="Task ID (required for single task)")
-    parser.add_argument("--prefix", type=str, default="custom", help="Prefix for task IDs (batch mode)")
-    parser.add_argument("--benchmark_dir", type=Path, default=get_settings().benchmark_root, help="Benchmark root directory")
+    group.add_argument("--task_dir", type=Path)
+    group.add_argument("--output_dir", type=Path)
+    parser.add_argument("--task_id", type=str)
+    parser.add_argument("--prefix", type=str, default="custom")
+    parser.add_argument("--benchmark_dir", type=Path, default=get_settings().benchmark_root)
+    parser.add_argument("--mcp_tools", type=Path)
     args = parser.parse_args()
 
     if args.task_dir:
@@ -143,6 +144,12 @@ def main():
         print(f"Packed {args.task_dir.name} as {args.task_id}")
     else:
         pack_all_tasks(args.output_dir, args.prefix, args.benchmark_dir)
+
+    if args.mcp_tools and args.mcp_tools.exists():
+        dest = args.benchmark_dir / "code_mode" / "_mcp_tools.py"
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(args.mcp_tools, dest)
+        logger.info("Copied _mcp_tools.py -> %s", dest)
 
 
 if __name__ == "__main__":
