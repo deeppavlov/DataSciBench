@@ -171,3 +171,4 @@ storage/
 log*
 scripts
 notes
+src/vlm_config.py
