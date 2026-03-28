@@ -1,5 +1,5 @@
 from metagpt.config2 import Config
-from metagpt.roles import Role
+from metagpt.roles.role import Role
 from role import SciDataInterpreter
 from metagpt.schema import Message, MessageQueue, SerializationMixin
 from metagpt.context_mixin import ContextMixin
