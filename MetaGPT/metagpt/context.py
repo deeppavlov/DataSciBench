@@ -17,8 +17,6 @@ from metagpt.provider.base_llm import BaseLLM
 from metagpt.provider.llm_provider_registry import create_llm_instance
 from metagpt.utils.cost_manager import (
     CostManager,
-    FireworksCostManager,
-    TokenCostManager,
 )
 from metagpt.utils.git_repository import GitRepository
 from metagpt.utils.project_repo import ProjectRepo
@@ -80,12 +78,7 @@ class Context(BaseModel):
 
     def _select_costmanager(self, llm_config: LLMConfig) -> CostManager:
         """Return a CostManager instance"""
-        if llm_config.api_type == LLMType.FIREWORKS:
-            return FireworksCostManager()
-        elif llm_config.api_type == LLMType.OPEN_LLM:
-            return TokenCostManager()
-        else:
-            return self.cost_manager
+        return self.cost_manager
 
     def llm(self) -> BaseLLM:
         """Return a LLM instance, fixme: support cache"""
