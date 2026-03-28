@@ -201,5 +201,6 @@ if __name__ == "__main__":
                             f.write(json.dumps(output_dict)+'\n')
 
                     except Exception as e:
+                        import traceback
                         temp_logger.info("====================================================")
-                        temp_logger.info(f"{e}\n====================================================")
+                        temp_logger.info(f"{traceback.format_exc()}\n====================================================")

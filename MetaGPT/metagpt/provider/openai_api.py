@@ -82,7 +82,12 @@ class OpenAILLM(BaseLLM):
     def _get_proxy_params(self) -> dict:
         params = {}
         if self.config.proxy:
-            params = {"proxies": self.config.proxy}
+            import httpx
+            v = httpx.__version__.split('.')
+            if int(v[0]) > 0 or int(v[1]) >= 28:
+                params = {"proxy": self.config.proxy}
+            else:
+                params = {"proxies": self.config.proxy}
             if self.config.base_url:
                 params["base_url"] = self.config.base_url
 
