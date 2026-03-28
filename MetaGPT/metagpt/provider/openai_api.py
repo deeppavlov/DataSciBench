@@ -44,12 +44,6 @@ from metagpt.utils.token_counter import (
 @register_provider(
     [
         LLMType.OPENAI,
-        LLMType.FIREWORKS,
-        LLMType.OPEN_LLM,
-        LLMType.MOONSHOT,
-        LLMType.MISTRAL,
-        LLMType.YI,
-        LLMType.OPENROUTER,
     ]
 )
 class OpenAILLM(BaseLLM):

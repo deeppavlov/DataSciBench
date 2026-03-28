@@ -16,24 +16,9 @@ from metagpt.utils.yaml_model import YamlModel
 
 class LLMType(Enum):
     OPENAI = "openai"
-    ANTHROPIC = "anthropic"
-    CLAUDE = "claude"  # alias name of anthropic
-    SPARK = "spark"
-    ZHIPUAI = "zhipuai"
-    FIREWORKS = "fireworks"
-    OPEN_LLM = "open_llm"
     GEMINI = "gemini"
     METAGPT = "metagpt"
-    AZURE = "azure"
     OLLAMA = "ollama"
-    QIANFAN = "qianfan"  # Baidu BCE
-    DASHSCOPE = "dashscope"  # Aliyun LingJi DashScope
-    MOONSHOT = "moonshot"
-    MISTRAL = "mistral"
-    YI = "yi"  # lingyiwanwu
-    OPENROUTER = "openrouter"
-    BEDROCK = "bedrock"
-    ARK = "ark"
 
     def __missing__(self, key):
         return self.OPENAI
@@ -54,16 +39,6 @@ class LLMConfig(YamlModel):
     model: Optional[str] = None  # also stands for DEPLOYMENT_NAME
     pricing_plan: Optional[str] = None  # Cost Settlement Plan Parameters.
 
-    # For Cloud Service Provider like Baidu/ Alibaba
-    access_key: Optional[str] = None
-    secret_key: Optional[str] = None
-    endpoint: Optional[str] = None  # for self-deployed model on the cloud
-
-    # For Spark(Xunfei), maybe remove later
-    app_id: Optional[str] = None
-    api_secret: Optional[str] = None
-    domain: Optional[str] = None
-
     # For Chat Completion
     max_token: int = 4096
     temperature: float = 0.7
@@ -80,9 +55,6 @@ class LLMConfig(YamlModel):
     logprobs: Optional[bool] = None
     top_logprobs: Optional[int] = None
     timeout: int = 600
-
-    # For Amazon Bedrock
-    region_name: str = None
 
     # For Network
     proxy: Optional[str] = None
