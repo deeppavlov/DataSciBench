@@ -117,11 +117,8 @@ def register_tool(tags: list[str] = None, schema_path: str = "", **kwargs):
 
 
 def make_schema(tool_source_object, include, path):
-    os.makedirs(os.path.dirname(path), exist_ok=True)  # Create the necessary directories
     try:
         schema = convert_code_to_tool_schema(tool_source_object, include=include)
-        with open(path, "w", encoding="utf-8") as f:
-            yaml.dump(schema, f, sort_keys=False)
     except Exception as e:
         schema = {}
         logger.error(f"Fail to make schema: {e}")
