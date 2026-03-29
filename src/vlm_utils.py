@@ -109,4 +109,4 @@ def vlm_vis_quality(ground_truth_path, test_path):
             _log_vlm(messages, error=str(e))
             raise e
             
-    return int(resp_content.split("### Total Score:")[1].strip().split("/")[0])
+    return float(resp_content.split("### Total Score:")[1].strip().split("/")[0])

@@ -1,6 +1,6 @@
 # Data Science Tasks
 
-Generate tasks related to data analysis, machine learning, statistical analysis, and data visualization.
+Generate simple tasks related to data analysis, machine learning, statistical analysis, and data visualization.
 
 Tasks may include:
 - Building predictive models on tabular data

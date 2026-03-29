@@ -17,18 +17,18 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-echo ""
-echo "[Step 2] Calculating final CSV metrics..."
-python -m evaluation_results.calculate_final_metric
-if [ $? -ne 0 ]; then
-    echo "Error during Step 2 final metric calculation. Exiting."
-    exit 1
-fi
+# echo ""
+# echo "[Step 2] Calculating final CSV metrics..."
+# python -m evaluation_results.calculate_final_metric
+# if [ $? -ne 0 ]; then
+#     echo "Error during Step 2 final metric calculation. Exiting."
+#     exit 1
+# fi
 
-echo ""
-echo "=========================================================="
-echo "Evaluation Pipeline Complete."
-echo "Final results have been updated."
-echo "VLM Logs are now unified and located at:"
-echo "evaluation_results/vlm_run_log.txt"
-echo "=========================================================="
+# echo ""
+# echo "=========================================================="
+# echo "Evaluation Pipeline Complete."
+# echo "Final results have been updated."
+# echo "VLM Logs are now unified and located at:"
+# echo "evaluation_results/vlm_run_log.txt"
+# echo "=========================================================="

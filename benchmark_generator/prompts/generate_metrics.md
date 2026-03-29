@@ -17,8 +17,8 @@ Common metric patterns:
 - **Value comparison**: compare specific values or ranges
 - **Model accuracy**: load model, run predictions, check accuracy threshold
 - **Completeness**: check that all expected columns/rows exist
-- **VLM-as-a-judge (Visualization Quality)**: for generated plots (e.g., PNG). Use `from src.vlm_utils import vlm_vis_quality` and return `float(vlm_vis_quality(ground_truth, "output.png"))`.
-- **LLM-as-a-judge (Text Quality)**: for open-ended text answers, analysis, or reports (e.g., MD, TXT). Use `from src.llm_utils import llm_text_quality` and return `float(llm_text_quality(ground_truth, "output.txt"))`.
+- **VLM-as-a-judge (Visualization Quality)**: for generated plots (e.g., PNG). Use `from src.vlm_utils import vlm_vis_quality` and return `float(vlm_vis_quality(ground_truth, "output.png"))`. NEVER return a boolean expression (do NOT use >= or ==).
+- **LLM-as-a-judge (Text Quality)**: for open-ended text answers, analysis, or reports (e.g., MD, TXT). Use `from src.llm_utils import llm_text_quality` and return `float(llm_text_quality(ground_truth, "output.txt"))`. NEVER return a boolean expression (do NOT use >= or ==).
 
 ## Output format
 

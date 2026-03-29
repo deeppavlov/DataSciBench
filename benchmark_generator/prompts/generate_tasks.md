@@ -16,6 +16,7 @@ Each task must be a self-contained prompt. The prompt should:
 4. Break the work into numbered steps with clear input/output for each step
 5. Include an explicit instruction naming the specific framework/library/tool that the solver MUST use
 6. Be detailed enough that an LLM agent can solve it without additional context
+7. Separate task items with line breaks.
 
 ## Quotas
 

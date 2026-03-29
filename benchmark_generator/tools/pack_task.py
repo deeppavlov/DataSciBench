@@ -101,12 +101,22 @@ def pack_single_task(task_dir: Path, task_id: str, benchmark_root: Path):
             shutil.copy2(f, data_dir / f.name)
             logger.info("Copied %s -> data/%s/%s", f.name, task_id, f.name)
 
+    class BlockStringDumper(yaml.Dumper):
+        pass
+
+    def str_presenter(dumper, data):
+        if '\n' in data:
+            return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
+        return dumper.represent_scalar('tag:yaml.org,2002:str', data)
+
+    BlockStringDumper.add_representer(str, str_presenter)
+
     prompt_text = prompt_md.read_text(encoding="utf-8")
     metrics = _parse_metrics_py(metrics_py)
     metric_yaml = _metrics_to_yaml(metrics, prompt_text)
     yaml_path = metric_dir / "metric.yaml"
     yaml_path.write_text(
-        yaml.dump(metric_yaml, allow_unicode=True, default_flow_style=False, sort_keys=False),
+        yaml.dump(metric_yaml, Dumper=BlockStringDumper, allow_unicode=True, default_flow_style=False, sort_keys=False),
         encoding="utf-8",
     )
     logger.info("Created metric/%s/metric.yaml", task_id)
