@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Specify TASK_ID here (e.g., from data folder: dl_0, human_12, etc.)
-TASK_ID="human_24"
+TASK_ID="human_3"
 # Config for the run
 CONFIG_FILE="gemma3.yaml"
 

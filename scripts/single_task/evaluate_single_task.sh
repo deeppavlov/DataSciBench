@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Specify TASK_ID here (same as in run_single_task.sh)
-TASK_ID="human_24"
+TASK_ID="human_3"
 # Model name for evaluation
 MODEL_NAME="gemma-3-27b-it"
 
