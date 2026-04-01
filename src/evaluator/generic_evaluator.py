@@ -22,7 +22,7 @@ class GenericRule(Rule):
     A generic rule is instantiated with a funciton that takes in a metric returned by the Metric class and returns a boolean
     """
     def __init__(self, rule: str=None):
-        if rule == None:
+        if rule is None:
             self.rule = lambda x: x
         else:
             self.rule = eval(rule)

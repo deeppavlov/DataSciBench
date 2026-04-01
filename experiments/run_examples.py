@@ -69,10 +69,7 @@ if __name__ == "__main__":
     folders = [f for f in os.listdir(data_dir) if os.path.isdir(os.path.join(data_dir, f))]
     num_folders = len(folders)
     args = get_args()
-    if args.task_id is None:
-        task_id = folders
-    else:
-        task_id = args.task_id if "[" not in args.task_id else eval(args.task_id)
+    task_id = folders if args.task_id is None else args.task_id if "[" not in args.task_id else eval(args.task_id)
 
     if isinstance(task_id, str):
         folders = [f"{args.task_id}"]

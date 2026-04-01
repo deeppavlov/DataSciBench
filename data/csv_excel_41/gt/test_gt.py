@@ -37,10 +37,7 @@ def fill_weight(row, models):
     if pd.isnull(row['weight']):
         region = row['region']
         height = row['height']
-        if region in models:
-            model = models[region]
-        else:
-            model = models['overall']
+        model = models[region] if region in models else models['overall']
         # Predict weight using the model
         predicted_weight = model['slope'] * height + model['intercept']
         return predicted_weight

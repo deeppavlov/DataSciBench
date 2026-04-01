@@ -88,7 +88,7 @@ for model in model_list:
 
     # %%
     success_dict = {}
-    for index, row in df_crs.iterrows():
+    for _index, row in df_crs.iterrows():
         if row['data_name'] not in success_dict:
             success_dict[row['data_name']] = 0
         if row['result_cr'] == 1:
@@ -159,7 +159,7 @@ for model in model_list:
     # %%
     # calculate average completion rate for df_crs
     total_cr = 0
-    for index, row in df_crs.iterrows():
+    for _index, row in df_crs.iterrows():
         total_cr += row['result_cr']
 
     avg_cr = total_cr/(TOTAL_NUM_FUNC * MAX_RUNS) * 100
@@ -167,7 +167,7 @@ for model in model_list:
 
     # calculate average completion rate for human, csv and dl
     total_cr = 0
-    for index, row in df_crs.iterrows():
+    for _index, row in df_crs.iterrows():
         if row['data_name'].startswith("human"):
             total_cr += row['result_cr']
 
@@ -175,7 +175,7 @@ for model in model_list:
     print("Average completion rate for data_name starting with 'human': ", total_cr/(HUMAN_NUM_FUNC * MAX_RUNS) * 100)
 
     total_cr = 0
-    for index, row in df_crs.iterrows():
+    for _index, row in df_crs.iterrows():
         if row['data_name'].startswith("csv"):
             total_cr += row['result_cr']
 
@@ -183,7 +183,7 @@ for model in model_list:
     print("Average completion rate for data_name starting with 'csv': ", total_cr/(CSV_NUM_FUNC * MAX_RUNS) * 100)
 
     total_cr = 0
-    for index, row in df_crs.iterrows():
+    for _index, row in df_crs.iterrows():
         if row['data_name'].startswith("dl"):
             total_cr += row['result_cr']
     
@@ -204,10 +204,10 @@ for model in model_list:
     # %%
     # calculate average completion rate for each (funciotn, task) in top_5_functions_dict
     f_list = []
-    for function_dict, TOTAL in zip(top_5_functions_dict, F_NUM_LIST):
+    for function_dict, TOTAL in zip(top_5_functions_dict, F_NUM_LIST, strict=False):
         # print("function_name: ", function_dict['function_name'], "task_name: ", function_dict['task_name'])
         total_cr = 0
-        for index, row in df.iterrows():
+        for _index, row in df.iterrows():
             # print(row['function_name'])
             try:
                 if row['function_name'] == function_dict['function_name'] and row['task_name'] == function_dict['task_name']:
@@ -224,7 +224,7 @@ for model in model_list:
     # %%
     vlm_list = []
     llm_list = []
-    for index, row in df.iterrows():
+    for _index, row in df.iterrows():
         if pd.notna(row['result_type']) and row['result_type'] == "single task (int)":
             try:
                 val = float(row['result_value'])

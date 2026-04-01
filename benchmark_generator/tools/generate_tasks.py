@@ -1,4 +1,5 @@
 import argparse
+import contextlib
 import logging
 from pathlib import Path
 
@@ -46,10 +47,8 @@ def generate_tasks(
     next_num = 1
     if existing:
         last = existing[-1].name
-        try:
+        with contextlib.suppress(IndexError, ValueError):
             next_num = int(last.split("_")[1]) + 1
-        except (IndexError, ValueError):
-            pass
 
     created_dirs = []
     for i, task in enumerate(task_list.tasks):

@@ -47,10 +47,6 @@ def main(requirement: str, plan: list, args):
     counter = 0
     total_counter = 0
     wrong_counter = 0
-    silicon = [
-        "Qwen/Qwen2.5-Coder-7B-Instruct",
-        "01-ai/Yi-1.5-9B-Chat-16K", "google/gemma-2-9b-it", "meta-llama/Meta-Llama-3-8B-Instruct", "meta-llama/Meta-Llama-3.1-8B-Instruct", "Qwen/Qwen2-1.5B-Instruct", "Qwen/Qwen2-7B-Instruct", "Qwen/Qwen2.5-7B-Instruct", "THUDM/glm-4-9b-chat"
-    ]
     model_name = args.model_id.split("/")[-1]
     csv_output_file = get_result_output_dir(model_name)
     print("CSV output file: ", csv_output_file)
@@ -88,8 +84,6 @@ def main(requirement: str, plan: list, args):
         # output_name = f"{model_name}_outputs.jsonl"
         outputs = []
         # for loading the outputs
-        true = True
-        false = False
         # print("Data path: ", os.listdir(data_path))
         for model_run_id in os.listdir(data_path):
             if args.model_id is not None and not model_run_id.startswith(args.model_id.split("/")[-1]):
@@ -120,7 +114,7 @@ def main(requirement: str, plan: list, args):
                 print(f"Model run {model_run_id} is invalid! Skipped.")
         
         # save the results per model run and per task to a single file
-        for idx, output in enumerate(outputs):
+        for _idx, output in enumerate(outputs):
             gt_path = os.path.abspath(data_path)
             # if args.model_id in silicon:
             #     gt_path = os.path.join(gt_path, "../gt")

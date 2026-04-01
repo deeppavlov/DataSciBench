@@ -22,13 +22,13 @@ for script in entry_points:
         finder.run_script(script)
 
 used_files = set()
-for name, mod in finder.modules.items():
+for _name, mod in finder.modules.items():
     if mod.__file__ and "MetaGPT/metagpt" in mod.__file__:
         used_files.add(os.path.abspath(mod.__file__))
 
 # All files in MetaGPT/metagpt
 all_files = set()
-for root, dirs, files in os.walk("MetaGPT/metagpt"):
+for root, _dirs, files in os.walk("MetaGPT/metagpt"):
     for file in files:
         if file.endswith(".py"):
             all_files.add(os.path.abspath(os.path.join(root, file)))

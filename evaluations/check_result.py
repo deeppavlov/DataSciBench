@@ -15,21 +15,16 @@ def parse_arguments():
 
 def main(all_args):
     all_should=[]
-    dirs=[]
     output_dir = 'data'
     model_ = all_args.model_id
-    if model_ == "all":
-        models = all_models
-    else:
-        models = [model_]
+    models = all_models if model_ == "all" else [model_]
 
     for model_id in models:
         model_name_parts = model_id.split('/')
         if len(model_name_parts) > 1:
-            model_dir=model_name_parts[0]
+            model_name_parts[0]
             model_name = model_name_parts[1]
         else:
-            model_dir = ""
             model_name = model_name_parts[0]
         have_completed = 0 
         success_num = 0
@@ -43,7 +38,6 @@ def main(all_args):
             flag = False
             new_dir = os.path.join(output_dir, dir_)
             if os.path.isdir(new_dir):
-                should_dir_num=MAX_RUNS
                 actual_complete = 0
                 success = 0
                 for sub_dir in os.listdir(new_dir):

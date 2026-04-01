@@ -107,7 +107,7 @@ class Node:
                 self.correct_list.append(1)
                 print(correctness)
                 wrong_type = type(correctness)
-                warnings.warn(f"The evaluator should return either an integer or a boolean, but a {wrong_type} was returned.")
+                warnings.warn(f"The evaluator should return either an integer or a boolean, but a {wrong_type} was returned.", stacklevel=2)
             result_list.append(correctness)
         if len(result_list) > 0:
             return result_list

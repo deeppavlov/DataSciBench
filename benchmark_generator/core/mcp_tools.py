@@ -165,7 +165,7 @@ def generate_wrapper_module(tools: dict[str, list[Tool]], mcp_config_path: Path)
             params = _params_from_schema(tool.inputSchema)
             sig_parts = []
             call_dict_parts = []
-            for pname, ptype, req in params:
+            for pname, ptype, _req in params:
                 py_type = {"string": "str", "integer": "int", "number": "float", "boolean": "bool"}.get(ptype, "str")
                 sig_parts.append(f"{pname}: {py_type}")
                 call_dict_parts.append(f"{repr(pname)}: {pname}")

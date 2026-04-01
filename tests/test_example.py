@@ -29,7 +29,7 @@ class TestExample(unittest.TestCase):
 def run_tests():
     suite = unittest.TestLoader().loadTestsFromTestCase(TestMathUtils)
     runner = unittest.TextTestRunner()
-    result = runner.run(suite)
+    runner.run(suite)
     return TestExample.passed_tests_counter
 
 if __name__ == "__main__":

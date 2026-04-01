@@ -24,7 +24,6 @@ class TestContextManagers(unittest.TestCase):
     def test_change_metalog_path(self):
         # Test changing the log file path
         logger, _, _ = create_logger()
-        original_logfile = logger.logfile
         with change_metalog_path(logger, file_path='/path/to/new/logfile.log'):
             self.assertEqual(logger.logfile, '/path/to/new/logfile.log')
 
