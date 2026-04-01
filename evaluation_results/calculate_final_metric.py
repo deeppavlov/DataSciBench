@@ -212,12 +212,12 @@ for model in model_list:
             try:
                 if row['function_name'] == function_dict['function_name'] and row['task_name'] == function_dict['task_name']:
                     total_cr += row['result_cr']
-            except:
+            except Exception:
                 print(row)
         try:
             f_list.append(total_cr/(TOTAL * 2 * MAX_RUNS) * 100)
             print("Average completion rate for (", function_dict['function_name'], ", ", function_dict['task_name'], "): ", total_cr/(TOTAL * 2 * MAX_RUNS))
-        except:
+        except Exception:
             f_list.append(0)
             print("Average completion rate for (", function_dict['function_name'], ", ", function_dict['task_name'], "): ", 0)
     print('-'*100)
@@ -238,13 +238,13 @@ for model in model_list:
 
     try:
         vlm_score = sum(vlm_list) / len(vlm_list) if len(vlm_list) > 0 else 0.0
-    except:
+    except Exception:
         vlm_score = 0.0
     print("VLM: ", vlm_score)
 
     try:
         llm_score = sum(llm_list) / len(llm_list) if len(llm_list) > 0 else 0.0
-    except:
+    except Exception:
         llm_score = 0.0
     print("LLM: ", llm_score)
 

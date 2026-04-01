@@ -27,7 +27,7 @@ class TestExample(unittest.TestCase):
         self.assertLess(distance, 10)
 
 def run_tests():
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestMathUtils)
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestExample)
     runner = unittest.TextTestRunner()
     runner.run(suite)
     return TestExample.passed_tests_counter

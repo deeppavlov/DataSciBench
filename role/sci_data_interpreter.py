@@ -87,7 +87,7 @@ class SciDataInterpreter(Role):
         return json_objects
 
     @model_validator(mode="after")
-    def set_plan_and_tool(self) -> Interpreter:
+    def set_plan_and_tool(self) -> SciDataInterpreter:
         self._set_react_mode(react_mode=self.react_mode, max_react_loop=self.max_react_loop, auto_run=self.auto_run)
         self.use_plan = (
             self.react_mode == "plan_and_act"

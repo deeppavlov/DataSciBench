@@ -1,3 +1,4 @@
+import base64
 import json
 import os
 from datetime import datetime
@@ -41,7 +42,7 @@ def _log_vlm(request_messages, response_content=None, error=None):
     except Exception as e:
         print(f"Failed to log VLM call: {e}")
 
-import base64
+
 
 
 def vlm_vis_quality(ground_truth_path, test_path):
