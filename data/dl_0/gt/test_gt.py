@@ -1,15 +1,16 @@
-import pandas as pd
-import numpy as np
 import glob
-import os
 import json
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM, TimeDistributed
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report, confusion_matrix
+import os
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
+import tensorflow as tf
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.layers import LSTM, Dense
+from tensorflow.keras.models import Sequential
 
 # Constants
 INPUT_DIR = '../data/'

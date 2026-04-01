@@ -2,6 +2,7 @@ import asyncio
 
 # from metagpt.roles.di.data_interpreter import DataInterpreter
 from metagpt.roles.di.data_interpreter import DataInterpreter
+
 # from metagpt.logs import logger
 
 async def main(requirement: str):

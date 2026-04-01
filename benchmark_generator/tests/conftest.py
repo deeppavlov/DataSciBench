@@ -1,7 +1,4 @@
-import json
-import shutil
 import textwrap
-from pathlib import Path
 
 import pytest
 

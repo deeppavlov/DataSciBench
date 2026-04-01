@@ -26,9 +26,8 @@ missing_proportion_df.rename(columns={'index': 'column'}, inplace=True)
 missing_proportion_df.to_csv('missing_values_proportion.csv', index=False)
 
 
-import pandas as pd
 import numpy as np
-
+import pandas as pd
 
 # Read the data
 df = pd.read_csv('../data.csv')

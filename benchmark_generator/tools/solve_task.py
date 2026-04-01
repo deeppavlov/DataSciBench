@@ -1,5 +1,4 @@
 import argparse
-import json
 import logging
 import os
 import subprocess
@@ -9,7 +8,7 @@ import textwrap
 from pathlib import Path
 
 from ..core.config import get_settings
-from ..core.llm import call_llm, call_llm_multi
+from ..core.llm import call_llm_multi
 from ..core.models import MetricsList, Solution
 
 logger = logging.getLogger(__name__)

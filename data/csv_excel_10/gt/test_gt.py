@@ -1,8 +1,6 @@
 import pandas as pd
-import numpy as np
-import tensorflow as tf
-from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
+from tensorflow.keras.models import Sequential
 
 # Load input and output datasets
 input_data = pd.read_csv("../input_data.csv").values

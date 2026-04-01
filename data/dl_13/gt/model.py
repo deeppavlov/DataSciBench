@@ -1,6 +1,7 @@
 
 import tensorflow as tf
 
+
 class LinearRegressionModel(tf.Module):
     def __init__(self):
         self.w = tf.Variable(0.8, dtype=tf.float32)

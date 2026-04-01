@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 Modified DI role for DataSciBench
 @Modified by: 2024/8/6. Added a plan_list to capture the completed/failed plans.
@@ -17,13 +16,11 @@ from metagpt.actions.di.write_analysis_code import CheckData, WriteAnalysisCode
 from metagpt.logs import logger
 from metagpt.prompts.di.write_analysis_code import DATA_INFO
 from metagpt.roles.role import Role
-from metagpt.schema import Message, Task, TaskResult, Plan
+from metagpt.schema import Message, Plan, Task, TaskResult
 from metagpt.strategy.task_type import TaskType
 from metagpt.tools.tool_recommend import BM25ToolRecommender, ToolRecommender
 from metagpt.utils.common import CodeParser
-
 from metagpt.utils.cost_manager import Costs
-from metagpt.config2 import Config
 
 REACT_THINK_PROMPT = """
 # User Requirement
@@ -90,7 +87,7 @@ class SciDataInterpreter(Role):
         return json_objects
 
     @model_validator(mode="after")
-    def set_plan_and_tool(self) -> "Interpreter":
+    def set_plan_and_tool(self) -> Interpreter:
         self._set_react_mode(react_mode=self.react_mode, max_react_loop=self.max_react_loop, auto_run=self.auto_run)
         self.use_plan = (
             self.react_mode == "plan_and_act"

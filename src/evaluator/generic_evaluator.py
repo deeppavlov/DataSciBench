@@ -1,5 +1,7 @@
-from src.schemas.schemas import Metric, Evaluator, Rule, TestFunction
-from typing import Callable, Any
+from typing import Any
+
+from src.schemas.schemas import Evaluator, Metric, Rule, TestFunction
+
 
 class GenericMetric(Metric):
     """

@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def data_preparation():
     # Read the previous campaign data
     df = pd.read_csv('../campaign_data.csv')
@@ -10,8 +11,8 @@ def data_preparation():
 
 data_preparation()
 
-import pandas as pd
 from sklearn.linear_model import LinearRegression
+
 
 def model_training():
     # Read the cleaned data
@@ -36,7 +37,6 @@ def model_training():
 
 model_training()
 
-import pandas as pd
 
 def expenditure_calculation(desired_units_sold):
     # Read the model parameters
@@ -53,8 +53,6 @@ def expenditure_calculation(desired_units_sold):
 
 expenditure_calculation(60000)
 
-import pandas as pd
-from sklearn.linear_model import LinearRegression
 
 def data_preparation():
     df = pd.read_csv('campaign_data.csv')
@@ -92,7 +90,7 @@ def desired_marketing_expenditure(marketing_expenditure, units_sold, desired_uni
     model_training()
     expenditure_calculation(desired_units_sold)
     
-    with open('required_expenditure.txt', 'r') as f:
+    with open('required_expenditure.txt') as f:
         result = float(f.read())
     
     return result

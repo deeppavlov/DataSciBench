@@ -1,7 +1,8 @@
-import os
-from openai import OpenAI
 import json
+import os
 from datetime import datetime
+
+from openai import OpenAI
 
 try:
     from .vlm_config import API_KEY, BASE_URL
@@ -29,9 +30,9 @@ def _log_llm(request_messages, response_content=None, error=None):
 
 def llm_text_quality(ground_truth_path, test_path):
     try:
-        with open(ground_truth_path, "r", encoding="utf-8") as f:
+        with open(ground_truth_path, encoding="utf-8") as f:
             gt_text = f.read()
-        with open(test_path, "r", encoding="utf-8") as f:
+        with open(test_path, encoding="utf-8") as f:
             test_text = f.read()
     except Exception as e:
         _log_llm([], error=f"File read error: {e}")

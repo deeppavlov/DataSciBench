@@ -1,7 +1,8 @@
-import os
-from openai import OpenAI
 import json
+import os
 from datetime import datetime
+
+from openai import OpenAI
 
 try:
     from .vlm_config import API_KEY, BASE_URL
@@ -41,6 +42,8 @@ def _log_vlm(request_messages, response_content=None, error=None):
         print(f"Failed to log VLM call: {e}")
 
 import base64
+
+
 def vlm_vis_quality(ground_truth_path, test_path):
     # Open the image file and encode it as a base64 string
     def encode_image(image_path):

@@ -1,8 +1,9 @@
-from .schemas import Metric, Evaluator, Task, TestFunction, DAG
-from ..evaluator.evaluator_dict import TM_2_EVALUATOR
-from ..evaluator import GenericEvaluator, CREvaluator
-from role import SciDataInterpreter
 import warnings
+
+from ..evaluator import CREvaluator, GenericEvaluator
+from ..evaluator.evaluator_dict import TM_2_EVALUATOR
+from .schemas import DAG, Task, TestFunction
+
 
 class Node:
     def __init__(self, node_info: dict, taskname2gt: dict[dict]=None, task_list: list[Task]=None):
@@ -12,17 +13,17 @@ class Node:
         - a Node needs to be evaluated. In this case, the Node will retrieve Evaluators which include Metrics, Codes and Rules.
         """
         self.correct_list = []
-        self.task_id = node_info.get("task_id", None)
-        self.function = node_info.get("function", None)
-        self.metric = node_info.get("metric", None)
-        self.dependent_task_ids = node_info.get("dependent_task_ids", None)
-        self.instruction = node_info.get("instruction", None)
-        self.task_type = node_info.get("task_type", None)
-        self.task_name = node_info.get("task_name", None)
-        self.code = node_info.get("code", None)
-        self.result = node_info.get("result", None)
-        self.is_success = node_info.get("is_success", None)
-        self.is_finished = node_info.get("is_finished", None)
+        self.task_id = node_info.get("task_id")
+        self.function = node_info.get("function")
+        self.metric = node_info.get("metric")
+        self.dependent_task_ids = node_info.get("dependent_task_ids")
+        self.instruction = node_info.get("instruction")
+        self.task_type = node_info.get("task_type")
+        self.task_name = node_info.get("task_name")
+        self.code = node_info.get("code")
+        self.result = node_info.get("result")
+        self.is_success = node_info.get("is_success")
+        self.is_finished = node_info.get("is_finished")
         self.taskname2gt = taskname2gt
         if task_list is None:
             self.task_list = self.retrieve_task(self.task_type)
@@ -69,7 +70,7 @@ class Node:
             return evaluator()
         if evaluator is None:
             return None
-        gt_dict = taskname2gt.get(task.task_type, None)
+        gt_dict = taskname2gt.get(task.task_type)
         # print(gt_dict)
         if gt_dict is None:
             return None

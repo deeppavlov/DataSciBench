@@ -1,16 +1,15 @@
 import ast
 import json
 import logging
-from pathlib import Path
 from unittest.mock import MagicMock
 
 import pytest
 
 from benchmark_generator.core.mcp_tools import (
+    _check_tool_name_collisions,
+    _params_from_schema,
     generate_api_doc,
     generate_wrapper_module,
-    _params_from_schema,
-    _check_tool_name_collisions,
 )
 
 

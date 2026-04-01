@@ -87,6 +87,7 @@ This analysis highlights the top 5 association rules discovered based on the met
 # Save analysis to PDF
 from fpdf import FPDF
 
+
 class PDF(FPDF):
     def header(self):
         self.set_font('Arial', 'B', 12)

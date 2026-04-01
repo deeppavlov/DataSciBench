@@ -1,10 +1,7 @@
-from metagpt.config2 import Config
-from metagpt.roles.role import Role
-from role import SciDataInterpreter
-from metagpt.schema import Message, MessageQueue, SerializationMixin
-from metagpt.context_mixin import ContextMixin
-from pydantic import BaseModel
+
 from metagpt.actions.di.write_plan import WritePlan
+from metagpt.config2 import Config
+from role import SciDataInterpreter
 
 # Example configurations for gpt-4, gpt-4-turbo and gpt-3.5-turbo
 gpt35 = Config.from_sab_config("test_config.yaml")  # Load custom configuration from `~/.metagpt` directory `gpt-4.yaml`
@@ -16,7 +13,6 @@ A = SciDataInterpreter(config=gpt35)
 # print(A.planner.plan_writter.llm.config)
 print(WritePlan().llm)
 # print(SciDataInterpreter.__mro__)
-from inspect import signature
 
 # Check the __init__() signature of the relevant classes
 # print(signature(Role.__init__))

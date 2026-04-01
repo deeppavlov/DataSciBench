@@ -1,6 +1,6 @@
-import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+
 
 def detect_outliers(data_series, window_size, threshold):
     outliers = []

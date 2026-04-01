@@ -3,7 +3,6 @@ from benchmark_generator.core.models import (
     MetricEntry,
     MetricsList,
     Solution,
-    SubTask,
     TaskList,
 )
 

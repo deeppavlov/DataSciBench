@@ -1,8 +1,10 @@
 from abc import ABC
-from typing import Any
 from dataclasses import dataclass
+from typing import Any
+
 # from metagpt.strategy.task_type import TaskType
 from src.utils import create_function_from_string
+
 
 class Evaluator(ABC):
     def __init__(self):

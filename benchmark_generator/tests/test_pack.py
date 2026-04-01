@@ -4,17 +4,15 @@ from pathlib import Path
 import yaml
 
 from benchmark_generator.tools.pack_task import (
+    _metrics_to_yaml,
     _parse_metrics_py,
     _prompt_md_to_json,
-    _metrics_to_yaml,
     pack_single_task,
 )
 
 
 class TestPromptMdToJson:
     def test_basic_conversion(self, sample_prompt_md):
-        from io import StringIO
-        from pathlib import Path
         import tempfile
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:

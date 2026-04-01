@@ -3,8 +3,8 @@ from pathlib import Path
 
 from ..core.config import get_settings
 from ..tools.generate_tasks import generate_tasks
-from ..tools.solve_task import solve_single_task, solve_tasks, _run_script
-from ..tools.pack_task import pack_single_task, pack_all_tasks
+from ..tools.pack_task import pack_all_tasks, pack_single_task
+from ..tools.solve_task import _run_script, solve_single_task, solve_tasks
 
 logger = logging.getLogger(__name__)
 

@@ -4,12 +4,10 @@ and that it round-trips correctly through _parse_metrics_py."""
 import ast
 import subprocess
 import sys
-import textwrap
-from pathlib import Path
 
 from benchmark_generator.core.models import MetricEntry, MetricsList
-from benchmark_generator.tools.solve_task import _generate_metrics_py
 from benchmark_generator.tools.pack_task import _parse_metrics_py
+from benchmark_generator.tools.solve_task import _generate_metrics_py
 
 
 def _make_metrics_list(*entries: dict) -> MetricsList:

@@ -1,14 +1,14 @@
-import os
 import argparse
-import json
-from src.utils import change_dir
-from src.utils import load_yaml, list_to_dict_by_task
+import csv
+import os
+from dataclasses import dataclass
+
+from src.evaluator.cr_evaluator import CREvaluator
+
 # from src.logs import create_logger, get_model_name
 from src.schemas.dag import LinearizedDAG
-from src.evaluator.cr_evaluator import CREvaluator
-from dataclasses import dataclass
-from typing import Union
-import csv
+from src.utils import change_dir, list_to_dict_by_task, load_yaml
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="For evaluation")
@@ -31,7 +31,7 @@ class FinalResultOutput:
     metric_name: str
     function_name: str
     result_value: str
-    result_cr: Union[int, float]
+    result_cr: int | float
     result_type: str = "single task (bool)"
 
     def to_list(self):
@@ -109,14 +109,7 @@ def main(requirement: str, plan: list, args):
                 output_dict['model_name'] = model_name
                 output_dict['run_id'] = run_id
                 outputs.append(output_dict)
-            elif os.path.exists(os.path.join(data_path, model_run_id, "logs.txt")) and os.path.getsize(os.path.join(data_path, model_run_id, "logs.txt")) != 0:
-                output_dict = {}
-                output_dict['dir'] = os.path.join(data_path, model_run_id)
-                output_dict['model_name'] = model_name
-                output_dict['run_id'] = run_id
-                outputs.append(output_dict)
-                counter += 1
-            elif args.debug_mode or model_run_id == 'gt':
+            elif os.path.exists(os.path.join(data_path, model_run_id, "logs.txt")) and os.path.getsize(os.path.join(data_path, model_run_id, "logs.txt")) != 0 or args.debug_mode or model_run_id == 'gt':
                 output_dict = {}
                 output_dict['dir'] = os.path.join(data_path, model_run_id)
                 output_dict['model_name'] = model_name

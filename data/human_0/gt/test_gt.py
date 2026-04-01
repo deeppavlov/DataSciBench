@@ -1,5 +1,5 @@
 import pandas as pd
-import numpy as np
+
 
 def most_corr(prices):
     # Calculate daily percentage changes

@@ -1,11 +1,12 @@
 import csv
 from collections import defaultdict
 
+
 def main():
     passed_models = defaultdict(set)
     all_tasks = set()
     
-    with open('combined_results.csv', 'r', encoding='utf-8') as f:
+    with open('combined_results.csv', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
             all_tasks.add(row['data_name'])

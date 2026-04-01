@@ -1,12 +1,10 @@
-from src.schemas.schemas import Metric, Evaluator, DAG
 import json
-import asyncio
 
 # from metagpt.roles.di.data_interpreter import DataInterpreter
 # from role import SciDataInterpreter
-from metagpt.logs import logger
+from metagpt.schema import Plan
+from src.schemas.schemas import Evaluator, Metric
 
-from metagpt.schema import Message, Task, TaskResult, Plan
 
 class CRMetric(Metric):
     # CR: int = None

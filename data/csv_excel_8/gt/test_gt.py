@@ -29,9 +29,10 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 
+
 class BPNeuralNet(nn.Module):
     def __init__(self, input_dim):
-        super(BPNeuralNet, self).__init__()
+        super().__init__()
         self.fc1 = nn.Linear(input_dim, 128)
         self.fc2 = nn.Linear(128, 32)
         self.fc3 = nn.Linear(32, 2)
@@ -78,8 +79,8 @@ for epoch in range(num_epochs):
 
 
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, roc_curve, auc
 import seaborn as sns
+from sklearn.metrics import auc, confusion_matrix, roc_curve
 
 # Evaluate on test set
 model.eval()

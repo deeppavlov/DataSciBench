@@ -1,6 +1,8 @@
 import unittest
-from src.schemas.dag import Node, LineairzedDAG
-from src.utils import load_yaml, list_to_dict_by_task
+
+from src.schemas.dag import LineairzedDAG
+from src.utils import list_to_dict_by_task, load_yaml
+
 
 async def run_di(prompt: str):
     test_dag = LineairzedDAG(prompt)

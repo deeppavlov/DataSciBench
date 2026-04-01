@@ -1,8 +1,10 @@
 import asyncio
 
+from metagpt.logs import logger
+
 # from metagpt.roles.di.data_interpreter import DataInterpreter
 from role.sci_data_interpreter import SciDataInterpreter
-from metagpt.logs import logger
+
 
 async def main(requirement: str):
     role = SciDataInterpreter()

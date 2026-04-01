@@ -1,18 +1,22 @@
 import asyncio
+import os
 from dataclasses import asdict
+
+from metagpt.logs import logger
+
 # from metagpt.roles.di.data_interpreter import DataInterpreter
 from role import SciDataInterpreter
 from src.logs import create_logger, get_model_name
-from metagpt.logs import logger
-import os
+
 os.environ["MPLBACKEND"] = "Agg" # Disable matplotlib GUI popups
 
-from src.utils import change_dir, change_metalog_path
 import argparse
-import time
 import json
-from src.schemas import SciAgentBenchOutput
+import time
+
 from metagpt.config2 import Config
+from src.schemas import SciAgentBenchOutput
+from src.utils import change_dir, change_metalog_path
 
 SPECIFY_PATH_PROMPT = "All the input source data is at the `../` folder. And all the output files should be saved at the currect folder `./`.\n\n"
 
@@ -86,7 +90,7 @@ if __name__ == "__main__":
         prompt_file = os.path.join(data_dir, folder, "prompt.json")
         if not os.path.exists(prompt_file):
             continue
-        with open(prompt_file, "r") as file:
+        with open(prompt_file) as file:
             prompt_data = eval(file.read())
             if data_source_type is None or prompt_data["data_source_type"].startswith(data_source_type):
                 filtered_folders.append(folder)
@@ -105,7 +109,7 @@ if __name__ == "__main__":
         prompt_file = os.path.join(data_dir, folder, "prompt.json")
         # separately save each run
         for sub_idx in range(args.max_runs):
-            with open(prompt_file, "r") as file:
+            with open(prompt_file) as file:
                 prompt_data = eval(file.read())
             # ===================================================
             # if orig_log_dir has already finished, skip
@@ -126,7 +130,7 @@ if __name__ == "__main__":
             # if os.path.getsize(sys_log_file_path) != 0:
             sys_log = ""
             if os.path.exists(sys_log_file_path):
-                with open(sys_log_file_path, "r") as f:
+                with open(sys_log_file_path) as f:
                     sys_log = str(f.read())
             if "JSONDecodeError" in sys_log and "chatanywhere_error" not in sys_log:
                 print("Skipping folder", folder)
@@ -160,7 +164,7 @@ if __name__ == "__main__":
                         temp_logger.info(f"Processing {folder} ({id}/{num_folders})")
                         temp_logger.info(f"Prompt:\n{requirement}")
 
-                        temp_logger.info(f"=== ENVIRONMENT DIAGNOSTICS ===")
+                        temp_logger.info("=== ENVIRONMENT DIAGNOSTICS ===")
                         temp_logger.info(f"CWD: {os.getcwd()}")
                         temp_logger.info(f"Files in CWD: {os.listdir('.')}")
                         try:
@@ -169,7 +173,7 @@ if __name__ == "__main__":
                             temp_logger.info(f"Cannot list parent dir: {e}")
                         temp_logger.info(f"data_source_type: {prompt_data.get('data_source_type', 'N/A')}")
                         temp_logger.info(f"SPECIFY_PATH_PROMPT added: {not prompt_data['data_source_type'].startswith('1')}")
-                        temp_logger.info(f"=== END DIAGNOSTICS ===")
+                        temp_logger.info("=== END DIAGNOSTICS ===")
 
                         time_logger.info(f"Processing {folder} ({id}/{num_folders})")
                         start_time = time.time()
@@ -200,7 +204,7 @@ if __name__ == "__main__":
                         with open(output_dict_path, "a") as f:
                             f.write(json.dumps(output_dict)+'\n')
 
-                    except Exception as e:
+                    except Exception:
                         import traceback
                         temp_logger.info("====================================================")
                         temp_logger.info(f"{traceback.format_exc()}\n====================================================")
