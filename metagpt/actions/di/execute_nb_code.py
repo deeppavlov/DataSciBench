@@ -52,7 +52,18 @@ class ExecuteNbCode(Action):
     async def build(self):
         if self.nb_client.kc is None or not await self.nb_client.kc.is_alive():
             self.nb_client.create_kernel_manager()
-            self.nb_client.start_new_kernel()
+            try:
+                self.nb_client.start_new_kernel()
+            except Exception as e:
+                if "NoSuchKernel" in str(e):
+                    import sys
+                    import subprocess
+
+                    logger.info("Kernel 'python3' not found. Registering current environment as 'python3' kernel...")
+                    subprocess.check_call([sys.executable, "-m", "ipykernel", "install", "--user", "--name", "python3"])
+                    self.nb_client.start_new_kernel()
+                else:
+                    raise e
             self.nb_client.start_new_kernel_client()
 
     async def terminate(self):
