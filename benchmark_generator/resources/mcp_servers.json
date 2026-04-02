@@ -6,7 +6,7 @@
     },
     "clickhouse": {
       "command": "uvx",
-      "args": ["clickhouse-mcp"],
+      "args": ["mcp-clickhouse"],
       "env": {
         "CLICKHOUSE_HOST": "localhost",
         "CLICKHOUSE_PORT": "8123"
