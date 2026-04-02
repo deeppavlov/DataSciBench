@@ -9,10 +9,18 @@ from typing import List, Optional, Union
 from google import genai
 from google.genai import types
 
+from tenacity import (
+    after_log,
+    retry,
+    retry_if_exception,
+    stop_after_attempt,
+    wait_fixed,
+)
+
 from metagpt.configs.llm_config import LLMConfig, LLMType
 from metagpt.const import USE_CONFIG_TIMEOUT
 from metagpt.logs import log_llm_stream, logger
-from metagpt.provider.base_llm import BaseLLM
+from metagpt.provider.base_llm import BaseLLM, retry_if_api_error
 from metagpt.provider.llm_provider_registry import register_provider
 from metagpt.schema import Message
 
@@ -116,8 +124,17 @@ class GeminiLLM(BaseLLM):
         self._update_costs(usage)
         return resp
 
-    async def acompletion(self, messages: list[dict], timeout=USE_CONFIG_TIMEOUT) -> dict:
+    @retry(
+        stop=stop_after_attempt(6),
+        wait=wait_fixed(30),
+        after=after_log(logger, logger.level("WARNING").name),
+        retry=retry_if_exception(retry_if_api_error),
+    )
+    async def _acompletion(self, messages: list[dict], timeout=USE_CONFIG_TIMEOUT) -> types.GenerateContentResponse:
         return await self._achat_completion(messages, timeout=self.get_timeout(timeout))
+
+    async def acompletion(self, messages: list[dict], timeout=USE_CONFIG_TIMEOUT) -> dict:
+        return await self._acompletion(messages, timeout=timeout)
 
     async def _achat_completion_stream(self, messages: list[dict], timeout: int = USE_CONFIG_TIMEOUT) -> str:
         collected_content = []

@@ -17,8 +17,9 @@ from pydantic import BaseModel
 from tenacity import (
     after_log,
     retry,
-    retry_if_exception_type,
+    retry_if_exception,
     stop_after_attempt,
+    wait_fixed,
     wait_random_exponential,
 )
 
@@ -31,6 +32,36 @@ from metagpt.utils.cost_manager import CostManager, Costs
 
 class RepetitionError(Exception):
     pass
+
+
+def retry_if_api_error(e: Exception) -> bool:
+    """Retry if error is 400, 401, 429, 5xx or connection error."""
+    # 1. Check status code from various LLM clients (OpenAI, Google GenAI, etc.)
+    status_code = getattr(e, "status_code", None) or getattr(e, "code", None)
+    
+    # Google GenAI 1.x errors might have code in 'code' or 'status_code'
+    # OpenAI errors have 'status_code'
+    
+    if status_code in [400, 401, 429] or (isinstance(status_code, int) and status_code >= 500):
+        return True
+
+    # 2. Check for connection/timeout errors by name (robust against missing imports)
+    error_name = type(e).__name__
+    retryable_names = [
+        "ConnectionError", "APIConnectionError", "ConnectError", "TimeoutError", 
+        "ReadTimeout", "ConnectTimeout", "NetworkError", "RemoteDisconnected",
+        "ProxyError", "SSLError", "ServiceUnavailableError", "InternalServerError"
+    ]
+    if any(name in error_name for name in retryable_names):
+        return True
+        
+    # 3. Specific check for "no response" / timeout strings in message
+    msg = str(e).lower()
+    if "timeout" in msg or "connection" in msg or "no response" in msg:
+        if "404" not in msg: # 404 is usually not retryable
+            return True
+
+    return False
 
 
 class BaseLLM(ABC):
@@ -214,10 +245,10 @@ class BaseLLM(ABC):
         """_achat_completion_stream implemented by inherited class"""
 
     @retry(
-        stop=stop_after_attempt(3),
-        wait=wait_random_exponential(min=1, max=60),
+        stop=stop_after_attempt(6),
+        wait=wait_fixed(30),
         after=after_log(logger, logger.level("WARNING").name),
-        retry=retry_if_exception_type(ConnectionError),
+        retry=retry_if_exception(retry_if_api_error),
         retry_error_callback=log_and_reraise,
     )
     async def acompletion_text(

@@ -19,15 +19,16 @@ from openai.types.chat import ChatCompletion, ChatCompletionChunk
 from tenacity import (
     after_log,
     retry,
-    retry_if_exception_type,
+    retry_if_exception,
     stop_after_attempt,
+    wait_fixed,
     wait_random_exponential,
 )
 
 from metagpt.configs.llm_config import LLMConfig, LLMType
 from metagpt.const import USE_CONFIG_TIMEOUT
 from metagpt.logs import log_llm_stream, logger
-from metagpt.provider.base_llm import BaseLLM, RepetitionError
+from metagpt.provider.base_llm import BaseLLM, RepetitionError, retry_if_api_error
 from metagpt.provider.constant import GENERAL_FUNCTION_SCHEMA
 from metagpt.provider.llm_provider_registry import register_provider
 from metagpt.utils.common import CodeParser, decode_image, log_and_reraise
@@ -56,6 +57,13 @@ class OpenAILLM(BaseLLM):
         self.cost_manager: Optional[CostManager] = None
         self._api_keys = config.api_keys or []
         self._key_index = 0
+
+    def _rotate_key(self):
+        if self._api_keys:
+            self.config.api_key = self._api_keys[self._key_index % len(self._api_keys)]
+            self._key_index += 1
+            self._init_client()
+            logger.info(f"Rotated to API key index {(self._key_index - 1) % len(self._api_keys)}")
 
     def _init_client(self):
         """https://github.com/openai/openai-python#async-usage"""
@@ -156,11 +164,7 @@ class OpenAILLM(BaseLLM):
     def _cons_kwargs(self, messages: list[dict], timeout=USE_CONFIG_TIMEOUT, **extra_kwargs) -> dict:
         print('_'*100, f"using model {self.model}\n", '_'*100)
 
-        if self._api_keys:
-            self.config.api_key = self._api_keys[self._key_index % len(self._api_keys)]
-            self._key_index += 1
-            self._init_client()
-            print(f"Rotated to API key index {(self._key_index - 1) % len(self._api_keys)}")
+        # Key rotation moved to _rotate_key called by entry points
 
         if self.model == 'o1-mini':
             print("using o1-mini\n")
@@ -193,22 +197,49 @@ class OpenAILLM(BaseLLM):
         self._update_costs(rsp.usage)
         return rsp
 
-    async def acompletion(self, messages: list[dict], timeout=USE_CONFIG_TIMEOUT) -> ChatCompletion:
-        return await self._achat_completion(messages, timeout=self.get_timeout(timeout))
-
     @retry(
-        wait=wait_random_exponential(min=1, max=60),
         stop=stop_after_attempt(6),
+        wait=wait_fixed(30),
         after=after_log(logger, logger.level("WARNING").name),
-        retry=retry_if_exception_type(APIConnectionError),
+        retry=retry_if_exception(retry_if_api_error),
         retry_error_callback=log_and_reraise,
     )
-    async def acompletion_text(self, messages: list[dict], stream=False, timeout=USE_CONFIG_TIMEOUT) -> str:
+    async def _acompletion_text(self, messages: list[dict], stream=False, timeout=USE_CONFIG_TIMEOUT) -> str:
         if self.model == 'o1-mini':
             return self.get_choice_text(
                 await self._achat_completion(messages, timeout=self.get_timeout(timeout))
             )
         return await self._achat_completion_stream(messages, timeout=timeout)
+
+    async def acompletion_text(self, messages: list[dict], stream=False, timeout=USE_CONFIG_TIMEOUT) -> str:
+        self._rotate_key()
+        return await self._acompletion_text(messages, stream=stream, timeout=timeout)
+
+    @retry(
+        stop=stop_after_attempt(6),
+        wait=wait_fixed(30),
+        after=after_log(logger, logger.level("WARNING").name),
+        retry=retry_if_exception(retry_if_api_error),
+        retry_error_callback=log_and_reraise,
+    )
+    async def _acompletion(self, messages: list[dict], timeout=USE_CONFIG_TIMEOUT) -> ChatCompletion:
+        return await self._achat_completion(messages, timeout=self.get_timeout(timeout))
+
+    async def acompletion(self, messages: list[dict], timeout=USE_CONFIG_TIMEOUT) -> ChatCompletion:
+        self._rotate_key()
+        return await self._acompletion(messages, timeout=self.get_timeout(timeout))
+
+    @retry(
+        stop=stop_after_attempt(6),
+        wait=wait_fixed(30),
+        after=after_log(logger, logger.level("WARNING").name),
+        retry=retry_if_exception(retry_if_api_error),
+        retry_error_callback=log_and_reraise,
+    )
+    async def _acompletion_function(
+        self, messages: list[dict], timeout: int = USE_CONFIG_TIMEOUT, **chat_configs
+    ) -> ChatCompletion:
+        return await self._achat_completion_function(messages, timeout=timeout, **chat_configs)
 
     async def _achat_completion_function(
             self, messages: list[dict], timeout: int = USE_CONFIG_TIMEOUT, **chat_configs
@@ -232,7 +263,8 @@ class OpenAILLM(BaseLLM):
         if "tools" not in kwargs:
             configs = {"tools": [{"type": "function", "function": GENERAL_FUNCTION_SCHEMA}]}
             kwargs.update(configs)
-        rsp = await self._achat_completion_function(messages, **kwargs)
+        self._rotate_key()
+        rsp = await self._acompletion_function(messages, **kwargs)
         return self.get_choice_function_arguments(rsp)
 
     def _parse_arguments(self, arguments: str) -> dict:
