@@ -89,7 +89,8 @@ if __name__ == "__main__":
             continue
         with open(prompt_file) as file:
             prompt_data = eval(file.read())
-            if data_source_type is None or prompt_data["data_source_type"].startswith(data_source_type):
+            ds_type = prompt_data.get("data_source_type", "None")
+            if data_source_type is None or str(ds_type).startswith(str(data_source_type)):
                 filtered_folders.append(folder)
     # folders=['bcb1011', 'bcb1017', 'bcb102', 'bcb1024', 'bcb1035', 'bcb1037', 'bcb104', 'bcb1043', 'bcb105', 'bcb1051']
 

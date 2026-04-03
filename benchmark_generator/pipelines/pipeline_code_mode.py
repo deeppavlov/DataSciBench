@@ -12,10 +12,49 @@ from ..tools.solve_task import _run_script, solve_single_task, solve_tasks
 
 logger = logging.getLogger(__name__)
 
+STEPS = {
+    0: "Подключение к MCP-серверам (discover tools, api_doc, _mcp_tools.py)",
+    1: "Генерация задач (prompt.md, input_data.py)",
+    2: "Запуск input_data.py (подготовка данных)",
+    3: "Решение задач (solution.py, metrics.py, gt/)",
+    4: "Упаковка в формат бенчмарка (data/, metric/)",
+}
+
 
 def ask(prompt: str, default: str) -> str:
     val = input(f"{prompt} [{default}]: ").strip()
     return val if val else default
+
+
+def _choose_start_step(output_dir: Path) -> int:
+    has_output = output_dir.exists() and any(output_dir.iterdir()) if output_dir.exists() else False
+
+    if not has_output:
+        return 0
+
+    print("\nОбнаружен существующий output. С какого шага продолжить?")
+    for num, desc in STEPS.items():
+        print(f"  {num} — {desc}")
+    choice = ask("Шаг", "0")
+    return int(choice)
+
+
+def _load_existing_state(output_dir: Path, mcp_config: Path):
+    mcp_env = {}
+    if mcp_config.exists():
+        with open(mcp_config, encoding="utf-8") as f:
+            data = json.load(f)
+            for srv in data.get("mcpServers", {}).values():
+                mcp_env.update(srv.get("env", {}))
+
+    api_doc_path = output_dir / "api_doc.md"
+    mcp_tools_path = output_dir / "_mcp_tools.py"
+
+    api_doc_text = None
+    if api_doc_path.exists():
+        api_doc_text = api_doc_path.read_text(encoding="utf-8")
+
+    return mcp_env, api_doc_path, mcp_tools_path, api_doc_text
 
 
 async def run_pipeline():
@@ -29,35 +68,33 @@ async def run_pipeline():
     count = int(ask("count", "10"))
     output_dir = Path(ask("output_dir", str(settings.output_dir)))
 
-    print("\n=== Шаг 0: Подключение к MCP-серверам ===")
-    tools = await discover_tools(mcp_config)
+    start_step = _choose_start_step(output_dir)
+    mcp_env, api_doc_path, mcp_tools_path, api_doc_text = _load_existing_state(output_dir, mcp_config)
 
-    total_tools = sum(len(t) for t in tools.values())
-    print(f"Обнаружено {total_tools} инструментов из {len(tools)} серверов")
+    if start_step <= 0:
+        print("\n=== Шаг 0: Подключение к MCP-серверам ===")
+        tools = await discover_tools(mcp_config)
 
-    api_doc = generate_api_doc(tools)
-    api_doc_path = output_dir / "api_doc.md"
-    output_dir.mkdir(parents=True, exist_ok=True)
-    api_doc_path.write_text(api_doc, encoding="utf-8")
-    print(f"Сохранён api_doc.md:\n{api_doc}")
+        total_tools = sum(len(t) for t in tools.values())
+        print(f"Обнаружено {total_tools} инструментов из {len(tools)} серверов")
 
-    wrapper_code = generate_wrapper_module(tools, mcp_config)
-    mcp_tools_path = output_dir / "_mcp_tools.py"
-    mcp_tools_path.write_text(wrapper_code, encoding="utf-8")
-    print(f"Сохранён _mcp_tools.py ({len(wrapper_code)} bytes)")
+        api_doc = generate_api_doc(tools)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        api_doc_path.write_text(api_doc, encoding="utf-8")
+        print(f"Сохранён api_doc.md:\n{api_doc}")
 
-    mcp_env = {}
-    if mcp_config.exists():
-        with open(mcp_config, encoding="utf-8") as f:
-            data = json.load(f)
-            for srv in data.get("mcpServers", {}).values():
-                mcp_env.update(srv.get("env", {}))
+        wrapper_code = generate_wrapper_module(tools, mcp_config)
+        mcp_tools_path.write_text(wrapper_code, encoding="utf-8")
+        print(f"Сохранён _mcp_tools.py ({len(wrapper_code)} bytes)")
 
-    print("\n=== Шаг 1: Генерация задач ===")
-    dirs = generate_tasks(api_doc_path, count, output_dir, topic_path=topic, code_mode=True, env_hints=mcp_env)
-    print(f"Создано {len(dirs)} задач")
-    for d in dirs:
-        print(f"  {d.name}/")
+        api_doc_text = api_doc
+
+    if start_step <= 1:
+        print("\n=== Шаг 1: Генерация задач ===")
+        dirs = generate_tasks(api_doc_path, count, output_dir, topic_path=topic, code_mode=True, env_hints=mcp_env)
+        print(f"Создано {len(dirs)} задач")
+        for d in dirs:
+            print(f"  {d.name}/")
 
     input("\nПроверьте задачи. Нажмите Enter для продолжения...")
 
@@ -69,25 +106,28 @@ async def run_pipeline():
         task_name = ask("Имя задачи", "task_001")
         tasks = [output_dir / task_name]
 
-    print("\n=== Шаг 2: Запуск input_data ===")
-    for task_dir in tasks:
-        input_data = task_dir / "input_data.py"
-        if input_data.exists():
-            print(f"Запуск input_data.py в {task_dir}")
-            out = _run_script(input_data, cwd=task_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env)
-            if "exited with code" in out or "ERROR" in out:
-                print(out)
-    print("Шаг 2 завершен.")
+    if start_step <= 2:
+        print("\n=== Шаг 2: Запуск input_data ===")
+        for task_dir in tasks:
+            input_data = task_dir / "input_data.py"
+            if input_data.exists():
+                print(f"Запуск input_data.py в {task_dir}")
+                out = _run_script(input_data, cwd=task_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env)
+                if "exited with code" in out or "ERROR" in out:
+                    print(out)
+        print("Шаг 2 завершен.")
 
-    api_doc_text = api_doc_path.read_text(encoding="utf-8")
+    if api_doc_text is None:
+        api_doc_text = api_doc_path.read_text(encoding="utf-8")
 
-    input("\nНажмите Enter для генерации решений (Шаг 3)...")
-    print("\n=== Шаг 3: Решение задач ===")
-    if work_mode == "1":
-        solve_tasks(output_dir, api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env)
-    else:
-        solve_single_task(tasks[0], api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env)
-    print("Шаг 3 завершен.")
+    if start_step <= 3:
+        input("\nНажмите Enter для генерации решений (Шаг 3)...")
+        print("\n=== Шаг 3: Решение задач ===")
+        if work_mode == "1":
+            solve_tasks(output_dir, api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env)
+        else:
+            solve_single_task(tasks[0], api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env)
+        print("Шаг 3 завершен.")
 
     while True:
         print("-----------------------------------")
