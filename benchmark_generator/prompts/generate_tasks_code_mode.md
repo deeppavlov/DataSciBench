@@ -16,6 +16,7 @@ Each task must be a self-contained prompt. The prompt should:
 4. Break the work into numbered steps with clear input/output for each step
 5. Mention: "The following functions are available in your environment:" and list their names with a brief one-line description each
 6. Be detailed enough that an LLM agent can solve it without additional context
+7. **CRITICAL**: The task prompt MUST instruct the solver to prefer **standard Python libraries** (`pandas`, `sklearn`, `open()`, `os`, etc.) for any task that can be performed locally. This includes data processing, file management in the current working directory, and analytical calculations. Solver must use **MCP API functions** ONLY for interacting with **external services** (databases, remote storage, specialized APIs) or when the task explicitly requires functionality only available via the tool.
 
 ## Quotas
 
