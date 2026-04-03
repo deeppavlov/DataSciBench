@@ -1,4 +1,5 @@
 import asyncio
+import json
 import logging
 import shutil
 from pathlib import Path
@@ -45,8 +46,15 @@ async def run_pipeline():
     mcp_tools_path.write_text(wrapper_code, encoding="utf-8")
     print(f"Сохранён _mcp_tools.py ({len(wrapper_code)} bytes)")
 
+    mcp_env = {}
+    if mcp_config.exists():
+        with open(mcp_config, encoding="utf-8") as f:
+            data = json.load(f)
+            for srv in data.get("mcpServers", {}).values():
+                mcp_env.update(srv.get("env", {}))
+
     print("\n=== Шаг 1: Генерация задач ===")
-    dirs = generate_tasks(api_doc_path, count, output_dir, topic_path=topic, code_mode=True)
+    dirs = generate_tasks(api_doc_path, count, output_dir, topic_path=topic, code_mode=True, env_hints=mcp_env)
     print(f"Создано {len(dirs)} задач")
     for d in dirs:
         print(f"  {d.name}/")
@@ -66,7 +74,9 @@ async def run_pipeline():
         input_data = task_dir / "input_data.py"
         if input_data.exists():
             print(f"Запуск input_data.py в {task_dir}")
-            _run_script(input_data, cwd=task_dir)
+            out = _run_script(input_data, cwd=task_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env)
+            if "exited with code" in out or "ERROR" in out:
+                print(out)
     print("Шаг 2 завершен.")
 
     api_doc_text = api_doc_path.read_text(encoding="utf-8")
@@ -74,9 +84,9 @@ async def run_pipeline():
     input("\nНажмите Enter для генерации решений (Шаг 3)...")
     print("\n=== Шаг 3: Решение задач ===")
     if work_mode == "1":
-        solve_tasks(output_dir, api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path)
+        solve_tasks(output_dir, api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env)
     else:
-        solve_single_task(tasks[0], api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path)
+        solve_single_task(tasks[0], api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env)
     print("Шаг 3 завершен.")
 
     while True:
@@ -87,15 +97,19 @@ async def run_pipeline():
 
         if action == "1":
             for task_dir in tasks:
+                input_data = task_dir / "input_data.py"
+                if input_data.exists():
+                    print(f"Сброс среды: запуск input_data.py в {task_dir}...")
+                    _run_script(input_data, cwd=task_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env)
                 solution = task_dir / "solution.py"
                 metrics = task_dir / "metrics.py"
                 if solution.exists() and metrics.exists():
                     gt_dir = task_dir / "gt"
                     gt_dir.mkdir(exist_ok=True)
                     print(f"Запуск solution.py в {task_dir}/gt...")
-                    _run_script(solution, cwd=gt_dir, code_mode=True, mcp_tools_path=mcp_tools_path)
+                    _run_script(solution, cwd=gt_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env)
                     print(f"Запуск metrics.py в {task_dir}/gt...")
-                    out = _run_script(metrics, cwd=gt_dir)
+                    out = _run_script(metrics, cwd=gt_dir, extra_env=mcp_env)
                     print(out)
             print("Повторная проверка завершена.")
         else:

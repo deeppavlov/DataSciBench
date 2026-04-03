@@ -1,4 +1,5 @@
 import argparse
+import json
 import contextlib
 import logging
 from pathlib import Path
@@ -23,6 +24,7 @@ def generate_tasks(
     output_dir: Path,
     topic_path: Path | None = None,
     code_mode: bool = False,
+    env_hints: dict | None = None,
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -36,6 +38,11 @@ def generate_tasks(
     parts = [f"Generate exactly {count} benchmark tasks."]
     if topic_text:
         parts.append(f"Topic:\n---\n{topic_text}\n---")
+    
+    if env_hints:
+        env_text = json.dumps(env_hints, indent=2)
+        parts.append(f"Environment variables and their current values:\n---\n{env_text}\n---")
+
     codebase_label = "Available API" if code_mode else "Codebase description"
     parts.append(f"{codebase_label}:\n---\n{codebase_text}\n---")
 

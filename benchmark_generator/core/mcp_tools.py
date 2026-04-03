@@ -143,14 +143,12 @@ def generate_wrapper_module(tools: dict[str, list[Tool]], mcp_config_path: Path)
 
         async def _call(server_name, tool_name, args):
             session = await _get_session(server_name)
+            args = {k: v for k, v in args.items() if v is not None}
             result = await session.call_tool(tool_name, args)
-            parts = []
-            for item in result.content:
-                if hasattr(item, "text"):
-                    parts.append(item.text)
-                else:
-                    parts.append(str(item))
-            return "\\n".join(parts)
+            text = "\\n".join(item.text if hasattr(item, "text") else str(item) for item in result.content)
+            if result.isError:
+                raise RuntimeError(f"Tool {tool_name} failed: {text}")
+            return text
 
         def _run(server_name, tool_name, args):
             loop = _get_loop()
@@ -163,11 +161,13 @@ def generate_wrapper_module(tools: dict[str, list[Tool]], mcp_config_path: Path)
     for server_name, server_tools in tools.items():
         for tool in server_tools:
             params = _params_from_schema(tool.inputSchema)
+            sorted_params = sorted(params, key=lambda x: not x[2]) 
             sig_parts = []
             call_dict_parts = []
-            for pname, ptype, _req in params:
+            for pname, ptype, _req in sorted_params:
                 py_type = {"string": "str", "integer": "int", "number": "float", "boolean": "bool"}.get(ptype, "str")
-                sig_parts.append(f"{pname}: {py_type}")
+                default = "" if _req else " = None"
+                sig_parts.append(f"{pname}: {py_type}{default}")
                 call_dict_parts.append(f"{repr(pname)}: {pname}")
 
             sig = ", ".join(sig_parts)

@@ -26,6 +26,7 @@ def _run_script(
     timeout: int | None = None,
     code_mode: bool = False,
     mcp_tools_path: Path | None = None,
+    extra_env: dict | None = None,
 ) -> str:
     if timeout is None:
         timeout = get_settings().code_timeout
@@ -35,6 +36,8 @@ def _run_script(
 
     if code_mode and mcp_tools_path:
         env = os.environ.copy()
+        if extra_env:
+            env.update(extra_env)
         tools_dir = str(mcp_tools_path.parent.resolve())
         env["PYTHONPATH"] = tools_dir + ":" + env.get("PYTHONPATH", "")
 
@@ -47,6 +50,9 @@ def _run_script(
         tmp.flush()
         tmp.close()
         run_path = Path(tmp.name)
+    elif extra_env:
+        env = os.environ.copy()
+        env.update(extra_env)
 
     try:
         result = subprocess.run(
@@ -158,6 +164,7 @@ def solve_single_task(
     codebase_text: str | None = None,
     code_mode: bool = False,
     mcp_tools_path: Path | None = None,
+    mcp_env: dict | None = None,
 ):
     prompt_path = task_dir / "prompt.md"
     if not prompt_path.exists():
@@ -173,8 +180,12 @@ def solve_single_task(
     input_data_path = task_dir / "input_data.py"
     if input_data_path.exists():
         logger.info("Running input_data.py...")
-        output = _run_script(input_data_path, cwd=task_dir)
-        logger.debug("input_data.py output: %s", output)
+        output = _run_script(
+            input_data_path, cwd=task_dir,
+            code_mode=code_mode, mcp_tools_path=mcp_tools_path,
+            extra_env=mcp_env
+        )
+        logger.info("input_data.py output: %s", output)
 
     prompt_name = "solve_task_code_mode.md" if code_mode else "solve_task.md"
     system_prompt = _load_prompt(prompt_name)
@@ -201,6 +212,7 @@ def solve_single_task(
     exec_output = _run_script(
         solution_path, cwd=gt_dir,
         code_mode=code_mode, mcp_tools_path=mcp_tools_path,
+        extra_env=mcp_env,
     )
     logger.info("Solution output:\n%s", exec_output)
 
@@ -236,7 +248,7 @@ def solve_single_task(
     logger.info("Saved chat_log.txt")
 
     logger.info("Running metrics.py to verify...")
-    metrics_output = _run_script(metrics_path, cwd=gt_dir)
+    metrics_output = _run_script(metrics_path, cwd=gt_dir, extra_env=mcp_env)
     verify_log = task_dir / "verify_log.txt"
     verify_log.write_text(metrics_output, encoding="utf-8")
     logger.info("Verification:\n%s", metrics_output)
@@ -247,6 +259,7 @@ def solve_tasks(
     codebase_text: str | None = None,
     code_mode: bool = False,
     mcp_tools_path: Path | None = None,
+    mcp_env: dict | None = None,
 ):
     task_dirs = sorted(d for d in output_dir.iterdir() if d.is_dir() and d.name.startswith("task_"))
     if not task_dirs:
@@ -257,7 +270,7 @@ def solve_tasks(
         if (task_dir / "solution.py").exists():
             logger.info("Skipping %s (already solved)", task_dir.name)
             continue
-        solve_single_task(task_dir, codebase_text, code_mode, mcp_tools_path)
+        solve_single_task(task_dir, codebase_text, code_mode, mcp_tools_path, mcp_env)
 
 
 def main():
