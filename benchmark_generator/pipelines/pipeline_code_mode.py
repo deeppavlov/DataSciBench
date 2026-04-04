@@ -128,9 +128,9 @@ async def run_pipeline():
         print("\n=== Шаг 3: Решение задач ===")
         topic_text = topic.read_text(encoding="utf-8") if topic.exists() else None
         if work_mode == "1":
-            solve_tasks(output_dir, api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env, topic_text=topic_text, api_doc_text=api_doc_text)
+            solve_tasks(output_dir, codebase_text=api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env, topic_text=topic_text, api_doc_text=api_doc_text)
         else:
-            solve_single_task(tasks[0], api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env, topic_text=topic_text, api_doc_text=api_doc_text)
+            solve_single_task(tasks[0], codebase_text=api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env, topic_text=topic_text, api_doc_text=api_doc_text)
         print("Шаг 3 завершен.")
 
     while True:

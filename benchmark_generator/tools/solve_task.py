@@ -184,7 +184,7 @@ def run_and_fix_input_data(
     system_content = (
         "You are an expert debugger. The script input_data.py failed to prepare the environment. "
         "Fix either the task prompt or input_data.py. If no changes are needed for a specific field, leave it null.\n"
-        "You are allowed to update the prompt if the original one was flawed, but stay within the scope of the provided Topic."
+        "You are allowed to update the prompt if the original one was flawed, but stay within the scope of the provided Topic. DO NOT change the structure of the prompt."
     )
     if topic_text:
         system_content += f"\n\nOriginal Task Topic:\n---\n{topic_text}\n---"
@@ -239,6 +239,8 @@ def solve_single_task(
     code_mode: bool = False,
     mcp_tools_path: Path | None = None,
     mcp_env: dict | None = None,
+    topic_text: str | None = None,
+    api_doc_text: str | None = None,
 ):
     prompt_path = task_dir / "prompt.md"
     if not prompt_path.exists():
