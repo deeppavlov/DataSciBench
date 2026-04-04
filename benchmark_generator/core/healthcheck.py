@@ -1,4 +1,3 @@
-import json
 import logging
 from pathlib import Path
 
@@ -24,13 +23,14 @@ The following MCP tools are available:
 {api_doc}
 
 Your task is to write a single Python script that performs exactly ONE safe, read-only function call per available server to verify that the underlying systems are alive and responding. 
-For example, for a filesystem server, you could use `list_allowed_directories` or `list_directory`. For a database server, you could use `list_databases` or a simple `run_select_query("SELECT 1")`.
+For example, you could use `list_allowed_directories()` for the filesystem and `list_databases()` for ClickHouse.
 
 REQUIREMENTS:
 1. Print "OK: <server_name>" if the call succeeds.
 2. If a call fails, catch the exception and print "ERROR: <server_name> - <error details>".
-3. The script must be self-contained and assume the tools are already available in the global namespace (do NOT import them).
-4. Return ONLY the raw python code. DO NOT include markdown formatting or explanations.
+3. The script must be self-contained.
+4. CRITICAL: All tools are imported automatically into the global namespace. Call them directly (e.g. `list_databases()`), DO NOT use server name prefixes (e.g. NOT `clickhouse.list_databases()`).
+5. Return ONLY the raw python code. DO NOT include markdown formatting or explanations.
 """
     
     print("Генерация диагностического скрипта через LLM...")
@@ -54,7 +54,9 @@ REQUIREMENTS:
 
     print("\n--- Запуск диагностического скрипта ---")
     try:
-        output = _run_script(script_path, cwd=output_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env)
+        output = _run_script(
+            script_path, cwd=output_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env
+        )
         print(output)
     except Exception as e:
         print(f"Ошибка при выполнении скрипта: {e}")
