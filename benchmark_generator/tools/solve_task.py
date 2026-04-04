@@ -316,13 +316,16 @@ def solve_single_task(
     metrics_path.write_text(_generate_metrics_py(metrics, prompt_text), encoding="utf-8")
 
     for attempt in range(5):
+        logger.info("Running metrics.py to verify (Attempt %d/5)...", attempt + 1)
         metrics_output = _run_script(metrics_path, cwd=gt_dir, extra_env=mcp_env)
         
         if "[EXIT_CODE_ERROR:" not in metrics_output and "ERROR: Script timed out" not in metrics_output and "FAIL:" not in metrics_output and "ERROR:" not in metrics_output:
+            logger.info("Verification SUCCESS:\n%s", metrics_output)
             verify_log = task_dir / "verify_log.txt"
             verify_log.write_text(metrics_output, encoding="utf-8")
             break
 
+        logger.warning("Verification FAILED (Attempt %d/5). Requesting fix...", attempt + 1)
         user_msg = f"metrics.py failed or found incorrect solution outputs:\n{metrics_output}\nFix the solution code and/or the metrics. Return null for fields that do not require changes."
         metric_messages.append({"role": "user", "content": user_msg})
         
@@ -354,7 +357,6 @@ def solve_single_task(
         if correction.updated_metrics:
             metrics.metrics = correction.updated_metrics
             metrics_path.write_text(_generate_metrics_py(metrics, prompt_text), encoding="utf-8")
-
 
 def solve_tasks(
     output_dir: Path,
