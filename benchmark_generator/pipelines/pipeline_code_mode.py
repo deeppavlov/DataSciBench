@@ -107,9 +107,17 @@ async def run_pipeline():
 
     if start_step <= 2:
         print("\n=== Шаг 2: Запуск input_data ===")
+        topic_text = topic.read_text(encoding="utf-8") if topic.exists() else None
         for task_dir in tasks:
             print(f"Запуск и проверка input_data.py в {task_dir}")
-            run_and_fix_input_data(task_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env)
+            run_and_fix_input_data(
+                task_dir, 
+                code_mode=True, 
+                mcp_tools_path=mcp_tools_path, 
+                extra_env=mcp_env,
+                topic_text=topic_text,
+                api_doc_text=api_doc_text
+            )
         print("Шаг 2 завершен.")
 
     if api_doc_text is None:
@@ -118,10 +126,11 @@ async def run_pipeline():
     if start_step <= 3:
         input("\nНажмите Enter для генерации решений (Шаг 3)...")
         print("\n=== Шаг 3: Решение задач ===")
+        topic_text = topic.read_text(encoding="utf-8") if topic.exists() else None
         if work_mode == "1":
-            solve_tasks(output_dir, api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env)
+            solve_tasks(output_dir, api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env, topic_text=topic_text, api_doc_text=api_doc_text)
         else:
-            solve_single_task(tasks[0], api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env)
+            solve_single_task(tasks[0], api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env, topic_text=topic_text, api_doc_text=api_doc_text)
         print("Шаг 3 завершен.")
 
     while True:

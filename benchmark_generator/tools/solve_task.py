@@ -172,6 +172,8 @@ def run_and_fix_input_data(
     code_mode: bool = False,
     mcp_tools_path: Path | None = None,
     extra_env: dict | None = None,
+    topic_text: str | None = None,
+    api_doc_text: str | None = None,
 ) -> bool:
     input_data_path = task_dir / "input_data.py"
     prompt_path = task_dir / "prompt.md"
@@ -179,10 +181,20 @@ def run_and_fix_input_data(
     if not input_data_path.exists():
         return True
 
+    system_content = (
+        "You are an expert debugger. The script input_data.py failed to prepare the environment. "
+        "Fix either the task prompt or input_data.py. If no changes are needed for a specific field, leave it null.\n"
+        "You are allowed to update the prompt if the original one was flawed, but stay within the scope of the provided Topic."
+    )
+    if topic_text:
+        system_content += f"\n\nOriginal Task Topic:\n---\n{topic_text}\n---"
+    if code_mode and api_doc_text:
+        system_content += f"\n\nAvailable MCP API:\n---\n{api_doc_text}\n---"
+
     messages = [
         {
             "role": "system",
-            "content": "You are an expert debugger. The script input_data.py failed to prepare the environment. Fix either the task prompt or input_data.py. If no changes are needed for a specific field, leave it null.",
+            "content": system_content,
         }
     ]
 
@@ -233,6 +245,13 @@ def solve_single_task(
         return
 
     logger.info("Solving task: %s", task_dir.name)
+    
+    if not run_and_fix_input_data(
+        task_dir, code_mode=code_mode, mcp_tools_path=mcp_tools_path, extra_env=mcp_env,
+        topic_text=topic_text, api_doc_text=api_doc_text
+    ):
+        logger.error("Skipping task %s due to input_data failures", task_dir.name)
+        return
     
     gt_dir = task_dir / "gt"
     gt_dir.mkdir(exist_ok=True)
@@ -364,12 +383,14 @@ def solve_tasks(
     code_mode: bool = False,
     mcp_tools_path: Path | None = None,
     mcp_env: dict | None = None,
+    topic_text: str | None = None,
+    api_doc_text: str | None = None,
 ):
     task_dirs = sorted(d for d in output_dir.iterdir() if d.is_dir() and d.name.startswith("task_"))
     for task_dir in task_dirs:
         if (task_dir / "solution.py").exists():
             continue
-        solve_single_task(task_dir, codebase_text, code_mode, mcp_tools_path, mcp_env)
+        solve_single_task(task_dir, codebase_text, code_mode, mcp_tools_path, mcp_env, topic_text, api_doc_text)
 
 
 def main():
@@ -383,21 +404,29 @@ def main():
     parser.add_argument("--codebase", type=Path)
     parser.add_argument("--code_mode", action="store_true")
     parser.add_argument("--mcp_tools_path", type=Path)
+    parser.add_argument("--topic", type=Path)
+    parser.add_argument("--api_doc", type=Path)
     args = parser.parse_args()
 
     codebase_text = None
     if args.codebase and args.codebase.exists():
         codebase_text = args.codebase.read_text(encoding="utf-8")
+    elif args.api_doc and args.api_doc.exists():
+        codebase_text = args.api_doc.read_text(encoding="utf-8")
+
+    topic_text = None
+    if args.topic and args.topic.exists():
+        topic_text = args.topic.read_text(encoding="utf-8")
 
     if args.task_dir:
-        solve_single_task(args.task_dir, codebase_text, args.code_mode, args.mcp_tools_path)
+        solve_single_task(args.task_dir, codebase_text, args.code_mode, args.mcp_tools_path, topic_text=topic_text, api_doc_text=codebase_text)
     else:
         if args.force:
             task_dirs = sorted(d for d in args.output_dir.iterdir() if d.is_dir() and d.name.startswith("task_"))
             for td in task_dirs:
-                solve_single_task(td, codebase_text, args.code_mode, args.mcp_tools_path)
+                solve_single_task(td, codebase_text, args.code_mode, args.mcp_tools_path, topic_text=topic_text, api_doc_text=codebase_text)
         else:
-            solve_tasks(args.output_dir, codebase_text, args.code_mode, args.mcp_tools_path)
+            solve_tasks(args.output_dir, codebase_text, args.code_mode, args.mcp_tools_path, topic_text=topic_text, api_doc_text=codebase_text)
 
 
 if __name__ == "__main__":
