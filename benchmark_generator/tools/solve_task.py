@@ -7,6 +7,8 @@ import tempfile
 import textwrap
 from pathlib import Path
 
+from pydantic import ValidationError
+
 from ..core.config import get_settings
 from ..core.llm import call_llm_multi
 from ..core.models import (
@@ -77,8 +79,11 @@ def _run_script(
     output = result.stdout
     if result.stderr:
         output += "\n--- stderr ---\n" + result.stderr
+    
     if result.returncode != 0:
         logger.warning("Script %s exited with code %d", script_path.name, result.returncode)
+        output += f"\n[EXIT_CODE_ERROR: {result.returncode}]"
+        
     return output
 
 
@@ -190,7 +195,7 @@ def run_and_fix_input_data(
             extra_env=extra_env,
         )
 
-        if "exited with code" not in out and "Traceback" not in out and "ERROR:" not in out:
+        if "[EXIT_CODE_ERROR:" not in out and "ERROR: Script timed out" not in out:
             return True
 
         prompt_text = prompt_path.read_text(encoding="utf-8")
@@ -199,8 +204,14 @@ def run_and_fix_input_data(
         user_msg = f"Task prompt:\n{prompt_text}\n\ninput_data.py:\n{code_text}\n\nExecution Output/Error:\n{out}\n\nProvide fixes."
         messages.append({"role": "user", "content": user_msg})
 
-        correction, messages = call_llm_multi(messages, response_model=InputDataCorrection)
-        _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+        try:
+            correction, messages = call_llm_multi(messages, response_model=InputDataCorrection)
+            _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+        except ValidationError as e:
+            err_msg = f"JSON Validation Error:\n{str(e)}\nFix your response format."
+            messages.append({"role": "user", "content": err_msg})
+            _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "user", "content": err_msg}])
+            continue
 
         if correction.updated_prompt:
             prompt_path.write_text(correction.updated_prompt, encoding="utf-8")
@@ -240,8 +251,13 @@ def solve_single_task(
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
     ]
-    solution, solve_messages = call_llm_multi(solve_messages, response_model=Solution)
-    _append_chat_log(task_dir, solve_messages)
+    
+    try:
+        solution, solve_messages = call_llm_multi(solve_messages, response_model=Solution)
+        _append_chat_log(task_dir, solve_messages)
+    except ValidationError as e:
+        logger.error("Initial solution generation failed schema validation: %s", e)
+        return
 
     solution_path.write_text(solution.code, encoding="utf-8")
 
@@ -250,13 +266,21 @@ def solve_single_task(
         exec_output = _run_script(
             solution_path, cwd=gt_dir, code_mode=code_mode, mcp_tools_path=mcp_tools_path, extra_env=mcp_env
         )
-        if "exited with code" not in exec_output and "Traceback" not in exec_output and "ERROR:" not in exec_output:
+        
+        if "[EXIT_CODE_ERROR:" not in exec_output and "ERROR: Script timed out" not in exec_output:
             break
 
         user_msg = f"solution.py failed during execution:\n{exec_output}\nFix the code or subtasks. Return null for fields that do not require changes."
         solve_messages.append({"role": "user", "content": user_msg})
-        correction, solve_messages = call_llm_multi(solve_messages, response_model=SolutionCorrection)
-        _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+        
+        try:
+            correction, solve_messages = call_llm_multi(solve_messages, response_model=SolutionCorrection)
+            _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+        except ValidationError as e:
+            err_msg = f"JSON Validation Error:\n{str(e)}\nFix your response format."
+            solve_messages.append({"role": "user", "content": err_msg})
+            _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "user", "content": err_msg}])
+            continue
 
         if correction.updated_code:
             solution.code = correction.updated_code
@@ -280,8 +304,13 @@ def solve_single_task(
             ),
         },
     ]
-    metrics, metric_messages = call_llm_multi(metric_messages, response_model=MetricsList)
-    _append_chat_log(task_dir, metric_messages)
+    
+    try:
+        metrics, metric_messages = call_llm_multi(metric_messages, response_model=MetricsList)
+        _append_chat_log(task_dir, metric_messages)
+    except ValidationError as e:
+        logger.error("Initial metrics generation failed schema validation: %s", e)
+        return
 
     metrics_path = task_dir / "metrics.py"
     metrics_path.write_text(_generate_metrics_py(metrics, prompt_text), encoding="utf-8")
@@ -289,19 +318,34 @@ def solve_single_task(
     for attempt in range(5):
         metrics_output = _run_script(metrics_path, cwd=gt_dir, extra_env=mcp_env)
         
-        if "FAIL:" not in metrics_output and "ERROR:" not in metrics_output and "exited with code" not in metrics_output and "Traceback" not in metrics_output:
+        if "[EXIT_CODE_ERROR:" not in metrics_output and "ERROR: Script timed out" not in metrics_output and "FAIL:" not in metrics_output and "ERROR:" not in metrics_output:
             verify_log = task_dir / "verify_log.txt"
             verify_log.write_text(metrics_output, encoding="utf-8")
             break
 
         user_msg = f"metrics.py failed or found incorrect solution outputs:\n{metrics_output}\nFix the solution code and/or the metrics. Return null for fields that do not require changes."
         metric_messages.append({"role": "user", "content": user_msg})
-        correction, metric_messages = call_llm_multi(metric_messages, response_model=SolutionMetricsCorrection)
-        _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+        
+        try:
+            correction, metric_messages = call_llm_multi(metric_messages, response_model=SolutionMetricsCorrection)
+            _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+        except ValidationError as e:
+            err_msg = f"JSON Validation Error:\n{str(e)}\nFix your response format."
+            metric_messages.append({"role": "user", "content": err_msg})
+            _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "user", "content": err_msg}])
+            continue
 
         if correction.updated_solution_code:
             solution.code = correction.updated_solution_code
             solution_path.write_text(solution.code, encoding="utf-8")
+            
+            for f in gt_dir.iterdir():
+                if f.is_file() and f.name not in ("solution.py", "metrics.py"):
+                    try:
+                        f.unlink()
+                    except OSError:
+                        pass
+            
             exec_output = _run_script(
                 solution_path, cwd=gt_dir, code_mode=code_mode, mcp_tools_path=mcp_tools_path, extra_env=mcp_env
             )
