@@ -6,11 +6,12 @@
     },
     "clickhouse": {
       "command": "uvx",
-      "args": ["mcp-clickhouse"],
+      "args": ["mcp-clickhouse", "--no-banner"],
       "env": {
         "CLICKHOUSE_HOST": "localhost",
         "CLICKHOUSE_PORT": "8123",
-        "CLICKHOUSE_SECURE": "false"
+        "CLICKHOUSE_SECURE": "false",
+        "FASTMCP_SHOW_SERVER_BANNER": "false"
       }
     }
   }
