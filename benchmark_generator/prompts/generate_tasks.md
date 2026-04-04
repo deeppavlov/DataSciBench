@@ -17,7 +17,8 @@ Each task must be a self-contained prompt. The prompt should:
 5. Include an explicit instruction naming the specific framework/library/tool that the solver MUST use
 6. Be detailed enough that an LLM agent can solve it without additional context
 7. Separate task items with line breaks.
-
+8. **CRITICAL: Data Schema Rule**: If you create a task that requires working with databases, dataframes, or specific files, YOU MUST describe the exact data schema directly in the task prompt (table names, column names, data types, file structures). The testing model must be able to write SQL queries or pandas code correctly on the first try, without guessing the structure.
+ 
 ## Quotas
 
 You MUST follow these quotas across the generated batch:

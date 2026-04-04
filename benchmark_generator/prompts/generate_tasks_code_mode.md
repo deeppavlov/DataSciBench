@@ -17,7 +17,7 @@ Each task must be a self-contained prompt. The prompt should:
 5. Mention: "The following functions are available in your environment:" and list their names with a brief one-line description each
 6. Be detailed enough that an LLM agent can solve it without additional context
 7. **CRITICAL: Tool Usage Requirement**: The task MUST be designed such that it requires solving via the provided API functions. Do NOT generate tasks that can be solved entirely using only standard Python libraries (like purely local pandas processing without any external I/O).
-
+8. **CRITICAL: Data Schema Rule**: If you create a task that requires working with databases, dataframes, or specific files, YOU MUST describe the exact data schema directly in the task prompt (table names, column names, data types, file structures). The testing model must be able to write SQL queries or pandas code correctly on the first try, without guessing the structure.
 
 ## Quotas
 
