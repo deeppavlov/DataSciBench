@@ -8,7 +8,7 @@ from ..core.config import get_settings
 from ..core.mcp_tools import discover_tools, generate_api_doc, generate_wrapper_module
 from ..tools.generate_tasks import generate_tasks
 from ..tools.pack_task import pack_all_tasks, pack_single_task
-from ..tools.solve_task import _run_script, solve_single_task, solve_tasks
+from ..tools.solve_task import _run_script, run_and_fix_input_data, solve_single_task, solve_tasks
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +49,6 @@ def _load_existing_state(output_dir: Path, mcp_config: Path):
 
     api_doc_path = output_dir / "api_doc.md"
     mcp_tools_path = output_dir / "_mcp_tools.py"
-
     api_doc_text = None
     if api_doc_path.exists():
         api_doc_text = api_doc_path.read_text(encoding="utf-8")
@@ -109,12 +108,8 @@ async def run_pipeline():
     if start_step <= 2:
         print("\n=== Шаг 2: Запуск input_data ===")
         for task_dir in tasks:
-            input_data = task_dir / "input_data.py"
-            if input_data.exists():
-                print(f"Запуск input_data.py в {task_dir}")
-                out = _run_script(input_data, cwd=task_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env)
-                if "exited with code" in out or "ERROR" in out:
-                    print(out)
+            print(f"Запуск и проверка input_data.py в {task_dir}")
+            run_and_fix_input_data(task_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env)
         print("Шаг 2 завершен.")
 
     if api_doc_text is None:

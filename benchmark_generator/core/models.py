@@ -32,3 +32,19 @@ class MetricEntry(BaseModel):
 
 class MetricsList(BaseModel):
     metrics: list[MetricEntry]
+
+
+class InputDataCorrection(BaseModel):
+    updated_prompt: str | None = None
+    updated_input_data_code: str | None = None
+
+
+class SolutionCorrection(BaseModel):
+    updated_code: str | None = None
+    updated_subtasks: list[SubTask] | None = None
+
+
+class SolutionMetricsCorrection(BaseModel):
+    updated_solution_code: str | None = None
+    updated_subtasks: list[SubTask] | None = None
+    updated_metrics: list[MetricEntry] | None = None

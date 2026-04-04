@@ -4,7 +4,7 @@ from pathlib import Path
 from ..core.config import get_settings
 from ..tools.generate_tasks import generate_tasks
 from ..tools.pack_task import pack_all_tasks, pack_single_task
-from ..tools.solve_task import _run_script, solve_single_task, solve_tasks
+from ..tools.solve_task import _run_script, run_and_fix_input_data, solve_single_task, solve_tasks
 
 logger = logging.getLogger(__name__)
 
@@ -44,10 +44,8 @@ def main():
     input("Нажмите Enter для запуска input_data (Шаг 2)...")
     print("Шаг 2: Запуск input_data")
     for task_dir in tasks:
-        input_data = task_dir / "input_data.py"
-        if input_data.exists():
-            print(f"Запуск input_data.py в {task_dir}")
-            _run_script(input_data, cwd=task_dir)
+        print(f"Запуск и проверка input_data.py в {task_dir}")
+        run_and_fix_input_data(task_dir)
     print("Шаг 2 завершен.")
 
     codebase_text = codebase.read_text(encoding="utf-8") if codebase.exists() else None
@@ -91,7 +89,6 @@ def main():
         task_id = ask("task_id", "gen_001")
         pack_single_task(tasks[0], task_id, settings.benchmark_root)
     print("Шаг 4 завершен.")
-
     print("Пайплайн завершен!")
 
 

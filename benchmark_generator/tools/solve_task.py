@@ -9,7 +9,13 @@ from pathlib import Path
 
 from ..core.config import get_settings
 from ..core.llm import call_llm_multi
-from ..core.models import MetricsList, Solution
+from ..core.models import (
+    InputDataCorrection,
+    MetricsList,
+    Solution,
+    SolutionCorrection,
+    SolutionMetricsCorrection,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +49,7 @@ def _run_script(
 
         original_code = script_path.read_text(encoding="utf-8")
         wrapper_code = "from _mcp_tools import *\n" + original_code
-        tmp = tempfile.NamedTemporaryFile(
-            mode="w", suffix=".py", dir=str(cwd), delete=False
-        )
+        tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".py", dir=str(cwd), delete=False)
         tmp.write(wrapper_code)
         tmp.flush()
         tmp.close()
@@ -78,16 +82,16 @@ def _run_script(
     return output
 
 
-def _save_chat_log(task_dir: Path, messages: list[dict]):
-    log_path = task_dir / "chat_log.txt"
+def _append_chat_log(task_dir: Path, messages: list[dict]):
+    log_path = task_dir / "chat_log.md"
     lines = []
     for msg in messages:
         role = msg["role"].upper()
-        content = msg["content"]
         lines.append(f"=== {role} ===")
-        lines.append(content)
+        lines.append(msg.get("content", ""))
         lines.append("")
-    log_path.write_text("\n".join(lines), encoding="utf-8")
+    with open(log_path, "a", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
 
 
 def _generate_metrics_py(metrics: MetricsList, prompt_text: str) -> str:
@@ -155,8 +159,55 @@ def _generate_metrics_py(metrics: MetricsList, prompt_text: str) -> str:
             sys.exit(0 if ok else 1)
     """)
     parts.append(run_all_code)
-
     return "\n".join(parts)
+
+
+def run_and_fix_input_data(
+    task_dir: Path,
+    code_mode: bool = False,
+    mcp_tools_path: Path | None = None,
+    extra_env: dict | None = None,
+) -> bool:
+    input_data_path = task_dir / "input_data.py"
+    prompt_path = task_dir / "prompt.md"
+
+    if not input_data_path.exists():
+        return True
+
+    messages = [
+        {
+            "role": "system",
+            "content": "You are an expert debugger. The script input_data.py failed to prepare the environment. Fix either the task prompt or input_data.py. If no changes are needed for a specific field, leave it null.",
+        }
+    ]
+
+    for attempt in range(5):
+        out = _run_script(
+            input_data_path,
+            cwd=task_dir,
+            code_mode=code_mode,
+            mcp_tools_path=mcp_tools_path,
+            extra_env=extra_env,
+        )
+
+        if "exited with code" not in out and "Traceback" not in out and "ERROR:" not in out:
+            return True
+
+        prompt_text = prompt_path.read_text(encoding="utf-8")
+        code_text = input_data_path.read_text(encoding="utf-8")
+
+        user_msg = f"Task prompt:\n{prompt_text}\n\ninput_data.py:\n{code_text}\n\nExecution Output/Error:\n{out}\n\nProvide fixes."
+        messages.append({"role": "user", "content": user_msg})
+
+        correction, messages = call_llm_multi(messages, response_model=InputDataCorrection)
+        _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+
+        if correction.updated_prompt:
+            prompt_path.write_text(correction.updated_prompt, encoding="utf-8")
+        if correction.updated_input_data_code:
+            input_data_path.write_text(correction.updated_input_data_code, encoding="utf-8")
+
+    return False
 
 
 def solve_single_task(
@@ -168,53 +219,50 @@ def solve_single_task(
 ):
     prompt_path = task_dir / "prompt.md"
     if not prompt_path.exists():
-        logger.warning("No prompt.md in %s, skipping", task_dir)
         return
 
     logger.info("Solving task: %s", task_dir.name)
-    prompt_text = prompt_path.read_text(encoding="utf-8")
-
+    
     gt_dir = task_dir / "gt"
     gt_dir.mkdir(exist_ok=True)
+    solution_path = task_dir / "solution.py"
 
-    input_data_path = task_dir / "input_data.py"
-    if input_data_path.exists():
-        logger.info("Running input_data.py...")
-        output = _run_script(
-            input_data_path, cwd=task_dir,
-            code_mode=code_mode, mcp_tools_path=mcp_tools_path,
-            extra_env=mcp_env
-        )
-        logger.info("input_data.py output: %s", output)
-
+    prompt_text = prompt_path.read_text(encoding="utf-8")
     prompt_name = "solve_task_code_mode.md" if code_mode else "solve_task.md"
     system_prompt = _load_prompt(prompt_name)
-
     user_prompt = prompt_text
+
     if codebase_text:
         label = "Available API" if code_mode else "Framework/codebase"
-        user_prompt += (
-            f"\n\nYou MUST use the following {label} to solve this task:\n\n"
-            f"---\n{codebase_text}\n---"
-        )
+        user_prompt += f"\n\nYou MUST use the following {label} to solve this task:\n\n---\n{codebase_text}\n---"
 
     solve_messages = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
     ]
     solution, solve_messages = call_llm_multi(solve_messages, response_model=Solution)
+    _append_chat_log(task_dir, solve_messages)
 
-    solution_path = task_dir / "solution.py"
     solution_path.write_text(solution.code, encoding="utf-8")
-    logger.info("Saved solution.py")
 
-    logger.info("Running solution.py...")
-    exec_output = _run_script(
-        solution_path, cwd=gt_dir,
-        code_mode=code_mode, mcp_tools_path=mcp_tools_path,
-        extra_env=mcp_env,
-    )
-    logger.info("Solution output:\n%s", exec_output)
+    exec_output = ""
+    for attempt in range(5):
+        exec_output = _run_script(
+            solution_path, cwd=gt_dir, code_mode=code_mode, mcp_tools_path=mcp_tools_path, extra_env=mcp_env
+        )
+        if "exited with code" not in exec_output and "Traceback" not in exec_output and "ERROR:" not in exec_output:
+            break
+
+        user_msg = f"solution.py failed during execution:\n{exec_output}\nFix the code or subtasks. Return null for fields that do not require changes."
+        solve_messages.append({"role": "user", "content": user_msg})
+        correction, solve_messages = call_llm_multi(solve_messages, response_model=SolutionCorrection)
+        _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+
+        if correction.updated_code:
+            solution.code = correction.updated_code
+            solution_path.write_text(solution.code, encoding="utf-8")
+        if correction.updated_subtasks:
+            solution.subtasks = correction.updated_subtasks
 
     generated_files = [f.name for f in gt_dir.iterdir() if f.is_file()]
 
@@ -224,34 +272,44 @@ def solve_single_task(
             "role": "user",
             "content": (
                 f"Here is the task prompt:\n\n{prompt_text}\n\n"
-                f"The solution has been executed. Output:\n\n"
-                f"```\n{exec_output}\n```\n\n"
+                f"The solution has been executed. Output:\n\n```\n{exec_output}\n```\n\n"
                 f"Generated files in gt/: {generated_files}\n\n"
                 f"Subtask decomposition:\n"
-                + "\n".join(
-                    f"- {st.name}: {st.description} -> {st.output_files}"
-                    for st in solution.subtasks
-                )
+                + "\n".join(f"- {st.name}: {st.description} -> {st.output_files}" for st in solution.subtasks)
                 + "\n\nGenerate metrics for each subtask."
             ),
         },
     ]
     metrics, metric_messages = call_llm_multi(metric_messages, response_model=MetricsList)
+    _append_chat_log(task_dir, metric_messages)
 
-    metrics_py_content = _generate_metrics_py(metrics, prompt_text)
     metrics_path = task_dir / "metrics.py"
-    metrics_path.write_text(metrics_py_content, encoding="utf-8")
-    logger.info("Saved metrics.py")
+    metrics_path.write_text(_generate_metrics_py(metrics, prompt_text), encoding="utf-8")
 
-    all_messages = solve_messages + [{"role": "system", "content": "--- METRICS GENERATION PHASE ---"}] + metric_messages
-    _save_chat_log(task_dir, all_messages)
-    logger.info("Saved chat_log.txt")
+    for attempt in range(5):
+        metrics_output = _run_script(metrics_path, cwd=gt_dir, extra_env=mcp_env)
+        
+        if "FAIL:" not in metrics_output and "ERROR:" not in metrics_output and "exited with code" not in metrics_output and "Traceback" not in metrics_output:
+            verify_log = task_dir / "verify_log.txt"
+            verify_log.write_text(metrics_output, encoding="utf-8")
+            break
 
-    logger.info("Running metrics.py to verify...")
-    metrics_output = _run_script(metrics_path, cwd=gt_dir, extra_env=mcp_env)
-    verify_log = task_dir / "verify_log.txt"
-    verify_log.write_text(metrics_output, encoding="utf-8")
-    logger.info("Verification:\n%s", metrics_output)
+        user_msg = f"metrics.py failed or found incorrect solution outputs:\n{metrics_output}\nFix the solution code and/or the metrics. Return null for fields that do not require changes."
+        metric_messages.append({"role": "user", "content": user_msg})
+        correction, metric_messages = call_llm_multi(metric_messages, response_model=SolutionMetricsCorrection)
+        _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+
+        if correction.updated_solution_code:
+            solution.code = correction.updated_solution_code
+            solution_path.write_text(solution.code, encoding="utf-8")
+            exec_output = _run_script(
+                solution_path, cwd=gt_dir, code_mode=code_mode, mcp_tools_path=mcp_tools_path, extra_env=mcp_env
+            )
+            _append_chat_log(task_dir, [{"role": "system", "content": f"Re-ran updated solution. Output:\n{exec_output}"}])
+
+        if correction.updated_metrics:
+            metrics.metrics = correction.updated_metrics
+            metrics_path.write_text(_generate_metrics_py(metrics, prompt_text), encoding="utf-8")
 
 
 def solve_tasks(
@@ -262,13 +320,8 @@ def solve_tasks(
     mcp_env: dict | None = None,
 ):
     task_dirs = sorted(d for d in output_dir.iterdir() if d.is_dir() and d.name.startswith("task_"))
-    if not task_dirs:
-        logger.warning("No task directories found in %s", output_dir)
-        return
-
     for task_dir in task_dirs:
         if (task_dir / "solution.py").exists():
-            logger.info("Skipping %s (already solved)", task_dir.name)
             continue
         solve_single_task(task_dir, codebase_text, code_mode, mcp_tools_path, mcp_env)
 
@@ -276,7 +329,7 @@ def solve_tasks(
 def main():
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
-    parser = argparse.ArgumentParser(description="Solve benchmark tasks and generate gt + metrics")
+    parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--task_dir", type=Path)
     group.add_argument("--output_dir", type=Path)
