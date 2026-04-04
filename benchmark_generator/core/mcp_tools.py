@@ -47,7 +47,7 @@ def generate_api_doc(tools: dict[str, list[Tool]]) -> str:
             for pname, ptype, req in params:
                 sig_parts.append(f"{pname}: {ptype}")
             sig = ", ".join(sig_parts)
-            lines.append(f"### {tool.name}({sig}) -> str")
+            lines.append(f"### async {tool.name}({sig}) -> str")
             if tool.description:
                 lines.append(tool.description)
             for pname, ptype, req in params:
@@ -153,10 +153,10 @@ def generate_wrapper_module(tools: dict[str, list[Tool]], mcp_config_path: Path)
                 raise RuntimeError(f"Tool {tool_name} failed: {text}")
             return text
 
-        def _run(server_name, tool_name, args):
+        async def _run_async(server_name, tool_name, args):
             loop = _get_loop()
             future = asyncio.run_coroutine_threadsafe(_call(server_name, tool_name, args), loop)
-            return future.result()
+            return await asyncio.wrap_future(future)
 
     """)
 
@@ -178,9 +178,9 @@ def generate_wrapper_module(tools: dict[str, list[Tool]], mcp_config_path: Path)
 
             desc = tool.description or tool.name
             func_code = (
-                f'def {tool.name}({sig}) -> str:\n'
+                f'async def {tool.name}({sig}) -> str:\n'
                 f'    """{desc}"""\n'
-                f'    return _run({repr(server_name)}, {repr(tool.name)}, {call_dict})\n'
+                f'    return await _run_async({repr(server_name)}, {repr(tool.name)}, {call_dict})\n'
             )
             functions.append(func_code)
 
