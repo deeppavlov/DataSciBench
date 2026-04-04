@@ -183,6 +183,12 @@ class SciDataInterpreter(Role):
             self.working_memory.add(Message(content=code, role="assistant", cause_by=cause_by))
 
             ### execute code ###
+            from pathlib import Path
+            tools_file = Path(__file__).parent.parent / "code_mode" / "_mcp_tools.py"
+            if tools_file.exists():
+                init_code = f"import sys\nif '{tools_file.parent}' not in sys.path: sys.path.append('{tools_file.parent}')\nfrom _mcp_tools import *\n"
+                code = init_code + code
+
             result, success = await self.execute_code.run(code)
 
             self.working_memory.add(Message(content=result, role="user", cause_by=ExecuteNbCode))
