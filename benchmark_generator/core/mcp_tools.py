@@ -119,7 +119,10 @@ def generate_wrapper_module(tools: dict[str, list[Tool]], mcp_config_path: Path)
             if _loop is None:
                 return
             for task in _cleanup_tasks:
-                asyncio.run_coroutine_threadsafe(task(), _loop).result(timeout=5)
+                try:
+                    asyncio.run_coroutine_threadsafe(task(), _loop).result(timeout=5)
+                except Exception as e:
+                    print(f"Warning: Exception during MCP cleanup: {e}")
             _loop.call_soon_threadsafe(_loop.stop)
             _thread.join(timeout=5)
             _loop = None

@@ -184,7 +184,7 @@ def run_and_fix_input_data(
     system_content = (
         "You are an expert debugger. The script input_data.py failed to prepare the environment. "
         "Fix either the task prompt or input_data.py. If no changes are needed for a specific field, leave it null.\n"
-        "You are allowed to update the prompt if the original one was flawed, but stay within the scope of the provided Topic. DO NOT change the structure of the prompt."
+        "You are allowed to update the prompt if the original one was flawed, but stay within the scope of the provided Topic. Change the task only as a last resort, DO NOT delete the list of functions from it."
     )
     if topic_text:
         system_content += f"\n\nOriginal Task Topic:\n---\n{topic_text}\n---"
@@ -218,7 +218,10 @@ def run_and_fix_input_data(
 
         try:
             correction, messages = call_llm_multi(messages, response_model=InputDataCorrection)
-            _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+            _append_chat_log(
+                task_dir,
+                [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}],
+            )
         except ValidationError as e:
             err_msg = f"JSON Validation Error:\n{str(e)}\nFix your response format."
             messages.append({"role": "user", "content": err_msg})
@@ -247,14 +250,18 @@ def solve_single_task(
         return
 
     logger.info("Solving task: %s", task_dir.name)
-    
+
     if not run_and_fix_input_data(
-        task_dir, code_mode=code_mode, mcp_tools_path=mcp_tools_path, extra_env=mcp_env,
-        topic_text=topic_text, api_doc_text=api_doc_text
+        task_dir,
+        code_mode=code_mode,
+        mcp_tools_path=mcp_tools_path,
+        extra_env=mcp_env,
+        topic_text=topic_text,
+        api_doc_text=api_doc_text,
     ):
         logger.error("Skipping task %s due to input_data failures", task_dir.name)
         return
-    
+
     gt_dir = task_dir / "gt"
     gt_dir.mkdir(exist_ok=True)
     solution_path = task_dir / "solution.py"
@@ -272,7 +279,7 @@ def solve_single_task(
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
     ]
-    
+
     try:
         solution, solve_messages = call_llm_multi(solve_messages, response_model=Solution)
         _append_chat_log(task_dir, solve_messages)
@@ -287,16 +294,19 @@ def solve_single_task(
         exec_output = _run_script(
             solution_path, cwd=gt_dir, code_mode=code_mode, mcp_tools_path=mcp_tools_path, extra_env=mcp_env
         )
-        
+
         if "[EXIT_CODE_ERROR:" not in exec_output and "ERROR: Script timed out" not in exec_output:
             break
 
         user_msg = f"solution.py failed during execution:\n{exec_output}\nFix the code or subtasks. Return null for fields that do not require changes."
         solve_messages.append({"role": "user", "content": user_msg})
-        
+
         try:
             correction, solve_messages = call_llm_multi(solve_messages, response_model=SolutionCorrection)
-            _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+            _append_chat_log(
+                task_dir,
+                [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}],
+            )
         except ValidationError as e:
             err_msg = f"JSON Validation Error:\n{str(e)}\nFix your response format."
             solve_messages.append({"role": "user", "content": err_msg})
@@ -325,7 +335,7 @@ def solve_single_task(
             ),
         },
     ]
-    
+
     try:
         metrics, metric_messages = call_llm_multi(metric_messages, response_model=MetricsList)
         _append_chat_log(task_dir, metric_messages)
@@ -339,8 +349,13 @@ def solve_single_task(
     for attempt in range(5):
         logger.info("Running metrics.py to verify (Attempt %d/5)...", attempt + 1)
         metrics_output = _run_script(metrics_path, cwd=gt_dir, extra_env=mcp_env)
-        
-        if "[EXIT_CODE_ERROR:" not in metrics_output and "ERROR: Script timed out" not in metrics_output and "FAIL:" not in metrics_output and "ERROR:" not in metrics_output:
+
+        if (
+            "[EXIT_CODE_ERROR:" not in metrics_output
+            and "ERROR: Script timed out" not in metrics_output
+            and "FAIL:" not in metrics_output
+            and "ERROR:" not in metrics_output
+        ):
             logger.info("Verification SUCCESS:\n%s", metrics_output)
             verify_log = task_dir / "verify_log.txt"
             verify_log.write_text(metrics_output, encoding="utf-8")
@@ -349,10 +364,13 @@ def solve_single_task(
         logger.warning("Verification FAILED (Attempt %d/5). Requesting fix...", attempt + 1)
         user_msg = f"metrics.py failed or found incorrect solution outputs:\n{metrics_output}\nFix the solution code and/or the metrics. Return null for fields that do not require changes."
         metric_messages.append({"role": "user", "content": user_msg})
-        
+
         try:
             correction, metric_messages = call_llm_multi(metric_messages, response_model=SolutionMetricsCorrection)
-            _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}])
+            _append_chat_log(
+                task_dir,
+                [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}],
+            )
         except ValidationError as e:
             err_msg = f"JSON Validation Error:\n{str(e)}\nFix your response format."
             metric_messages.append({"role": "user", "content": err_msg})
@@ -362,22 +380,25 @@ def solve_single_task(
         if correction.updated_solution_code:
             solution.code = correction.updated_solution_code
             solution_path.write_text(solution.code, encoding="utf-8")
-            
+
             for f in gt_dir.iterdir():
                 if f.is_file() and f.name not in ("solution.py", "metrics.py"):
                     try:
                         f.unlink()
                     except OSError:
                         pass
-            
+
             exec_output = _run_script(
                 solution_path, cwd=gt_dir, code_mode=code_mode, mcp_tools_path=mcp_tools_path, extra_env=mcp_env
             )
-            _append_chat_log(task_dir, [{"role": "system", "content": f"Re-ran updated solution. Output:\n{exec_output}"}])
+            _append_chat_log(
+                task_dir, [{"role": "system", "content": f"Re-ran updated solution. Output:\n{exec_output}"}]
+            )
 
         if correction.updated_metrics:
             metrics.metrics = correction.updated_metrics
             metrics_path.write_text(_generate_metrics_py(metrics, prompt_text), encoding="utf-8")
+
 
 def solve_tasks(
     output_dir: Path,
@@ -421,14 +442,35 @@ def main():
         topic_text = args.topic.read_text(encoding="utf-8")
 
     if args.task_dir:
-        solve_single_task(args.task_dir, codebase_text, args.code_mode, args.mcp_tools_path, topic_text=topic_text, api_doc_text=codebase_text)
+        solve_single_task(
+            args.task_dir,
+            codebase_text,
+            args.code_mode,
+            args.mcp_tools_path,
+            topic_text=topic_text,
+            api_doc_text=codebase_text,
+        )
     else:
         if args.force:
             task_dirs = sorted(d for d in args.output_dir.iterdir() if d.is_dir() and d.name.startswith("task_"))
             for td in task_dirs:
-                solve_single_task(td, codebase_text, args.code_mode, args.mcp_tools_path, topic_text=topic_text, api_doc_text=codebase_text)
+                solve_single_task(
+                    td,
+                    codebase_text,
+                    args.code_mode,
+                    args.mcp_tools_path,
+                    topic_text=topic_text,
+                    api_doc_text=codebase_text,
+                )
         else:
-            solve_tasks(args.output_dir, codebase_text, args.code_mode, args.mcp_tools_path, topic_text=topic_text, api_doc_text=codebase_text)
+            solve_tasks(
+                args.output_dir,
+                codebase_text,
+                args.code_mode,
+                args.mcp_tools_path,
+                topic_text=topic_text,
+                api_doc_text=codebase_text,
+            )
 
 
 if __name__ == "__main__":

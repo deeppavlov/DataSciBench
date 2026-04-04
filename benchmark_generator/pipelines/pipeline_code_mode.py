@@ -5,6 +5,7 @@ import shutil
 from pathlib import Path
 
 from ..core.config import get_settings
+from ..core.healthcheck import interactive_healthcheck
 from ..core.mcp_tools import discover_tools, generate_api_doc, generate_wrapper_module
 from ..tools.generate_tasks import generate_tasks
 from ..tools.pack_task import pack_all_tasks, pack_single_task
@@ -88,6 +89,16 @@ async def run_pipeline():
 
         api_doc_text = api_doc
 
+    while True:
+        do_hc = ask("\nВыполнить проверку здоровья MCP-серверов с помощью LLM? (0 - нет, 1 - да)", "0")
+        if do_hc == "1":
+            interactive_healthcheck(output_dir, mcp_env)
+            recheck = ask("Повторить проверку? (0 - продолжить пайплайн, 1 - повторить проверку)", "0")
+            if recheck == "0":
+                break
+        else:
+            break
+
     if start_step <= 1:
         print("\n=== Шаг 1: Генерация задач ===")
         dirs = generate_tasks(api_doc_path, count, output_dir, topic_path=topic, code_mode=True, env_hints=mcp_env)
@@ -111,12 +122,12 @@ async def run_pipeline():
         for task_dir in tasks:
             print(f"Запуск и проверка input_data.py в {task_dir}")
             run_and_fix_input_data(
-                task_dir, 
-                code_mode=True, 
-                mcp_tools_path=mcp_tools_path, 
+                task_dir,
+                code_mode=True,
+                mcp_tools_path=mcp_tools_path,
                 extra_env=mcp_env,
                 topic_text=topic_text,
-                api_doc_text=api_doc_text
+                api_doc_text=api_doc_text,
             )
         print("Шаг 2 завершен.")
 
@@ -128,9 +139,25 @@ async def run_pipeline():
         print("\n=== Шаг 3: Решение задач ===")
         topic_text = topic.read_text(encoding="utf-8") if topic.exists() else None
         if work_mode == "1":
-            solve_tasks(output_dir, codebase_text=api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env, topic_text=topic_text, api_doc_text=api_doc_text)
+            solve_tasks(
+                output_dir,
+                codebase_text=api_doc_text,
+                code_mode=True,
+                mcp_tools_path=mcp_tools_path,
+                mcp_env=mcp_env,
+                topic_text=topic_text,
+                api_doc_text=api_doc_text,
+            )
         else:
-            solve_single_task(tasks[0], codebase_text=api_doc_text, code_mode=True, mcp_tools_path=mcp_tools_path, mcp_env=mcp_env, topic_text=topic_text, api_doc_text=api_doc_text)
+            solve_single_task(
+                tasks[0],
+                codebase_text=api_doc_text,
+                code_mode=True,
+                mcp_tools_path=mcp_tools_path,
+                mcp_env=mcp_env,
+                topic_text=topic_text,
+                api_doc_text=api_doc_text,
+            )
         print("Шаг 3 завершен.")
 
     while True:
@@ -144,7 +171,9 @@ async def run_pipeline():
                 input_data = task_dir / "input_data.py"
                 if input_data.exists():
                     print(f"Сброс среды: запуск input_data.py в {task_dir}...")
-                    _run_script(input_data, cwd=task_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env)
+                    _run_script(
+                        input_data, cwd=task_dir, code_mode=True, mcp_tools_path=mcp_tools_path, extra_env=mcp_env
+                    )
                 solution = task_dir / "solution.py"
                 metrics = task_dir / "metrics.py"
                 if solution.exists() and metrics.exists():
