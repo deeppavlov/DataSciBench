@@ -38,7 +38,7 @@ The `input_data_code` MUST be **idempotent and self-cleaning**:
 - It should first delete or drop any entities it's about to create (e.g., `DROP TABLE IF EXISTS`, `os.remove` if exists).
 - It should use the available API (like `run_select_query`) or standard Python to set up the EXACT state described in the prompt.
 - **FORBIDDEN**: You MUST NOT use external driver libraries in `input_data_code` (like `clickhouse_connect`, `psycopg2`, `pymongo`, etc.).
-- **IMPORTANT**: The functions from the "Available API" list are automatically available in your `input_data_code` without any additional imports. ALWAYS use them to interact with the system.
+- **IMPORTANT**: The functions from the "Available API" list are automatically available in your `input_data_code` without any additional imports. Note that these functions are ASYNCHRONOUS (`async def`). ALWAYS use them to interact with the system, and you MUST call them using `await` within an `asyncio.run(main())` block.
 - **IMPORTANT**: When writing connection code (e.g. for database), ALWAYS use `os.getenv(KEY, DEFAULT)` for parameters like HOST, PORT, USER, etc. Use the keys and values provided in the "Environment variables" section of the prompt.
 
 If the task can get data via the available API functions from internet, set `needs_input_data: false`.

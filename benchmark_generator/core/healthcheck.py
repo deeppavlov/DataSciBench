@@ -29,7 +29,7 @@ REQUIREMENTS:
 1. Print "OK: <server_name>" if the call succeeds.
 2. If a call fails, catch the exception and print "ERROR: <server_name> - <error details>".
 3. The script must be self-contained.
-4. CRITICAL: All tools are imported automatically into the global namespace. Call them directly (e.g. `list_databases()`), DO NOT use server name prefixes (e.g. NOT `clickhouse.list_databases()`).
+4. CRITICAL: All tools are imported automatically into the global namespace. Note that these tools are ASYNCHRONOUS (`async def`). You MUST call them using `await` inside an `asyncio.run(main())` block. Call them directly (e.g. `await list_databases()`), DO NOT use server name prefixes (e.g. NOT `clickhouse.list_databases()`).
 5. Return ONLY the raw python code. DO NOT include markdown formatting or explanations.
 """
     
