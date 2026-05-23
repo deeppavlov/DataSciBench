@@ -29,7 +29,7 @@
         gt_predictions = gt_output.iloc[:, -1].tolist()
         gt_predictions = [math.ceil(prediction) for prediction in gt_predictions]
 
-        actual_gt = pd.read_csv("../test_data.csv")
+        actual_gt = pd.read_csv("../data.csv")
         actual_label = actual_gt['Purchase Quantity (pcs)'].tolist()[:10]
         
         # Assuming ground_truth is a CSV containing actual sales data with a 'Predicted Purchase Quantity (pcs)' column

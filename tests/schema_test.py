@@ -1,9 +1,9 @@
-from src.schemas.schemas import Metric, Evaluator
-from src.schemas.dag import LineairzedDAG, Node
-from src.evaluator.cr_evaluator import CREvaluator
 import asyncio
-from src.utils import load_yaml, list_to_dict_by_task
 
+from src.evaluator.cr_evaluator import CREvaluator
+from src.schemas.dag import LineairzedDAG
+from src.schemas.schemas import Evaluator, Metric
+from src.utils import list_to_dict_by_task, load_yaml
 
 metric = Metric()
 evaluator = Evaluator()

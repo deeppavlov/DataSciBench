@@ -1,0 +1,46 @@
+Basic Statistical Indicators:
+Mean:
+0       -0.001471
+1        0.230952
+2        0.435734
+3        0.600293
+4        0.726610
+           ...   
+196     -0.230410
+197     -0.155540
+198     -0.074958
+199      0.001538
+label    0.500000
+Length: 201, dtype: float64
+Median:
+0       -0.000037
+1        0.231178
+2        0.434892
+3        0.600007
+4        0.722636
+           ...   
+196     -0.227554
+197     -0.149347
+198     -0.072723
+199      0.000201
+label    0.500000
+Length: 201, dtype: float64
+Standard Deviation:
+0        0.095587
+1        0.124411
+2        0.159060
+3        0.178233
+4        0.167717
+           ...   
+196      0.252670
+197      0.184300
+198      0.129194
+199      0.102563
+label    0.500250
+Length: 201, dtype: float64
+
+Observations:
+1. The mean, median, and standard deviation provide insights into the central tendency and spread of the data.
+2. Histograms show the distribution of each feature, indicating skewness or normality.
+3. Box plots help identify outliers and the spread of the data.
+4. The correlation matrix reveals relationships between features, which can be visualized using a heatmap.

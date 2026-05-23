@@ -1,0 +1,1909 @@
+,Prompt,Metrics,Original Prompt,Qualified (Y/N),Modified Prompt (If not qualified),data source type
+0,"Create a dataframe with the following structure, using different years as row indices and different categories as column names, filling in the corresponding values. The input data should be stored in ""data.csv"" with the following format:
+```
+时间,品类,指标,地区,周期,单位,数值
+2022,农业科技进步贡献率,贡献率,全国,年,%,62.4
+2021,农业科技进步贡献率,贡献率,全国,年,%,61.5
+2020,化肥有效利用率,利用率,全国,年,%,40.2
+2020,农药有效利用率,利用率,全国,年,%,40.6
+2020,县域数字农业农村发展总体水平,占比,全国,年,%,37.9
+2020,农业科技进步贡献率,贡献率,全国,年,%,60.7
+2019,农药有效利用率,利用率,全国,年,%,39.8
+2019,化肥有效利用率,利用率,全国,年,%,39.2
+2019,县域数字农业农村发展总体水平,占比,全国,年,%,36.0
+2019,农业科技进步贡献率,贡献率,全国,年,%,59.2
+2018,县域数字农业农村发展总体水平,占比,全国,年,%,33.0
+2018,农业科技进步贡献率,贡献率,全国,年,%,58.3
+2017,农药有效利用率,利用率,全国,年,%,38.8
+2017,化肥有效利用率,利用率,全国,年,%,38.8
+2017,农业科技进步贡献率,贡献率,全国,年,%,57.5
+2016,农业科技进步贡献率,贡献率,全国,年,%,56.7
+2015,农药有效利用率,利用率,全国,年,%,36.6
+2015,化肥有效利用率,利用率,全国,年,%,35.2
+2015,农业科技进步贡献率,贡献率,全国,年,%,56.1
+2014,农业科技进步贡献率,贡献率,全国,年,%,55.6
+2013,农药有效利用率,利用率,全国,年,%,35.0
+2013,化肥有效利用率,利用率,全国,年,%,33.0
+2013,农业科技进步贡献率,贡献率,全国,年,%,55.2
+2012,农业科技进步贡献率,贡献率,全国,年,%,54.5
+```
+The output should be saved in ""output.csv"" in a structured format that allows for easy evaluation of the completion of this task.",data integrity,"Create a dataframe with the following structure, using different years as row indices and different categories as column names, filling in the corresponding values:\n时间,品类,指标,地区,周期,单位,数值\n2022,农业科技进步贡献率,贡献率,全国,年,%,62.4\n2021,农业科技进步贡献率,贡献率,全国,年,%,61.5\n2020,化肥有效利用率,利用率,全国,年,%,40.2\n2020,农药有效利用率,利用率,全国,年,%,40.6\n2020,县域数字农业农村发展总体水平,占比,全国,年,%,37.9\n2020,农业科技进步贡献率,贡献率,全国,年,%,60.7\n2019,农药有效利用率,利用率,全国,年,%,39.8\n2019,化肥有效利用率,利用率,全国,年,%,39.2\n2019,县域数字农业农村发展总体水平,占比,全国,年,%,36.0\n2019,农业科技进步贡献率,贡献率,全国,年,%,59.2\n2018,县域数字农业农村发展总体水平,占比,全国,年,%,33.0\n2018,农业科技进步贡献率,贡献率,全国,年,%,58.3\n2017,农药有效利用率,利用率,全国,年,%,38.8\n2017,化肥有效利用率,利用率,全国,年,%,38.8\n2017,农业科技进步贡献率,贡献率,全国,年,%,57.5\n2016,农业科技进步贡献率,贡献率,全国,年,%,56.7\n2015,农药有效利用率,利用率,全国,年,%,36.6\n2015,化肥有效利用率,利用率,全国,年,%,35.2\n2015,农业科技进步贡献率,贡献率,全国,年,%,56.1\n2014,农业科技进步贡献率,贡献率,全国,年,%,55.6\n2013,农药有效利用率,利用率,全国,年,%,35.0\n2013,化肥有效利用率,利用率,全国,年,%,33.0\n2013,农业科技进步贡献率,贡献率,全国,年,%,55.2\n2012,农业科技进步贡献率,贡献率,全国,年,%,54.5",N,"Create a dataframe with the following structure, using different years as row indices and different categories as column names, filling in the corresponding values. The input data is as follows:
+```
+时间,品类,指标,地区,周期,单位,数值
+2022,农业科技进步贡献率,贡献率,全国,年,%,62.4
+2021,农业科技进步贡献率,贡献率,全国,年,%,61.5
+2020,化肥有效利用率,利用率,全国,年,%,40.2
+2020,农药有效利用率,利用率,全国,年,%,40.6
+2020,县域数字农业农村发展总体水平,占比,全国,年,%,37.9
+2020,农业科技进步贡献率,贡献率,全国,年,%,60.7
+2019,农药有效利用率,利用率,全国,年,%,39.8
+2019,化肥有效利用率,利用率,全国,年,%,39.2
+2019,县域数字农业农村发展总体水平,占比,全国,年,%,36.0
+2019,农业科技进步贡献率,贡献率,全国,年,%,59.2
+2018,县域数字农业农村发展总体水平,占比,全国,年,%,33.0
+2018,农业科技进步贡献率,贡献率,全国,年,%,58.3
+2017,农药有效利用率,利用率,全国,年,%,38.8
+2017,化肥有效利用率,利用率,全国,年,%,38.8
+2017,农业科技进步贡献率,贡献率,全国,年,%,57.5
+2016,农业科技进步贡献率,贡献率,全国,年,%,56.7
+2015,农药有效利用率,利用率,全国,年,%,36.6
+2015,化肥有效利用率,利用率,全国,年,%,35.2
+2015,农业科技进步贡献率,贡献率,全国,年,%,56.1
+2014,农业科技进步贡献率,贡献率,全国,年,%,55.6
+2013,农药有效利用率,利用率,全国,年,%,35.0
+2013,化肥有效利用率,利用率,全国,年,%,33.0
+2013,农业科技进步贡献率,贡献率,全国,年,%,55.2
+2012,农业科技进步贡献率,贡献率,全国,年,%,54.5
+```
+The output should be saved in ""output.csv"".",1=no dependency
+1,"Please complete the following task using Python:
+
+1. **Input**: Open the 'sheet1' worksheet of the Excel file `source.xlsx`.
+   - **Output**: A filtered dataset saved as `filtered_data.csv` containing the rows where:
+     - The value in column D is greater than or equal to 8 and less than 8.0010.
+     - The value in column F is equal to 18.
+     - The value in column G is greater than the value of the second row in column G.
+  
+2. **Input**: Use the filtered data from `filtered_data.csv`.
+   - **Output**: Update the 'sheet1' worksheet in the Excel file `target.xlsx` with the values copied from column G of the filtered rows, and save this updated Excel file as `target_updated.xlsx`.",data integrity,"Please complete the following task using Python: \nOpen the 'sheet1' worksheet of the Excel file source.xlsx, and filter the rows where the value in column D is greater than or equal to 8 and less than 8.0010, at the same time, the value in column F should be equal to 18, and the value in column G should be greater than the value of the second row in column G. Copy the values from the filtered rows in column G and paste them into the corresponding cells of the 'sheet1' worksheet in another Excel file target.xlsx.",N,"Please complete the following task using Python:\n Open the 'sheet1' worksheet of the Excel file source.xlsx, and filter the rows where the value in column D is greater than or equal to 8 and less than 8.0010, at the same time, the value in column F should be equal to 18, and the value in column G should be greater than the value of the second row in column G. Copy the values from the filtered rows in column G and paste them into the corresponding cells of the 'sheet1' worksheet in another Excel file target.xlsx.",3=human written data
+2,"Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set ""train.csv"" and test set ""test.csv"") to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: Analyze the dataset (input: ""train.csv"", output: ""data_analysis.pdf""). Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge.\n(2) Sample filtering: Remove any abnormal training samples (input: ""train.csv"", output: ""filtered_train.csv"").\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images (input: ""filtered_train.csv"", output: ""spectral_images_train.csv""). In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model (input: ""spectral_images_train.csv"", output: ""cnn_model.h5"").\n(5) Model testing: Evaluate the model's output on the test set (input: ""test.csv"" and ""cnn_model.h5"", output: ""model_evaluation_results.csv"").","data integrity,visualization,acc,precision,f1","Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set train.csv, and test set test.csv) to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: This dataset contains 2 classes. Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge.\n(2) Sample filtering: Remove any abnormal training samples.\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images. In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model.\n(5) Model testing: Evaluate the model's output on the test set.",N,"Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set ""train.csv"" and test set ""test.csv"") to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: Analyze the dataset (input: ""train.csv"", output: ""data_analysis.txt""). Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge.\n(2) Sample filtering: Remove any abnormal training samples (input: ""train.csv"", output: ""filtered_train.csv"").\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images (input: ""filtered_train.csv"", output: ""spectral_images_train.csv""). In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model (input: ""spectral_images_train.csv"", output: ""cnn_model.h5"").\n(5) Model testing: Evaluate the model's output on the test set (input: ""test.csv"" and ""cnn_model.h5"", output: ""model_evaluation_results.csv"").",3=human written data
+3,"Please write a segment of Python code that uses the `normalize` method in pandas to extract data from a JSON file into a table. The JSON input file will be named ""data.json"" and should be structured as follows:
+
+```json
+{
+  ""data"": [
+    {
+      ""上映年份"": ""2021"",
+      ""制片地区"": ""中国"",
+      ""导演"": ""陈凯歌 *"",
+      ""提交人"": ""zhchl@fckj"",
+      ""电影名称"": ""长津湖"",
+      ""票房"": ""577524"",
+      ""评分"": ""7.6""
+    },
+    {
+      ""上映年份"": ""2017"",
+      ""制片地区"": ""中国"",
+      ""导演"": ""吴京"",
+      ""提交人"": ""zhchl@fckj"",
+      ""电影名称"": ""战狼2"",
+      ""票房"": ""569456"",
+      ""评分"": ""7.1""
+    }
+  ]
+}
+```
+
+The output of the code should be a CSV file named ""output.csv"" containing the normalized data extracted from the JSON input file. Ensure that the structure of the CSV file clearly represents each attribute as a column for further evaluation.",data integrity,"Please write a segment of Python code that uses the `normalize` method in pandas to extract data from a JSON file into a table: \n```json\n\""data\"": [\n {\n \""上映年份\"": \""2021\"",\n \""制片地区\"": \""中国\"",\n \""导演\"": \""陈凯歌 *\"",\n \""提交人\"": \""zhchl@fckj\"",\n \""电影名称\"": \""长津湖\"",\n \""票房\"": \""577524\"",\n \""评分\"": \""7.6\""\n },\n {\n \""上映年份\"": \""2017\"",\n \""制片地区\"": \""中国\"",\n \""导演\"": \""吴京\"",\n \""提交人\"": \""zhchl@fckj\"",\n \""电影名称\"": \""战狼2\"",\n \""票房\"": \""569456\"",\n \""评分\"": \""7.1\""\n }\n]\n```",N,"Please write a segment of Python code that uses the `normalize` method in pandas to extract data from a JSON file into a table. The JSON input is as follows:
+
+```json
+{
+  ""data"": [
+    {
+      ""上映年份"": ""2021"",
+      ""制片地区"": ""中国"",
+      ""导演"": ""陈凯歌 *"",
+      ""提交人"": ""zhchl@fckj"",
+      ""电影名称"": ""长津湖"",
+      ""票房"": ""577524"",
+      ""评分"": ""7.6""
+    },
+    {
+      ""上映年份"": ""2017"",
+      ""制片地区"": ""中国"",
+      ""导演"": ""吴京"",
+      ""提交人"": ""zhchl@fckj"",
+      ""电影名称"": ""战狼2"",
+      ""票房"": ""569456"",
+      ""评分"": ""7.1""
+    }
+  ]
+}
+```
+
+The output of the code should be a CSV file named ""output.csv"" containing the normalized data extracted from the JSON input. Ensure that the structure of the CSV file clearly represents each attribute as a column for further evaluation.",1=no dependency
+4,"Write code to implement a sliding window based method to detect outliers in time series data. Use the ""closing price"" column in the input file ""ultimate_data.csv"" as the source data. The task should involve the following subtasks:
+
+1. **Detect Outliers**: Identify outliers in the ""closing price"" column using a sliding window technique. Output the results in a CSV file named ""outliers_detected.csv"" with columns for the index, value, and a flag indicating if it is an outlier.
+
+2. **Replace Outliers**: For each detected outlier in the sliding window, replace it with the average of 10 nearby values. Output the smoothed time series data in a CSV file named ""smoothed_data.csv"" that contains the original index and the adjusted closing prices.
+
+3. **Visualize Results**: Create a visual representation (plot) of the original closing prices and the smoothed prices to clearly show the outliers and replacements. Save the plot as an image file named ""outlier_detection_plot.png"".",outliers,Write code to implement a sliding window based method to detect outliers in time series data (closing price column in ultimate_data.csv) and replace the outliers in the window with the average of 10 nearby numbers to smooth the data curve.,N,"Write code to implement a sliding window based method to detect outliers in time series data. Use the ""closing price"" column in the input file ""ultimate_data.csv"" as the source data. The task should involve the following subtasks:
+
+1. Detect Outliers: Identify outliers in the ""closing price"" column using a sliding window technique. Output the results in a CSV file named ""outliers_detected.csv"" with columns for the index, value, and a flag indicating if it is an outlier.
+
+2. Replace Outliers: For each detected outlier in the sliding window, replace it with the average of 10 nearby values. Output the smoothed time series data in a CSV file named ""smoothed_data.csv"" that contains the original index and the adjusted closing prices.
+
+3. Visualize Results: Create a visual representation (plot) of the original closing prices and the smoothed prices to clearly show the outliers and replacements. Save the plot as an image file named ""outlier_detection_plot.png"".",3=human written data
+5,"A shopping mall has placed 5 automatic vending machines at different locations, labeled as A, B, C, D, and E. Data 1 (data file: data1.csv) provides the sales data for each vending machine from January 1, 2017, to December 31, 2017, and Data 2 (data file: data2.csv) provides the classification of the goods. Our goal is to read and merge the data from both tables, perform data validation and cleaning, and save the processed results.
+
+Specific requirements are as follows:
+
+1) Use the read_csv function from pandas to read the data from ""data1.csv"" and ""data2.csv"".
+   - Output: None
+   - Input: data1.csv, data2.csv
+
+2) Use the merge function or join() method from pandas to combine the data and save the merged results.
+   - Output: Merged data
+   - Output file: merged_data.csv
+
+3) Find and delete duplicate records.
+   - Output: Data without duplicates
+   - Output file: no_duplicates_data.csv
+
+4) Identify and remove abnormal data. (Delete records with payment amount and actual amount equal to 0; delete data with payment dates on February 29, 2017).
+   - Output: Data without abnormal entries
+   - Output file: no_abnormal_data.csv
+
+5) Find and handle missing values (for records with a missing due amount but a present actual amount, fill in the due amount with the actual amount; for records with a missing actual amount but a present due amount, fill in the actual amount with the due amount; delete the record if both the actual and due amounts are missing).
+   - Output: Data without missing values
+   - Output file: filled_missing_data.csv
+
+6) Save the final processed data.
+   - Output: Final cleaned data
+   - Output file: final_processed_data.csv","data integrity,data consistency,data quality","A shopping mall has placed 5 automatic vending machines at different locations, labeled as A, B, C, D, and E. Data 1 (data file: data1.csv) provides the sales data for each vending machine from January 1, 2017, to December 31, 2017, and Data 2 (data file: data2.csv) provides the classification of the goods. Now we need to read and merge the data from both tables. We also need to perform data validation and cleaning on the merged data, including checking and processing duplicates, inspecting and handling outliers, and identifying and managing missing values.
+
+ Specific requirements are as follows:
+
+ 1) Use the read_csv function from pandas to read the data.
+ 2) Use the merge function or join() method from pandas to combine the data and save the merged results.
+ 3) Find and delete duplicate records.
+ 4) Identify and remove abnormal data. (Delete records with payment amount and actual amount equal to 0; delete data with payment dates on February 29, 2017).
+ 5) Find and handle missing values (for records with a missing due amount but a present actual amount, fill in the due amount with the actual amount; for records with a missing actual amount but a present due amount, fill in the actual amount with the due amount; delete the record if both the actual and due amounts are missing).
+ 6) Save the processed data.",N,"A shopping mall has placed 5 automatic vending machines at different locations, labeled as A, B, C, D, and E. Data 1 (data file: data1.csv) provides the sales data for each vending machine from January 1, 2017, to December 31, 2017, and Data 2 (data file: data2.csv) provides the classification of the goods. Our goal is to read and merge the data from both tables, perform data validation and cleaning, and save the processed results.
+
+Specific requirements are as follows:
+
+1) Use the read_csv function from pandas to read the data from ""data1.csv"" and ""data2.csv"".
+
+2) Use the merge function or join() method from pandas to combine the data and save the merged results.
+   - Output: Merged data
+   - Output file: merged_data.csv
+
+3) Find and delete duplicate records.
+   - Output: Data without duplicates
+   - Output file: no_duplicates_data.csv
+
+4) Identify and remove abnormal data. (Delete records with payment amount and actual amount equal to 0; delete data with payment dates on February 29, 2017).
+   - Output: Data without abnormal entries
+   - Output file: no_abnormal_data.csv
+
+5) Find and handle missing values (for records with a missing due amount but a present actual amount, fill in the due amount with the actual amount; for records with a missing actual amount but a present due amount, fill in the actual amount with the due amount; delete the record if both the actual and due amounts are missing).
+   - Output: Data without missing values
+   - Output file: filled_missing_data.csv
+
+6) Save the final processed data.
+   - Output: Final cleaned data
+   - Output file: final_processed_data.csv",2=open source data
+6,"Import re  
+Import pandas as pd  
+
+# Extract Chinese, English letters, and numbers from a sentence  
+def remove_p(txt):  
+    txt1 = str(txt)  
+    if txt1.strip() == '':  
+        return ''  
+    rule = re.compile('[^a-zA-Z0-9\\u4E00-\\u9FA5]')  
+    txt2 = rule.sub('', txt1)  
+    return txt2  
+
+# Function for stop words  
+Import jieba  
+def txt_cut(juzi):  
+    stopwordslist0 = [line.strip() for line in open('./百度停用词表.txt', encoding='UTF-8').readlines()]  
+    lis = [w for w in jieba.cut(juzi) if w not in stopwordslist0]  
+    return ' '.join(lis)
+
+Improve the above code according to the following requirements:  
+1. Read comment data from ""comments.csv"" and segment the text using remove_p and txt_cut methods. Save the segmentation results to a new column in ""comments_segmented.csv"". Output format: CSV; Filename: ""comments_segmented.csv"".  
+2. Implement the bidirectional maximum matching algorithm to segment 1000 collected comment data from ""comments.csv"" and save the results in a new column. Output format: CSV; Filename: ""comments_bidirectional_segmented.csv"".  
+3. Use the jieba package to segment and tag the part of speech for 1000 collected comment data from ""comments.csv"". Save the results in a new column. Output format: CSV; Filename: ""comments_pos_tagged.csv"".  
+4. Perform word frequency statistics based on the processed comments and generate a word cloud image. Save the word cloud as ""word_cloud.png"". Output format: IMG; Filename: ""word_cloud.png"".","data quality,data integrity","Import re\nImport pandas as pd\n\n# Extract Chinese, English, letters, and numbers from a sentence\ndef remove_p(txt):\n txt1 = str(txt)\n if txt1.strip() == '':\n return ''\n rule = re.compile('[^a-zA-Z0-9\\u4E00-\\u9FA5]')\n txt2 = rule.sub('',txt1)\n return txt2\n\n# Function for stop words\nImport jieba\ndef txt_cut(juzi):\n stopwordslist0 = [line.strip() for line in open('./百度停用词表.txt', encoding='UTF-8').readlines()]\n lis = [w for w in jieba.cut(juzi) if w not in stopwordslist0]\n return ' '.join(lis)\n Improve the above code according to the following requirements:\n1. Use Python to read comment data from a .csv file and segment the text using the following two methods; save the segmentation results to a new column in the original .csv file;\n2. Use the bidirectional maximum matching algorithm to segment 1000 collected comment data;\n3. Use the jieba package to segment and tag the part of speech for 1000 collected comment data;\n4. Perform word frequency statistics and display a word cloud.",N,"Import re  
+Import pandas as pd  
+
+# Extract Chinese, English letters, and numbers from a sentence  
+def remove_p(txt):  
+    txt1 = str(txt)  
+    if txt1.strip() == '':  
+        return ''  
+    rule = re.compile('[^a-zA-Z0-9\\u4E00-\\u9FA5]')  
+    txt2 = rule.sub('', txt1)  
+    return txt2  
+
+# Function for stop words  
+Import jieba  
+def txt_cut(juzi):  
+    stopwordslist0 = [line.strip() for line in open('./百度停用词表.txt', encoding='UTF-8').readlines()]  
+    lis = [w for w in jieba.cut(juzi) if w not in stopwordslist0]  
+    return ' '.join(lis)
+
+Improve the above code according to the following requirements:  
+1. Read comment data from ""comments.csv"" and segment the text using remove_p and txt_cut methods. Save the segmentation results to a new column in ""comments.csv"".
+2. Implement the bidirectional maximum matching algorithm to segment 1000 collected comment data from ""comments.csv"" and save the results in a new column in ""comments.csv"".
+3. Use the jieba package to segment and tag the part of speech for 1000 collected comment data from ""comments.csv"". Save the segmentation results to a new column in ""comments.csv"".
+4. Perform word frequency statistics based on the processed comments and generate a word cloud image. Save the word cloud as ""word_cloud.png"".",3=human written data
+7,"1. There is an Excel spreadsheet named 'data.xlsx' containing 10,000 pieces of data. Each piece of data includes a name, increase rate, data1, data2, data3, data4, data5, data6... up to data15. Input filename: 'data.xlsx'.
+
+2. The increase rate is related to data1, data2, data3, data4, data5, data6... up to data15.
+
+3. Data preprocessing: Clean, deduplicate, and handle missing values in the data to ensure its accuracy and consistency. Output format: CSV. Output filename: 'cleaned_data.csv'.
+
+4. Feature engineering: Based on the available data, extract useful features. Statistical features such as the average, standard deviation, and maximum of the increase rate for each name can be calculated, as well as the correlation features between the increase rate and data1 to data15. Output format: CSV. Output filename: 'features.csv'.
+
+5. Model training: Train machine learning models using historical data, designing linear regression, decision trees, random forests, and neural networks. The purpose of training the models is to find the relationship between the increase rate and data1 to 15, in order to predict tomorrow's increase rate. Output format: Model files (e.g., .pkl or .h5). Output filename: 'trained_models.pkl'.
+
+6. Model evaluation: Use a portion of historical data to evaluate the model, calculating prediction error metrics such as mean squared error and mean absolute error to assess the model's predictive power. Output format: CSV. Output filename: 'evaluation_metrics.csv'.
+
+7. Model application: Use the trained model to predict new data, obtaining the probability or predicted value of the increase rate for each name. Input filename: 'new_data.csv'. Output format: CSV. Output filename: 'predictions.csv'.
+
+8. Result visualization: Visualize the prediction results, using line graphs, bar charts, etc., to display the trends in predicted increase rates for better understanding and analysis of the results. Output format: Image (e.g., PNG or JPEG). Output filename: 'visualization.png'.
+
+9. Write the code for the above functions to ensure each task can be replicated and validated. Output format: Python file. Output filename: 'data_science_pipeline.py'.","data integrity,data consistency,data quality,mae,rmse,visualization","1. There is an Excel spreadsheet named 'data.xlsx' containing 10,000 pieces of data. Each piece of data includes a name, increase rate, data1, data2, data3, data4, data5, data6... up to data15.
+ 2. The increase rate is related to data1, data2, data3, data4, data5, data6... up to data15.
+ 3. Data preprocessing: Clean, deduplicate, and handle missing values in the data to ensure its accuracy and consistency.
+ 4. Feature engineering: Based on the available data, extract useful features. Statistical features such as the average, standard deviation, and maximum of the increase rate for each name can be calculated, as well as the correlation features between the increase rate and data1 to data15.
+ 5. Model training: Train machine learning models using historical data, designing linear regression, decision trees, random forests, and neural networks. The purpose of training the models is to find the relationship between the increase rate and data1 to 15, in order to predict tomorrow's increase rate.
+ 6. Model evaluation: Use a portion of historical data to evaluate the model, calculating prediction error metrics such as mean squared error and mean absolute error to assess the model's predictive power.
+ 7. Model application: Use the trained model to predict new data, obtaining the probability or predicted value of the increase rate for each name.
+ 8. Result visualization: Visualize the prediction results, using line graphs, bar charts, etc., to display the trends in predicted increase rates for better understanding and analysis of the results.
+ 9. Write the code for the above functions.",N,"1. There is an Excel spreadsheet named 'data.xlsx' containing 10,000 pieces of data. Each piece of data includes a name, increase rate, data1, data2, data3, data4, data5, data6... up to data15. Input filename: 'data.xlsx'.
+
+2. The increase rate is related to data1, data2, data3, data4, data5, data6... up to data15.
+
+3. Data preprocessing: Clean, deduplicate, and handle missing values in the data to ensure its accuracy and consistency. Output format: CSV. Output filename: 'cleaned_data.csv'.
+
+4. Feature engineering: Based on the available data, extract useful features. Statistical features such as the average, standard deviation, and maximum of the increase rate for each name can be calculated, as well as the correlation features between the increase rate and data1 to data15. Output format: CSV. Output filename: 'features.csv'.
+
+5. Model training: Train machine learning models using historical data, designing linear regression, decision trees, random forests, and neural networks. The purpose of training the models is to find the relationship between the increase rate and data1 to 15, in order to predict tomorrow's increase rate. Output format: Model files (.pkl). Output filename: 'trained_models.pkl'.
+
+6. Model evaluation: Use a portion of historical data to evaluate the model, calculating prediction error metrics such as mean squared error and mean absolute error to assess the model's predictive power. Output format: CSV. Output filename: 'evaluation_metrics.csv'.
+
+7. Model application: Use the trained model to predict new data, obtaining the probability or predicted value of the increase rate for each name. Input filename: 'new_data.csv'. Output format: CSV. Output filename: 'predictions.csv'.
+
+8. Result visualization: Visualize the prediction results, using line graphs, bar charts, etc., to display the trends in predicted increase rates for better understanding and analysis of the results. Output format: Image. Output filename: 'visualization.png'.
+
+Write the code for the above functions to ensure each task can be replicated and validated.",3=human written data
+8,"Use PyTorch, with datasets 'positive.csv' and 'negative.csv', each with 200 positive and negative samples, to perform binary classification with a BP neural network. Requirements are as follows:
+
+1. Design a BP neural network with 3 hidden layers, where the input layer dimension is the sample dimension; the hidden layer dimensions are 128, 32, and 2 respectively.  
+   **Output:** Model architecture description in 'model_architecture.txt'.
+
+2. Use the ReLU activation function for the hidden layers; the output layer has a dimension of 1 and uses the sigmoid activation function.  
+   **Output:** Model configuration parameters in 'model_config.json'.
+
+3. Train the model using 'positive.csv' and 'negative.csv' as inputs.  
+   **Output:** Training loss and accuracy over epochs in 'training_metrics.csv'.
+
+4. Evaluate the model on a test set (to be prepared from the input datasets).  
+   **Output:** Evaluation metrics (accuracy, precision, recall, F1 score) in 'evaluation_metrics.csv'.
+
+5. Generate confusion matrix and ROC curve for model performance visualization.  
+   **Output:** Confusion matrix image in 'confusion_matrix.png' and ROC curve image in 'roc_curve.png'.","consistency,acc,precision,recall,f1","Use PyTorch, with datasets 'positive.csv' and 'negative.csv', each with 200 positive and negative samples, to perform binary classification with a BP neural network. Requirements are as follows:\n1. Design a BP neural network with 3 hidden layers, where the input layer dimension is the sample dimension; the hidden layer dimensions are 128, 32, and 2 respectively.\n2. Use the ReLU activation function for the hidden layers; the output layer has a dimension of 1 and uses the sigmoid activation function.",N,"Use PyTorch, with datasets 'positive.csv' and 'negative.csv', each with 200 positive and negative samples, to perform binary classification with a BP neural network. Requirements are as follows:
+
+1. Design a BP neural network with 3 hidden layers, where the input layer dimension is the sample dimension; the hidden layer dimensions are 128, 32, and 2 respectively.  
+
+2. Use the ReLU activation function for the hidden layers; the output layer has a dimension of 1 and uses the sigmoid activation function.  
+
+3. Train the model using 'positive.csv' and 'negative.csv' as inputs.  
+
+4. Evaluate the model on a test set (to be prepared from the input datasets).  
+
+5. Generate confusion matrix and ROC curve for model performance visualization. Output: Confusion matrix image in 'confusion_matrix.png' and ROC curve image in 'roc_curve.png'.",3=human written data
+9,"The file 'stock_trading_data_close.csv' contains the closing price data of each individual stock for the past two years, and the file 'stock_info_data.csv' contains industry classification information for each individual stock. Please implement the following in Python:
+
+1. Define a strong stock: The closing price on a given day is greater than the 60-day moving average of the closing price, and the value of the 5-day moving average of the closing price is greater than the 20-day moving average value.  
+   **Input:** 'stock_trading_data_close.csv'  
+   **Output:** 'strong_stocks.csv' (columns: stock_name, analysis_date, is_strong)
+
+2. Set the analysis date to the last trading day.  
+   **Output:** 'analysis_date.txt' (content: analysis_date)
+
+3. Find the strong stocks on the analysis date.  
+   **Input:** 'strong_stocks.csv', 'analysis_date.txt'  
+   **Output:** 'strong_stocks_on_analysis_date.csv' (columns: stock_name, analysis_date)
+
+4. Group the strong stocks by industry and count the number of strong stocks in each industry.  
+   **Input:** 'strong_stocks_on_analysis_date.csv', 'stock_info_data.csv'  
+   **Output:** 'strong_stocks_by_industry_count.csv' (columns: industry, count)
+
+5. Group all stocks by industry and count the number of stocks in each industry.  
+   **Input:** 'stock_info_data.csv'  
+   **Output:** 'all_stocks_by_industry_count.csv' (columns: industry, total_count)","data integrity,statistics","The file 'stock_trading_data_close.csv' contains the closing price data of each individual stock for the past two years, and the file 'stock_info_data.csv' contains industry classification information for each individual stock. Please implement the following in Python:
+
+ 1. Define a strong stock: The closing price on a given day is greater than the 60-day moving average of the closing price, and the value of the 5-day moving average of the closing price is greater than the 20-day moving average value;
+ 2. Set the analysis date to the last trading day;
+ 3. Find the strong stocks on the analysis date;
+ 4. Group the strong stocks by industry and count the number of strong stocks in each industry;
+ 5. Group all stocks by industry and count the number of stocks in each industry.",N,"The file 'stock_trading_data_close.csv' contains the closing price data of each individual stock for the past two years, and the file 'stock_info_data.csv' contains industry classification information for each individual stock. Please implement the following in Python:
+
+1. Define a strong stock: The closing price on a given day is greater than the 60-day moving average of the closing price, and the value of the 5-day moving average of the closing price is greater than the 20-day moving average value.  
+
+2. Set the analysis date to the last trading day. 
+
+3. Find the strong stocks on the analysis date. 
+
+4. Group the strong stocks by industry and count the number of strong stocks in each industry. Output: 'strong_stocks_by_industry_count.csv' (columns: industry, count)
+
+5. Group all stocks by industry and count the number of stocks in each industry.  Output: 'all_stocks_by_industry_count.csv' (columns: industry, total_count)",3=human written data
+10,"Write a piece of neural network prediction code that establishes a relationship between inputs and outputs, and saves this mapping relationship to a pkl model. Utilize the input dataset from ""input_data.csv,"" which contains 500 rows and 12 columns (each row represents a set of inputs). The known outputs are in ""output_data.csv,"" a matrix with 7 rows and 500 columns. Ensure the data dimensions are automatically corresponded.
+
+1. **Subtask 1: Data Preprocessing**
+   - **Input:** ""input_data.csv"" and ""output_data.csv""
+   - **Output:** Preprocessed training dataset in ""preprocessed_data.csv"" (format: csv)
+
+2. **Subtask 2: Model Training**
+   - **Input:** ""preprocessed_data.csv""
+   - **Output:** Trained neural network model saved as ""model.pkl"" (format: pkl)
+
+3. **Subtask 3: Evaluation**
+   - **Input:** ""model.pkl"" and ""output_data.csv""
+   - **Output:** Model evaluation results in ""evaluation_results.csv"" (format: csv)
+
+Ensure each output file allows for further evaluation of the task completion quality.",consistency,"Write a piece of neural network prediction code: to establish a relationship between inputs and outputs, and save this mapping relationship to a pkl model. The known input dataset has 500 rows and 12 columns, where each row represents a set of inputs, making a total of five hundred input sets. The known output is a matrix with 7 rows and 500 columns. Please help me automatically correspond the data dimensions. The inputs and outputs are in files input_data.csv and output_data.csv",N,"Write a piece of neural network prediction code that establishes a relationship between inputs and outputs, and saves this mapping relationship to a pkl model. Utilize the input dataset from ""input_data.csv,"" which contains 500 rows and 12 columns (each row represents a set of inputs). The known outputs are in ""output_data.csv,"" a matrix with 7 rows and 500 columns. Ensure the data dimensions are automatically corresponded.
+
+Use the data to train the model and save the parameters in ""model.pkl"" and output model evaluation results in ""evaluation_results.csv"".",3=human written data
+11,"Write a piece of SVR prediction code that performs the following subtasks:
+
+1. **Load Input Data**: 
+   - **Input**: `12_Input.csv` (500 rows by 12 columns)
+   - **Output**: `input_data_summary.csv` (summary of input data, including basic statistics like mean, median, and standard deviation)
+
+2. **Load Output Data**: 
+   - **Input**: `a_full.csv` (500 rows by 500 columns)
+   - **Output**: `output_data_summary.csv` (summary of output data, including basic statistics like mean, median, and standard deviation)
+
+3. **Build SVR Model**:
+   - **Input**: `12_Input.csv` and `a_full.csv`
+   - **Output**: `svr_model.pkl` (saved SVR model used for predictions)
+
+4. **Make Predictions**:
+   - **Input**: `svr_model.pkl` and a specific row from `12_Input.csv`
+   - **Output**: `predictions.csv` (500 rows by 1 column of predicted values corresponding to the selected input row)
+
+5. **Visualize Prediction Accuracy**:
+   - **Input**: `predictions.csv` and the corresponding output row from `a_full.csv`
+   - **Output**: `prediction_accuracy.png` (visualization of prediction accuracy using a plot)
+
+Ensure that all output files reflect the quality and completeness of the subtasks for further evaluation.",acc,"Write a piece of SVR prediction code: to build a relationship between input and output, and save this mapping relationship to a pkl model. The known input dataset is 500 rows by 12 columns, named: 12_Input.csv, where each row represents a set of inputs, a total of five hundred input sets. The known output is 500 rows by 500 columns, named: a_full.csv, which is a 500*500 matrix, where the first row of the input corresponds to the first column of the output, and so on. Preferably, use any row of the input as the input to predict a column of values (500*1) in the output, print it, and visualize the prediction accuracy.",N,"Write a piece of SVR prediction code: to build a relationship between input and output, and save this mapping relationship to ""model.pkl"" file. The known input dataset is 500 rows by 12 columns, named: 12_Input.csv, where each row represents a set of inputs, a total of five hundred input sets. The known output is 500 rows by 500 columns, named: a_full.csv, which is a 500*500 matrix, where the first row of the input corresponds to the first column of the output, and so on. Preferably, use any row of the input as the input to predict a column of values (500*1) in the output, print it, and visualize the prediction accuracy in ""prediction_accuracy.png"".",3=human written data
+12,"Use Python to perform min-max normalization on the following values:
+
+Input Filename: `data.csv`
+
+```csv
+,District/County,Region,Community,Total Price,Unit Price,House Type,Floor,Total Area,House Structure,Inside Area,Construction Type,Orientation,Construction Structure,Decoration,Staircase Ratio,Heating Method,Elevator,Property Rights Years,s,Trading Rights,u,Form,Whether Over Five Years,Property Rights Form,Whether Have House Certificate,Average Price of Community,Community Completion Year,style,Total Buildings,Total Floors
+0,Chaoyang,Dongba,Olympic Garden Phase IV,760.0,54453.0,3 rooms 1 hall 2 baths,Low floor,139.57,Flat,124.91㎡,Slab,North-South,Steel-concrete structure,Finishing,10th column no data,11th column no data,12th column no data,70 years,43766,Commodity House,40679,Common residential,Over five years,Joint ownership,House certificate photo uploaded,60708,2009,Slab/Tower combination,23,10
+```
+
+Output: Perform min-max normalization on the `Total Price` and `Unit Price` columns.
+
+Output Format: `csv`
+
+Output Filename: `normalized_output.csv`",data consistency,"Use Python to perform min-max normalization on the following values:\n```csv\n,District/County,Region,Community,Total Price,Unit Price,House Type,Floor,Total Area,House Structure,Inside Area,Construction Type,Orientation,Construction Structure,Decoration,Staircase Ratio,Heating Method,Elevator,Property Rights Years,s,Trading Rights,u,Form,Whether Over Five Years,Property Rights Form,Whether Have House Certificate,Average Price of Community,Community Completion Year,style,Total Buildings,Total Floors\n0,Chaoyang,Dongba,Olympic Garden Phase IV,760.0,54453.0,3 rooms 1 hall 2 baths,Low floor,139.57,Flat,124.91㎡,Slab,North-South,Steel-concrete structure,Finishing,10th column no data,11th column no data,12th column no data,70 years,43766,Commodity House,40679,Common residential,Over five years,Joint ownership,House certificate photo uploaded,60708,2009,Slab/Tower combination,23,10\n```",N,"Use Python to perform min-max normalization on the following values:
+
+```csv
+,District/County,Region,Community,Total Price,Unit Price,House Type,Floor,Total Area,House Structure,Inside Area,Construction Type,Orientation,Construction Structure,Decoration,Staircase Ratio,Heating Method,Elevator,Property Rights Years,s,Trading Rights,u,Form,Whether Over Five Years,Property Rights Form,Whether Have House Certificate,Average Price of Community,Community Completion Year,style,Total Buildings,Total Floors
+0,Chaoyang,Dongba,Olympic Garden Phase IV,760.0,54453.0,3 rooms 1 hall 2 baths,Low floor,139.57,Flat,124.91㎡,Slab,North-South,Steel-concrete structure,Finishing,10th column no data,11th column no data,12th column no data,70 years,43766,Commodity House,40679,Common residential,Over five years,Joint ownership,House certificate photo uploaded,60708,2009,Slab/Tower combination,23,10
+```
+
+Save the output in file `normalized_output.csv`.",1=no dependency
+13,"Complete the code writing task in Python: 
+
+1. **Data Preparation**: Load the dataset from `data.csv`, which contains the results of a chemical analysis of wines from the same region in Italy. Each sample includes 14 attributes: Alcohol, Malic_Acid, Ash, Ash_Alcanity, Magnesium, Total_Phenols, Flavanoids, Nonflavanoid_Phenols, Proanthocyanins, Color_Intensity, Hue, OD280, Proline, and Types.  
+   **Output**: Store the processed data in `processed_data.csv` (format: CSV).
+
+2. **Visualization**: Create a stacked bar chart of the `Types` attribute versus the other attributes using the processed data from `processed_data.csv`.  
+   **Output**: Save the stacked bar chart as `stacked_bar_chart.png` (format: PNG). 
+
+Ensure that the outputs reflect the quality and integrity of each completed subtask for further evaluation.","data integrity,visualization","Complete the code writing task in Python: Create a stacked bar chart of the Types attribute versus other attributes based on the data.csv dataset. The dataset is the result of a chemical analysis of wines from the same region in Italy. Store the results in processed_data.csv. Each sample in the dataset contains 14 attributes, which are: Alcohol, Malic_Acid, Ash, Ash_Alcanity, Magnesium, Total_Phenols, Flavanoids, Nonflavanoid_Phenols, Proanthocyanins, Color_Intensity, Hue, OD280, Proline, and Types.",N,"Complete the code writing task in Python: Create a stacked bar chart of the Types attribute versus other attributes based on the data.csv dataset. The dataset is the result of a chemical analysis of wines from the same region in Italy. Store the results in processed_data.csv. Each sample in the dataset contains 14 attributes, which are: Alcohol, Malic_Acid, Ash, Ash_Alcanity, Magnesium, Total_Phenols, Flavanoids, Nonflavanoid_Phenols, Proanthocyanins, Color_Intensity, Hue, OD280, Proline, and Types. Save the stacked bar chart as `stacked_bar_chart.png`.",2=open source data
+14,"Complete the following task by writing code in Python:
+
+1. **Data Preprocessing**: Load the dataset from ""data.csv"". Clean the data and prepare it for analysis.  
+   **Output**: Store the processed data in ""processed_data.csv"".
+
+2. **Data Visualization**: Create a bar chart for the Alcohol attribute based on the ""processed_data.csv"" dataset.  
+   **Output**: Save the bar chart as ""alcohol_bar_chart.png"".","data integrity,visualization","Complete the following task by writing code in Python: Create a bar chart for the Alcohol attribute based on the data.csv dataset. The dataset comes from the analysis of chemical components of wines from the same region in Italy. Store the results in processed_data.csv. Each sample in the dataset contains 14 attributes, which are: Alcohol, Malic_Acid, Ash, Ash_Alcanity, Magnesium, Total_Phenols, Flavanoids, Nonflavanoid_Phenols, Proanthocyanins, Color_Intensity, Hue, OD280, Proline, Types.",N,"Complete the following task by writing code in Python: Create a bar chart for the Alcohol attribute based on the data.csv dataset. The dataset comes from the analysis of chemical components of wines from the same region in Italy. Store the results in processed_data.csv. Each sample in the dataset contains 14 attributes, which are: Alcohol, Malic_Acid, Ash, Ash_Alcanity, Magnesium, Total_Phenols, Flavanoids, Nonflavanoid_Phenols, Proanthocyanins, Color_Intensity, Hue, OD280, Proline, Types. Save the bar chart as ""alcohol_bar_chart.png"".",2=open source data
+15,"Based on the dataset 'Major Cities Monthly Prices.csv' (which contains data about urban resident consumption prices, with the x-axis representing cities including: Beijing, Tianjin, Shijiazhuang, Taiyuan, Hohhot, Shenyang, Dalian, Changchun, Harbin, Shanghai, Nanjing, Hangzhou, Ningbo, Hefei, Fuzhou, Xiamen, Nanchang, Jinan, Qingdao, Zhengzhou, Wuhan, Changsha, Guangzhou, Shenzhen, Nanning, Haikou, Chongqing, Chengdu, Guiyang, Kunming, Lhasa, Xi'an, Lanzhou, Xining, Yinchuan, and Urumqi; and the y-axis representing years from December 1, 2022, to November 1, 2023), perform the following subtasks:
+
+1. **Plot a histogram of consumption data**:  
+   - **Input**: 'Major Cities Monthly Prices.csv'  
+   - **Output**: 'histogram.png'  
+
+2. **Create a pie chart**:  
+   - **Input**: 'Major Cities Monthly Prices.csv'  
+   - **Output**: 'pie_chart.png'  
+
+3. **Generate a stacked bar chart**:  
+   - **Input**: 'Major Cities Monthly Prices.csv'  
+   - **Output**: 'stacked_bar_chart.png'  
+
+4. **Create a stacked bar graph**:  
+   - **Input**: 'Major Cities Monthly Prices.csv'  
+   - **Output**: 'stacked_bar_graph.png'  
+
+5. **Plot a bubble chart**:  
+   - **Input**: 'Major Cities Monthly Prices.csv'  
+   - **Output**: 'bubble_chart.png'  
+
+6. **Generate a radar chart**:  
+   - **Input**: 'Major Cities Monthly Prices.csv'  
+   - **Output**: 'radar_chart.png'  
+
+7. **Combine the histogram, pie chart, bubble chart, and radar chart on the same canvas**:  
+   - **Input**: 'histogram.png', 'pie_chart.png', 'bubble_chart.png', 'radar_chart.png'  
+   - **Output**: 'combined_charts.png'  
+
+Each output file should include appropriate auxiliary elements such as titles, legends, axis names, and scale labels to allow for further evaluation of the task completion.",visualization,"Based on the dataset 'Major Cities Monthly Prices.csv' file (data about urban resident consumption prices, with the x-axis representing cities, including: Beijing, Tianjin, Shijiazhuang, Taiyuan, Hohhot, Shenyang, Dalian, Changchun, Harbin, Shanghai, Nanjing, Hangzhou, Ningbo, Hefei, Fuzhou, Xiamen, Nanchang, Jinan, Qingdao, Zhengzhou, Wuhan, Changsha, Guangzhou, Shenzhen, Nanning, Haikou, Chongqing, Chengdu, Guiyang, Kunming, Lhasa, Xi'an, Lanzhou, Xining, Yinchuan, and Urumqi. The y-axis represents the years, ranging from December 1, 2022, to November 1, 2023), plot 6 types of charts regarding the consumption data: histogram, pie chart, stacked bar chart, stacked bar graph, bubble chart, and radar chart. Add auxiliary elements (title, legend, axis names, scale labels, etc.) and combine the histogram, pie chart, bubble chart, and radar chart on the same canvas.",N,"Based on the dataset 'Major Cities Monthly Prices.csv' file (data about urban resident consumption prices, with the x-axis representing cities, including: Beijing, Tianjin, Shijiazhuang, Taiyuan, Hohhot, Shenyang, Dalian, Changchun, Harbin, Shanghai, Nanjing, Hangzhou, Ningbo, Hefei, Fuzhou, Xiamen, Nanchang, Jinan, Qingdao, Zhengzhou, Wuhan, Changsha, Guangzhou, Shenzhen, Nanning, Haikou, Chongqing, Chengdu, Guiyang, Kunming, Lhasa, Xi'an, Lanzhou, Xining, Yinchuan, and Urumqi. The y-axis represents the years, ranging from December 1, 2022, to November 1, 2023), plot 6 types of charts regarding the consumption data: histogram(histogram.png), pie chart(pie_chart.png), stacked bar chart(stacked_bar_chart.png), stacked bar graph(stacked_bar_graph.png), bubble chart(bubble_chart.png), and radar chart(radar_chart.png). Add auxiliary elements (title, legend, axis names, scale labels, etc.) and combine the histogram, pie chart, bubble chart, and radar chart on the same canvas(combined_charts.png).",2=open source data
+16,"Please complete the code for the following questions.
+
+**First Part: Numpy Section (10 questions total)**  
+1. Create a custom random array named `arr` with elements valued between 1 and 100 and a size of 80. Find all elements in `arr` that are greater than 50 and less than 100.  
+   - **Output**: `filtered_elements.csv` (contains the filtered elements)
+
+2. Calculate the sum of the natural logarithms of all elements in array `arr`.  
+   - **Output**: `log_sum.txt` (contains the sum)
+
+3. Search array `arr` for the index position of the first occurrence of the value 30, and output the index position if it exists; otherwise, output a notification.  
+   - **Output**: `first_occurrence.txt` (contains the index or notification)
+
+4. Sort array `arr` in ascending order and output the sorted array.  
+   - **Output**: `sorted_array.csv` (contains the sorted array)
+
+5. Load the data from the text file ""data.txt"" into a Numpy array and save the array as a CSV file ""output.csv"".  
+   - **Input**: `data.txt`  
+   - **Output**: `output.csv` (contains the loaded array)
+
+6. Perform an intersection operation on two custom sets and output the result.  
+   - **Output**: `intersection_result.csv` (contains the intersection result)
+
+7. Vertically stack two custom arrays (concatenate them vertically).  
+   - **Output**: `stacked_array.csv` (contains the vertically stacked array)
+
+8. Provide example code for the use of logical AND (&) and logical OR (|) operators in Numpy.  
+   - **Output**: `logical_operators_example.py` (contains example code)
+
+9. Create a custom array and use the Numpy function cumsum() to calculate the cumulative sum of an array and display the result.  
+   - **Output**: `cumulative_sum.csv` (contains the cumulative sum)
+
+10. Create two custom arrays and use Numpy to compare the elements of the two arrays, returning a logical index array that indicates positions where the elements of the first array are less than those of the corresponding elements in the second array.  
+    - **Output**: `comparison_result.csv` (contains the logical index array)
+
+**Second Part: Matplotlib Section (10 questions total)**  
+11. Create a simple scatter plot with custom data representing random points on a two-dimensional plane.  
+    - **Output**: `scatter_plot.png` (contains the scatter plot)
+
+12. Create a chart containing three curves, representing the sine, cosine, and tangent functions, respectively, and add a legend.  
+    - **Output**: `trig_functions_plot.png` (contains the trigonometric functions plot)
+
+13. Plot a histogram representing random data with a normal distribution.  
+    - **Output**: `histogram.png` (contains the histogram)
+
+14. Create a simple pie chart with custom data representing the proportion of different categories.  
+    - **Output**: `pie_chart.png` (contains the pie chart)
+
+15. Generate an array of 80 random integers using NumPy and then plot a bar chart representing the distribution of these integers using Matplotlib.  
+    - **Output**: `bar_chart.png` (contains the bar chart)
+
+16. Generate an array of uniformly distributed random data using NumPy and plot a box plot using Matplotlib.  
+    - **Output**: `box_plot.png` (contains the box plot)
+
+17. Generate an array containing 120 points using NumPy and then plot a simple radar chart using Matplotlib.  
+    - **Output**: `radar_chart.png` (contains the radar chart)
+
+18. Generate random data using NumPy and then plot a three-dimensional bar chart using Matplotlib.  
+    - **Output**: `3d_bar_chart.png` (contains the 3D bar chart)
+
+19. Create a chart with 2 sub-plots representing the correlation of different datasets with custom data.  
+    - **Output**: `correlation_subplots.png` (contains the correlation charts)
+
+20. Set the Matplotlib plotting style to the dark_background style.  
+    - **Output**: `dark_background_plot.png` (contains a plot demonstrating the dark background style)","consistency,visualization","Please complete the code for the following questions.\nFirst Part: Numpy Section (10 questions total)\n1. Create a custom random array named `arr` with elements valued between 1 and 100 and a size of 80. Find all elements in `arr` that are greater than 50 and less than 100.\n2. Calculate the sum of the natural logarithms of all elements in array `arr`.\n3. Search array `arr` for the index position of the first occurrence of the value 30, and output the index position if it exists; otherwise, output a notification.\n4. Sort array `arr` in ascending order and output the sorted array.\n5. Load the data from the text file \""data.txt\"" into a Numpy array and save the array as a CSV file \""output.csv\"".\n6. Perform an intersection operation on two custom sets and output the result.\n7. Vertically stack two custom arrays (concatenate them vertically).\n8. Provide example code for the use of logical AND (&) and logical OR (|) operators in Numpy.\n9. Create a custom array and use the Numpy function cumsum() to calculate the cumulative sum of an array and display the result.\n10. Create two custom arrays and use Numpy to compare the elements of the two arrays, returning a logical index array that indicates positions where the elements of the first array are less than those of the corresponding elements in the second array.\nSecond Part: Matplotlib Section (10 questions total)\n11. Create a simple scatter plot with custom data representing random points on a two-dimensional plane.\n12. Create a chart containing three curves, representing the sine, cosine, and tangent functions, respectively, and add a legend.\n13. Plot a histogram representing random data with a normal distribution.\n14. Create a simple pie chart with custom data representing the proportion of different categories.\n15. Generate an array of 80 random integers using NumPy and then plot a bar chart representing the distribution of these integers using Matplotlib.\n16. Generate an array of uniformly distributed random data using NumPy and plot a box plot using Matplotlib.\n17. Generate an array containing 120 points using NumPy and then plot a simple radar chart using Matplotlib.\n18. Generate random data using NumPy and then plot a three-dimensional bar chart using Matplotlib.\n19. Create a chart with 2 sub-plots representing the correlation of different datasets with custom data.\n20. Set the Matplotlib plotting style to the dark_background style.",N,"Please complete the code for the following questions.
+
+First Part: Numpy Section (10 questions total)  
+1. Create a custom random array named `arr` with elements valued between 1 and 100 and a size of 80. Find all elements in `arr` that are greater than 50 and less than 100.  
+   - Output: `filtered_elements.csv` (contains the filtered elements)
+
+2. Calculate the sum of the natural logarithms of all elements in array `arr`.  
+   - Output: `log_sum.txt` (contains the sum)
+
+3. Search array `arr` for the index position of the first occurrence of the value 30, and output the index position if it exists; otherwise, output a notification.  
+   - Output: `first_occurrence.txt` (contains the index or notification)
+
+4. Sort array `arr` in ascending order and output the sorted array.  
+   - Output: `sorted_array.csv` (contains the sorted array)
+
+5. Load the data from the text file ""data.txt"" into a Numpy array and save the array as a CSV file ""output.csv"".  
+   - Input: `data.txt`  
+   - Output: `output.csv` (contains the loaded array)
+
+6. Perform an intersection operation on two custom sets and output the result.  
+   - Output: `intersection_result.csv` (contains the intersection result)
+
+7. Vertically stack two custom arrays (concatenate them vertically).  
+   - Output: `stacked_array.csv` (contains the vertically stacked array)
+
+8. Provide example code for the use of logical AND (&) and logical OR (|) operators in Numpy.  
+   - Output: `logical_operators_example.py` (contains example code)
+
+9. Create a custom array and use the Numpy function cumsum() to calculate the cumulative sum of an array and display the result.  
+   - Output: `cumulative_sum.csv` (contains the cumulative sum)
+
+10. Create two custom arrays and use Numpy to compare the elements of the two arrays, returning a logical index array that indicates positions where the elements of the first array are less than those of the corresponding elements in the second array.  
+    - Output: `comparison_result.csv` (contains the logical index array)
+
+Second Part: Matplotlib Section (10 questions total)  
+11. Create a simple scatter plot with custom data representing random points on a two-dimensional plane.  
+    - Output: `scatter_plot.png` (contains the scatter plot)
+
+12. Create a chart containing three curves, representing the sine, cosine, and tangent functions, respectively, and add a legend.  
+    - Output: `trig_functions_plot.png` (contains the trigonometric functions plot)
+
+13. Plot a histogram representing random data with a normal distribution.  
+    - Output: `histogram.png` (contains the histogram)
+
+14. Create a simple pie chart with custom data representing the proportion of different categories.  
+    - Output: `pie_chart.png` (contains the pie chart)
+
+15. Generate an array of 80 random integers using NumPy and then plot a bar chart representing the distribution of these integers using Matplotlib.  
+    - Output: `bar_chart.png` (contains the bar chart)
+
+16. Generate an array of uniformly distributed random data using NumPy and plot a box plot using Matplotlib.  
+    - Output: `box_plot.png` (contains the box plot)
+
+17. Generate an array containing 120 points using NumPy and then plot a simple radar chart using Matplotlib.  
+    - Output: `radar_chart.png` (contains the radar chart)
+
+18. Generate random data using NumPy and then plot a three-dimensional bar chart using Matplotlib.  
+    - Output: `3d_bar_chart.png` (contains the 3D bar chart)
+
+19. Create a chart with 2 sub-plots representing the correlation of different datasets with custom data.  
+    - Output: `correlation_subplots.png` (contains the correlation charts)
+
+20. Set the Matplotlib plotting style to the dark_background style.  
+    - Output: `dark_background_plot.png` (contains a plot demonstrating the dark background style)",1=no dependency
+17,"Build a neural network using PyTorch for data prediction. The data comes from an Excel spreadsheet named ""oil_data.xlsx"" with column names [""t"", ""temp"", ""y_oil_1"", ""y_oil_2"", ""y_oil_3""], where ""t"" and ""temp"" are inputs, and ""y_oil_1"", ""y_oil_2"", ""y_oil_3"" are outputs. The data consists of floating-point numbers with no empty values.
+
+1. **Data Preparation**: 
+   - Input: ""oil_data.xlsx""
+   - Output: ""training_data.csv"" (80% of the data) and ""test_data.csv"" (20% of the data).
+  
+2. **Model Training**: 
+   - Input: ""training_data.csv""
+   - Output: ""model.pth"" (the trained model file).
+  
+3. **Residual Decline Graph**: 
+   - Input: ""test_data.csv"" and ""model.pth""
+   - Output: ""residual_decline_graph.png"" (a plot of residuals).
+  
+4. **Model Evaluation**: 
+   - Input: ""test_data.csv"" and ""model.pth""
+   - Output: ""evaluation_results.pdf"" (a report of model evaluation metrics including RMSE, MAE, and R²).","acc,visualization","Build a neural network using PyTorch for data prediction. The data comes from an Excel spreadsheet oil_data.xlsx with column names [\""t\"",\""temp\"",\""y_oil_1\"",\""y_oil_2\"",\""y_oil_3\""], where \""t\"" and \""temp\"" are inputs, and \""y_oil_1\"", \""y_oil_2\"", \""y_oil_3\"" are outputs. The data are all floating-point numbers with no empty values. The requirement is to divide the data in the table into two datasets: a training set and a test set, with the training set accounting for 80% of the data and the test set accounting for 20%. A residual decline graph should be plotted, and the model should be evaluated based on the results of the test set.",N,"Build a neural network using PyTorch for data prediction. The data comes from an Excel spreadsheet oil_data.xlsx with column names [\""t\"",\""temp\"",\""y_oil_1\"",\""y_oil_2\"",\""y_oil_3\""], where \""t\"" and \""temp\"" are inputs, and \""y_oil_1\"", \""y_oil_2\"", \""y_oil_3\"" are outputs. The data are all floating-point numbers with no empty values. The requirement is to divide the data in the table into two datasets: a training set and a test set, with the training set accounting for 80% of the data and the test set accounting for 20%. A residual decline graph should be plotted, and the model should be evaluated based on the results of the test set. The model should be saved in ""model.pth"" and the graph saved as ""residual_decline_graph.png"".",3=human written data
+18,"Using the SVD (Singular Value Decomposition) method, recommend movies for a given user based on the provided movie rating matrix. The input file is `rating.csv`, which contains a user-movie rating matrix with a total of 943 users and 1682 movies in the dataset. The overall approach is to use SVD to 'compress' the movies into a lower-dimensional space, find movies that the user has not rated, compute the similarity between the unrated movies and other movies to obtain predicted ratings, and finally sort these movies by rating, recommending the top N movies to the user. 
+
+Specific approach:
+
+- **Part 1**: Load the test dataset and create the `loadExData` function.  
+  **Input**: `rating.csv`  
+  **Output**: `loaded_data.csv` (the loaded dataset in CSV format)
+
+- **Part 2**: Define three methods for calculating similarity: `ecludSim`, `pearsSim`, and `cosSim` functions.   
+  **Output**: `similarity_metrics.csv` (containing similarity scores for pairs of movies in CSV format)
+
+- **Part 3**: Process the matrix dimensionality reduction by creating the `svd_item` function.  
+  **Output**: `reduced_matrix.csv` (the dimensionality-reduced movie matrix in CSV format)
+
+- **Part 4**: Predict the rating for a movie that the user has not scored by creating the `svd_predict` function.  
+  **Input**: `reduced_matrix.csv`  
+  **Output**: `predicted_ratings.csv` (containing predicted ratings for unrated movies in CSV format)
+
+- **Part 5**: Generate the top N movies with high ratings, returning the movie numbers and predicted rating values by creating the `recommend` function.  
+  **Input**: `predicted_ratings.csv`  
+  **Output**: `top_n_movies.csv` (top N recommended movies with their predicted ratings in CSV format)
+
+- **Part 6**: Recommend movies for a specified user by creating the `recommend_predict` function.  
+  **Input**: `top_n_movies.csv`  
+  **Output**: `final_recommendations.csv` (final movie recommendations for the specified user in CSV format)
+
+- **Part 7**: Call the `recommend_predict` function to obtain the results.  
+  **Output**: `results_summary.pdf` (a PDF summarizing the recommendations)","consistency,distance,acc","Using the SVD (Singular Value Decomposition) method, recommend movies for a given user based on the provided movie rating matrix. \nThe data file `rating.csv` is a user-movie rating matrix, with a total of 943 users and 1682 movies in the dataset. \nThe overall approach is to use SVD to 'compress' the movies into a lower-dimensional space, find movies that the user has not rated, then calculate the similarity between the unrated movies and other movies to obtain a predicted rating, and finally sort these movies by rating from highest to lowest, recommending the top N movies to the user. \nSpecific approach:\nPart 1: Load the test dataset and create the loadExData function.\nPart 2: Define three methods for calculating similarity, creating the ecludSim function, pearsSim function, and cosSim function.\nPart 3: Process the matrix dimensionality reduction, creating the svd_item function.\nPart 4: In the already dimensionality-reduced data, predict the rating for a movie that the user has not scored, creating the svd_predict function.\nPart 5: Generate the top N movies with high ratings, returning the movie numbers and predicted rating values, creating the recommend function.\nPart 6: Recommend movies for a specified user, creating the recommend_predict function.\nPart 7: Call the recommend_predict function to obtain the results.",N,"Using the SVD (Singular Value Decomposition) method, recommend movies for a given user based on the provided movie rating matrix. The input file is `rating.csv`, which contains a user-movie rating matrix with a total of 943 users and 1682 movies in the dataset. The overall approach is to use SVD to 'compress' the movies into a lower-dimensional space, find movies that the user has not rated, compute the similarity between the unrated movies and other movies to obtain predicted ratings, and finally sort these movies by rating, recommending the top N movies to the user. 
+
+Specific approach:
+
+- Part 1: Load the test dataset and create the `loadExData` function.  
+  Input: `rating.csv`  
+  Output: `loaded_data.csv` (the loaded dataset in CSV format)
+
+- Part 2: Define three methods for calculating similarity: `ecludSim`, `pearsSim`, and `cosSim` functions.   
+  Output: `similarity_metrics.csv` (containing similarity scores for pairs of movies in CSV format)
+
+- Part 3: Process the matrix dimensionality reduction by creating the `svd_item` function.  
+  Output: `reduced_matrix.csv` (the dimensionality-reduced movie matrix in CSV format)
+
+- Part 4: Predict the rating for a movie that the user has not scored by creating the `svd_predict` function.  
+  Input: `reduced_matrix.csv`  
+  Output: `predicted_ratings.csv` (containing predicted ratings for unrated movies in CSV format)
+
+- Part 5: Generate the top N movies with high ratings, returning the movie numbers and predicted rating values by creating the `recommend` function.  
+  Input: `predicted_ratings.csv`  
+  Output: `top_n_movies.csv` (top N recommended movies with their predicted ratings in CSV format)
+
+- Part 6: Recommend movies for a specified user by creating the `recommend_predict` function.  
+  Input: `top_n_movies.csv`  
+  Output: `final_recommendations.csv` (final movie recommendations for the specified user in CSV format)
+
+- Part 7: Call the `recommend_predict` function to obtain the results.  
+  Output: `results_summary.pdf` (a PDF summarizing the recommendations)",3=human written data
+19,"Please solve a discrete optimization problem using Python. The problem description is as follows:
+1. Assign 1008 numbers to 2067 points, with the point numbers obtained by reading the first column of an Excel spreadsheet named ""points.xlsx"".
+   - **Input File:** ""points.xlsx"" (contains point numbers in the first column)
+   - **Output Format:** None (this step is for internal processing)
+
+2. For each pair of points A and B that share the same assigned number, retrieve the value k from another Excel spreadsheet named ""values.xlsx"", where:
+   - **Input File:** ""values.xlsx"" (1st column: A, 2nd column: B, 3rd column: k)
+   - **Output Format:** ""k_values.csv"" (CSV file containing columns: A, B, k)
+
+3. Additionally, if the remainder of A and B divided by 3 is the same, retrieve the value b from the same ""values.xlsx"" file (assuming it is provided, otherwise define a default method to calculate b).
+   - **Output Format:** ""b_values.csv"" (CSV file containing columns: A, B, b)
+
+4. The program you write should minimize the sum of k and b for all pairs (A, B).
+   - **Output Format:** ""results.txt"" (a text file containing the final minimized value) 
+
+Ensure to include proper error handling and validation for input files.","consistency,acc","Please solve a discrete optimization problem using Python. The problem description is as follows: Assign 1008 numbers to 2067 points, with the point numbers obtained by reading the first column of an Excel spreadsheet. If any two points A and B have the same assigned number, a value k may be obtained, which is found by looking up in another Excel spreadsheet where the first and second columns have A and B, and the third column contains the value k. Additionally, if the remainder of A and B divided by 3 is the same, there is also a value b.
+The program you write should minimize the sum of k and b, and at the end, return this value and save it in the results.txt file.",N,"Please solve a discrete optimization problem using Python. The problem description is as follows:
+1. Assign 1008 numbers to 2067 points, with the point numbers obtained by reading the first column of an Excel spreadsheet named ""points.xlsx"".
+   - Input File: ""points.xlsx"" (contains point numbers in the first column)
+
+2. For each pair of points A and B that share the same assigned number, retrieve the value k from another Excel spreadsheet named ""values.xlsx"", where:
+   - Input File: ""k_values.xlsx"" (1st column: A, 2nd column: B, 3rd column: k)
+
+3. Additionally, if the remainder of A and B divided by 3 is the same, retrieve the value b from ""b_values.xlsx"" file.
+   - Input Format: ""b_values.csv"" (CSV file containing columns: A, B, b)
+
+4. The program you write should minimize the sum of k and b for all pairs (A, B).
+   - Output Format: ""results.txt"" (a text file containing the final minimized value) 
+
+Ensure to include proper error handling and validation for input files.",3=human written data
+20,"Please implement a complex optimization problem in Python. The problem description is as follows:
+
+1. **Input Requirements:**
+   - Read the point numbers from the first column of Excel sheet 1, named ""points.xlsx"".
+   - Read the dependency values from Excel sheet 2, named ""dependencies.xlsx"", specifically the third column when the first column is i and the second column is j.
+
+2. **Subtasks:**
+   a. Create a matrix A of size 2067x2067, where each value a[i][j] is calculated based on values from ""dependencies.xlsx"". If values assigned to i and j are the same, the value of a[i][j] should be multiplied by 2.  
+      **Output**: Save matrix A to ""matrix_A.csv"" in CSV format.
+   
+   b. Create a matrix B of size 2067x2067, where each value b[i][j] is similarly calculated. If values assigned to i and j have the same remainder when divided by 3, the value of b[i][j] should be multiplied by 2.  
+      **Output**: Save matrix B to ""matrix_B.csv"" in CSV format.
+   
+   c. Find the allocation of values for matrices A and B that minimizes their sum and determine the minimum value.  
+      **Output**: Save the corresponding values of the 2067 points in ""results.csv"", where the first column is the point number and the second column is the assigned value.
+
+3. **Output Requirements:**
+   - Ensure all outputs are formatted correctly for evaluation. The output files should clearly indicate the matrix or results they contain.  
+   - The final result, including the allocations for the points, must be saved in ""results.csv"".","consistency,acc","Please implement a complex optimization problem in Python, the problem description is as follows:
+ Please distribute 1008 numbers (ranging from 0 to 1007) to 2067 points (the point numbers are read from the first column of Excel sheet 1), forming two 2067x2067 matrices between these points. Each value a[i][j] in matrix A depends on an Excel sheet 2 (read from the third column when the first column is i and the second column is j), and if the values assigned to i and j are the same, then the value of a[i][j] is multiplied by 2; each value a[i][j] in matrix B depends on an Excel sheet 2 (read from the third column when the first column is i and the second column is j), and if the values assigned to i and j have the same remainder when divided by 3, then the value of b[i][j] is multiplied by 2.
+ The program you write needs to find out how to allocate the values for matrices A and B to minimize their sum, and find the minimum value. Then, output the corresponding values of the 2067 points as an Excel sheet, where the first column is the point number and the second column is the assigned value. The final result should be saved in the file 'results.csv'.",N,"Please implement a complex optimization problem in Python. The problem description is as follows:
+
+1. Input Requirements:
+   - Read the point numbers from the first column of Excel sheet 1, named ""points.xlsx"".
+   - Read the dependency values from Excel sheet 2, named ""dependencies.csv"", specifically the third column when the first column is i and the second column is j.
+
+2. Subtasks:
+   a. Create a matrix A of size 2067x2067, where each value a[i][j] is calculated based on values from ""dependencies.csv"". If values assigned to i and j are the same, the value of a[i][j] should be multiplied by 2.  
+      Output: Save matrix A to ""matrix_A.csv"" in CSV format.
+   
+   b. Create a matrix B of size 2067x2067, where each value b[i][j] is similarly calculated. If values assigned to i and j have the same remainder when divided by 3, the value of b[i][j] should be multiplied by 2.  
+      Output: Save matrix B to ""matrix_B.csv"" in CSV format.
+   
+   c. Find the allocation of values for matrices A and B that minimizes their sum and determine the minimum value.  
+      Output: Save the corresponding values of the 2067 points in ""results.csv"", where the first column is the point number and the second column is the assigned value.
+
+3. Output Requirements:
+   - Ensure all outputs are formatted correctly for evaluation. The output files should clearly indicate the matrix or results they contain.  
+   - The final result, including the allocations for the points, must be saved in ""results.csv"".",3=human written data
+21,"Please implement a simulated annealing algorithm in Python. The problem is described as follows: 
+
+1. Read four Excel spreadsheets named 'points.xlsx', 'A1.xlsx', 'A2.xlsx', and 'B.xlsx'.
+   - Input files: 'points.xlsx', 'A1.xlsx', 'A2.xlsx', 'B.xlsx'
+
+2. Assign 1008 numbers (ranging from 0 to 1007) to n points, which can be repeated (the point numbers are read from the first column of 'points.xlsx'). 
+   - This will generate three n*n matrices: A1, A2, and B.
+
+3. Populate matrices A1 and A2:
+   - For each matrix A1 and A2, each element a1[i][j] or a2[i][j] (where i represents the row and j represents the column) depends on the Excel spreadsheets A1 and A2, respectively. Specific values are read from the third column when the first column is i and the second column is j. If the values allocated to i and j are the same, then the value of a[i][j] is doubled.
+
+4. Populate matrix B:
+   - Each element b[i][j] in matrix B depends on the Excel spreadsheet B. Values are read from the third column when the first column is i and the second column is j. If the values allocated to i and j have the same remainder when divided by 3, then the value of b[i][j] is doubled.
+
+5. The program needs to find an allocation of the A1, A2, and B matrices that minimizes their sum and calculates the minimum value.
+
+6. Output the corresponding values of the n points into an Excel spreadsheet named 'output.xlsx', where the first column is the point number and the second column is the allocated value.
+   - Output file: 'output.xlsx'
+
+7. Plot a progress bar for the optimization process and save the plot as an image file named 'progress.png'.
+   - Output file: 'progress.png'
+
+8. Save the final results in a folder named 'results' within the specified output files. 
+
+Please ensure all input and output files are correctly named and formatted to allow for further evaluation of your results.","acc, visualization","Please implement a simulated annealing algorithm in Python. The problem is described as follows:
+ First, read four Excel spreadsheets named 'points', 'A1', 'A2', and 'B'. Assign 1008 numbers (ranging from 0 to 1007) to n points, which can be repeated (the point numbers are read from the first column of the 'points' Excel spreadsheet). These points form three n*n matrices A1, A2, and B among themselves. Matrices A1, A2, and B are independent of each other and have two independent conditions: Matrices A1 and A2 are independent of each other, where each element a1[i][j] or a2[i][j] (where i represents the row and j represents the column) depends on the Excel spreadsheets A1 and A2 (read from the third column when the first column is i and the second column is j). If the values allocated to i and j are the same, then the value of a[i][j] is doubled; each element b[i][j] in matrix B depends on the Excel spreadsheet B (read from the third column when the first column is i and the second column is j), and if the values allocated to i and j have the same remainder when divided by 3, then the value of b[i][j] is doubled.
+ The program you write needs to find out how to allocate the A1, A2, and B matrices to minimize their sum and calculate the minimum value. Output the corresponding values of the n points as an Excel spreadsheet, where the first column is the point number and the second column is the allocated value. Additionally, plot a progress bar for the optimization process. Save the final results in a folder named 'results'.",Y,"Please implement a simulated annealing algorithm in Python. The problem is described as follows: 
+
+1. Read four files named 'points.csv', 'A1.csv', 'A2.csv', and 'B.csv'.
+   - Input files: 'points.xlsx', 'A1.csv', 'A2.csv', 'B.csv'
+
+2. Assign 1008 numbers (ranging from 0 to 1007) to n points, which can be repeated (the point numbers are read from the first column of 'points.csv'). 
+   - This will generate three n*n matrices: A1, A2, and B.
+
+3. Populate matrices A1 and A2:
+   - For each matrix A1 and A2, each element a1[i][j] or a2[i][j] (where i represents the row and j represents the column) depends on the files A1.csv and A2.csv, respectively. Specific values are read from the third column when the first column is i and the second column is j. If the values allocated to i and j are the same, then the value of a[i][j] is doubled.
+
+4. Populate matrix B:
+   - Each element b[i][j] in matrix B depends on the file B.csv. Values are read from the third column when the first column is i and the second column is j. If the values allocated to i and j have the same remainder when divided by 3, then the value of b[i][j] is doubled.
+
+5. The program needs to find an allocation of the A1, A2, and B matrices that minimizes their sum and calculates the minimum value.
+
+6. Output the corresponding values of the n points into an Excel spreadsheet named 'output.xlsx', where the first column is the point number and the second column is the allocated value.
+   - Output file: 'output.xlsx'
+
+7. Plot a progress bar for the optimization process and save the plot as an image file named 'progress.png'.
+   - Output file: 'progress.png'
+
+Please ensure all input and output files are correctly named and formatted to allow for further evaluation of your results.",3=human written data
+22,"Please solve a complex optimization problem using Python. The problem is described as follows:
+
+1. **Data Input**: Read the point numbers and attributes from ""data.xlsx"", where:
+   - First column: Point numbers
+   - Second column: Attribute X
+
+2. **Matrix A Construction**: 
+   - Read values for matrix A from ""matrixA.xlsx"", where:
+     - First column: i
+     - Second column: j
+     - Third column: Value
+   - Construct a 2067x2067 matrix A, where each value a[i][j] is calculated based on the rules provided (multiplied by 2 if i and j have the same attribute X).
+
+3. **Matrix B Construction**: 
+   - Read values for matrix B from ""matrixB.xlsx"", where:
+     - First column: i
+     - Second column: j
+     - Third column: Value
+   - Construct a 2067x2067 matrix B, where each value b[i][j] is calculated based on the rules provided (multiplied by 2 if i and j have the same remainder when divided by 3 and the same attribute X).
+
+4. **Optimization Procedure**: 
+   - Implement an algorithm to allocate the values in matrices A and B to minimize their total sum and find the minimum value.
+
+5. **Output**: 
+   - Create an Excel sheet named ""results.csv"" that contains:
+     - First column: Point number
+     - Second column: Assigned value for each point.
+
+Please ensure that the output file ""results.csv"" allows for further evaluation of the completed optimization task.","acc,format,data integrity","Please solve a complex optimization problem using Python. The problem is described as follows:\n\nDistribute 1008 numbers (ranging from 0 to 1007) to 2067 points (the point numbers are read from the first column of Excel sheet 1), with an attribute X (read from the second column of the Excel file 1). These points form two 2067x2067 matrices, A and B. Each value a[i][j] in matrix A is determined by an Excel sheet 2 (read from the third column where the first column is i and the second column is j), and if the values assigned to i and j have the same attribute X, then the value of a[i][j] is multiplied by 2; each value b[i][j] in matrix B is determined by an Excel sheet 3 (read from the third column where the first column is i and the second column is j), and if the values assigned to i and j have the same remainder when divided by 3 and the same attribute X, then the value of b[i][j] is multiplied by 2.\n\nThe program you write needs to find out how to allocate the values in matrices A and B to minimize their sum and to find the minimum value. Output the corresponding values for the 2067 points as an Excel sheet, with the first column being the point number and the second column being the assigned value. Save the final results in a file named 'results.csv'.",N,"Please solve a complex optimization problem using Python. The problem is described as follows:
+
+1. Data Input: Read the point numbers and attributes from ""data.csv"", where:
+   - First column: Point numbers
+   - Second column: Attribute X
+
+2. Matrix A Construction: 
+   - Read values for matrix A from ""A.csv"", where:
+     - First column: i
+     - Second column: j
+     - Third column: Value
+   - Construct a 2067x2067 matrix A, where each value a[i][j] is calculated based on the rules provided (multiplied by 2 if i and j have the same attribute X).
+
+3. Matrix B Construction: 
+   - Read values for matrix B from ""B.csv"", where:
+     - First column: i
+     - Second column: j
+     - Third column: Value
+   - Construct a 2067x2067 matrix B, where each value b[i][j] is calculated based on the rules provided (multiplied by 2 if i and j have the same remainder when divided by 3 and the same attribute X).
+
+4. Optimization Procedure: 
+   - Implement an algorithm to allocate the values in matrices A and B to minimize their total sum and find the minimum value.
+
+5. Output: 
+   - Create an Excel sheet named ""results.csv"" that contains:
+     - First column: Point number
+     - Second column: Assigned value for each point.
+
+Please ensure that the output file ""results.csv"" allows for further evaluation of the completed optimization task.",3=human written data
+23,"Please solve a complex optimization problem using Python. The problem is described as follows:
+
+1. Distribute 1008 numbers (ranging from 0 to 1007) to 2067 points (the point numbers are read from the first column of Excel sheet 1). 
+   - **Input:** Excel sheet 1 (input filename: `points.xlsx`).
+   - **Output:** Assigned values for the 2067 points in an Excel sheet (`results.csv`), where the first column is the point number and the second column is the assigned value.
+
+2. These points form two 2067x2067 matrices A and B, which are independent of each other and have two independent scenarios:
+   - Each element a[i][j] in matrix A (where i represents the row and j represents the column) depends on an Excel sheet 2 (input filename: `matrix_a.xlsx`, read from the third column where the first column is i and the second column is j).
+     - If the values assigned to i and j are the same, then the value of a[i][j] is multiplied by 2.
+   
+   - Each element b[i][j] in matrix B depends on an Excel sheet 3 (input filename: `matrix_b.xlsx`, read from the third column where the first column is i and the second column is j).
+     - If the values assigned to i and j have the same remainder when divided by 3, then the value of b[i][j] is multiplied by 2.
+
+3. The program you write needs to find out how to allocate the values to matrices A and B to minimize their sum and calculate the minimum value.
+   - **Output:** Minimum value obtained from the optimization process in a text file (`minimum_value.txt`).
+
+4. Use GUROBI based on the simulated annealing algorithm to implement this. 
+   - **Final Output:** Save the final results in a file named `results.csv`. 
+
+Ensure the final outputs reflect the quality of your implementation and allow for further evaluation.","acc,format,data integrity","Please solve a complex optimization problem using Python. The problem is described as follows:
+ Distribute 1008 numbers (ranging from 0 to 1007) to 2067 points (the point numbers are read from the first column of Excel sheet 1). These points form two 2067x2067 matrices A and B, which are independent of each other and have two independent scenarios: Each element a[i][j] in matrix A (where i represents the row and j represents the column) depends on an Excel sheet 2 (read from the third column where the first column is i and the second column is j); if the values assigned to i and j are the same, then the value of a[i][j] is multiplied by 2. Each element b[i][j] in matrix B depends on an Excel sheet 3 (read from the third column where the first column is i and the second column is j), and if the values assigned to i and j have the same remainder when divided by 3, then the value of b[i][j] is multiplied by 2.
+ The program you write needs to find out how to allocate the values to matrices A and B to minimize their sum and calculate the minimum value. Output the corresponding values for the 2067 points as an Excel sheet, where the first column is the point number and the second column is the assigned value. Please use GUROBI based on the simulated annealing algorithm to implement this. Save the final results in a file named results.csv.",N,"Please solve a complex optimization problem using Python. The problem is described as follows:
+
+1. Distribute 1008 numbers (ranging from 0 to 1007) to 2067 points (the point numbers are read from the first column of points.csv). 
+   - Input: `points.csv`.
+   - Output: Assigned values for the 2067 points in an Excel sheet (`results.csv`), where the first column is the point number and the second column is the assigned value.
+
+2. These points form two 2067x2067 matrices A and B, which are independent of each other and have two independent scenarios:
+   - Each element a[i][j] in matrix A (where i represents the row and j represents the column) depends on a file (input filename: `matrix_a.csv`, read from the third column where the first column is i and the second column is j).
+     - If the values assigned to i and j are the same, then the value of a[i][j] is multiplied by 2.
+   
+   - Each element b[i][j] in matrix B depends on a file (input filename: `matrix_b.csv`, read from the third column where the first column is i and the second column is j).
+     - If the values assigned to i and j have the same remainder when divided by 3, then the value of b[i][j] is multiplied by 2.
+
+3. The program you write needs to find out how to allocate the values to matrices A and B to minimize their sum and calculate the minimum value.
+   - Output: Minimum value obtained from the optimization process in a text file (`minimum_value.txt`).
+
+4. Use GUROBI based on the simulated annealing algorithm to implement this. 
+   - Final Output: Save the final results in a file named `results.csv`. 
+
+Ensure the final outputs reflect the quality of your implementation and allow for further evaluation.",3=human written data
+24,"Please solve a complex optimization problem using Python. The problem description is as follows:
+
+Distribute 1008 numbers (ranging from 0 to 1007) to 2067 points (the point numbers are read from the first column of Excel sheet 1). These points form three 2067x2067 matrices A1, A2, and B. Matrices A1, A2, and B are independent of each other and have two independent situations:
+
+1. Matrices A1 and A2 are independent, where each element a1[i][j] or a2[i][j] (where i represents the row and j represents the column) depends on an input file named ""excel_sheet_2.xlsx"" (read from the third column when the first column is i and the second column is j). If the values assigned to i and j are the same, then the value of a[i][j] is multiplied by 2.
+
+2. Each element b[i][j] in matrix B depends on an input file named ""excel_sheet_3.xlsx"" (read from the third column when the first column is i and the second column is j), and if the values assigned to i and j have the same remainder when divided by 3, then the value of b[i][j] is multiplied by 2.
+
+Your program needs to determine how to allocate the matrices A1, A2, and B to minimize their sum and find the minimum value. 
+
+Subtasks:
+- Implement the simulated annealing algorithm using GUROBI.
+- Output the corresponding values for the 2067 points in a file named ""results.csv"", where the first column is the point number and the second column is the assigned value.
+- Provide the minimum value separately in a file named ""minimum_value.txt"".
+
+**Input Files:**
+- ""excel_sheet_1.xlsx""
+- ""excel_sheet_2.xlsx""
+- ""excel_sheet_3.xlsx""
+
+**Output Files:**
+- ""results.csv"" (CSV format)
+- ""minimum_value.txt"" (Text format)","acc,format,data integrity","Please solve a complex optimization problem using Python. The problem description is as follows:
+ Distribute 1008 numbers (ranging from 0 to 1007) to 2067 points (the point numbers are read from the first column of Excel sheet 1). These points form three 2067x2067 matrices A1, A2, and B. Matrices A1, A2, and B are independent of each other and have two independent situations: Matrices A1 and A2 are independent, where each element a1[i][j] or a2[i][j] (where i represents the row and j represents the column) depends on an Excel sheet 2 (read from the third column when the first column is i and the second column is j). If the values assigned to i and j are the same, then the value of a[i][j] is multiplied by 2; each element b[i][j] in matrix B depends on an Excel sheet 3 (read from the third column when the first column is i and the second column is j), and if the values assigned to i and j have the same remainder when divided by 3, then the value of b[i][j] is multiplied by 2.
+ Your program needs to determine how to allocate the matrices A1, A2, and B to minimize their sum and find the minimum value. Output the corresponding values for the 2067 points in an Excel sheet, where the first column is the point number and the second column is the assigned value. Implement the simulated annealing algorithm using GUROBI. Save the final results in a file named 'results.csv'.",N,"Please solve a complex optimization problem using Python. The problem description is as follows:
+
+Distribute 1008 numbers (ranging from 0 to 1007) to 2067 points (the point numbers are read from the first column of Excel sheet 1). These points form three 2067x2067 matrices A1, A2, and B. Matrices A1, A2, and B are independent of each other and have two independent situations:
+
+1. Matrices A1 and A2 are independent, where each element a1[i][j] or a2[i][j] (where i represents the row and j represents the column) depends on input files named ""a1.csv"" and ""a2.csv"" (read from the third column when the first column is i and the second column is j). If the values assigned to i and j are the same, then the value of a[i][j] is multiplied by 2.
+
+2. Each element b[i][j] in matrix B depends on an input file named ""b.csv"" (read from the third column when the first column is i and the second column is j), and if the values assigned to i and j have the same remainder when divided by 3, then the value of b[i][j] is multiplied by 2.
+
+Your program needs to determine how to allocate the matrices A1, A2, and B to minimize their sum and find the minimum value. 
+
+Subtasks:
+- Implement the simulated annealing algorithm using GUROBI.
+- Output the corresponding values for the 2067 points in a file named ""results.csv"", where the first column is the point number and the second column is the assigned value.
+- Provide the minimum value separately in a file named ""minimum_value.txt"".
+",3=human written data
+25,"Please implement a complex optimization problem in Python as described below:
+
+1. **Read Points:**
+   - Input: Read the 'points' from the first column of the Excel table named **'points.xlsx'**.
+   - Output: Save the read points into a CSV file named **'points.csv'**.
+
+2. **Construct Matrices A1 and A2:**
+   - Input: Construct matrices A1 and A2 by reading from the Excel tables named **'A1.xlsx'** and **'A2.xlsx'**, specifically using the third column where the first column is i and the second column is j.
+   - Output: Save matrices A1 and A2 into separate CSV files named **'matrix_A1.csv'** and **'matrix_A2.csv'** respectively.
+
+3. **Construct Matrix B:**
+   - Input: Construct matrix B by reading from the Excel table named **'B.xlsx'**, using the third column where the first column is i and the second column is j.
+   - Output: Save matrix B into a CSV file named **'matrix_B.csv'**.
+
+4. **Optimization Implementation:**
+   - Implement a simulated annealing algorithm using GUROBI to determine the optimal allocation of matrices A1, A2, and B to minimize their sum based on the defined conditions.
+   - Output: Save the corresponding values for the 2067 points in an Excel table named **'results.xlsx'**, where the first column is the point number and the second column is the assigned value.
+
+5. **Final Results:**
+   - Additionally, save the minimum value found by the optimization algorithm in a text file named **'minimum_value.txt'**.
+
+Ensure that all output files reflect the quality of the completion of each subtask, allowing for further evaluation.","acc,format,data integrity","Please implement a complex optimization problem in Python as described below:
+ Distribute the range 0-1007 to 2067 points (read from the first column of the Excel table 'points'). These points form three 2067x2067 matrices A1, A2, and B. Matrices A1, A2, and B are independent of each other and have two independent conditions: Matrices A1 and A2 are independent, where each element a1[i][j] or a2[i][j] (where i represents the row and j represents the column) depends on the Excel tables A1 and A2 (read from the third column when the first column is i and the second column is j), and if the values assigned to i and j are the same, then the value of a[i][j] is multiplied by 2; each element b[i][j] in matrix B depends on an Excel table B (read from the third column when the first column is i and the second column is j), and if the values assigned to i and j have the same remainder when divided by 3, then the value of b[i][j] is multiplied by 2.
+ The program you write should determine how to allocate the A1, A2, and B matrices to minimize their sum and find the minimum value. Output the corresponding values for the 2067 points as an Excel table, where the first column is the point number and the second column is the assigned value. Use GUROBI to implement the simulated annealing algorithm. Save the final result in a file named 'results.csv'.",N,"Please implement a complex optimization problem in Python as described below:
+
+1. Read Points:
+   - Input: Read the 'points' from the first column of the file named 'points.csv'.
+
+2. Construct Matrices A1 and A2:
+   - Input: Construct matrices A1 and A2 by reading from the files named 'A1.csv' and 'A2.csv', specifically using the third column where the first column is i and the second column is j.
+
+3. Construct Matrix B:
+   - Input: Construct matrix B by reading from the file named 'B.csv', using the third column where the first column is i and the second column is j.
+
+4. Optimization Implementation:
+   - Implement a simulated annealing algorithm using GUROBI to determine the optimal allocation of matrices A1, A2, and B to minimize their sum based on the defined conditions.
+   - Output: Save the corresponding values for the 2067 points in an Excel table named 'results.xlsx', where the first column is the point number and the second column is the assigned value.
+
+5. Final Results:
+   - Additionally, save the minimum value found by the optimization algorithm in a text file named 'minimum_value.txt'.
+
+Ensure that all output files reflect the quality of the completion of each subtask, allowing for further evaluation.",3=human written data
+26,"Please solve the following problem using Python. The description is as follows:
+
+1. Read four Excel sheets named ""points.xlsx"", ""A1.xlsx"", ""A2.xlsx"", and ""B.xlsx"".
+   - Input files: 
+     - ""points.xlsx"" (contains point numbers in the first column)
+     - ""A1.xlsx"" (contains matrix data for A1)
+     - ""A2.xlsx"" (contains matrix data for A2)
+     - ""B.xlsx"" (contains matrix data for B)
+
+2. Assign the numbers 0-1007 to n points, allowing repetitions from the first column of the ""points.xlsx"" sheet. These points will form three n*n matrices A1, A2, and B.
+
+3. Create the matrices A1, A2, and B as follows:
+   - A1: Each element a1[i][j] is derived from ""A1.xlsx"" based on the third column when the first column is i and the second column is j. If i equals j, then double the value of a1[i][j].
+   - A2: Each element a2[i][j] is derived similarly from ""A2.xlsx"", with the same doubling condition.
+   - B: Each element b[i][j] is derived from ""B.xlsx"" based on similar column rules. If the indices i and j have the same remainder when divided by 3, then double the value of b[i][j].
+
+4. The program must determine the optimal assignment of matrices A1, A2, and B to minimize their total sum and compute the minimum value.
+
+5. Output requirements:
+   - Save the results in an Excel file named ""output.xlsx"". The first column should contain the point numbers, and the second column should contain the assigned values corresponding to those points.
+   - Create a progress bar for the optimization process, displayed in the console during execution.
+
+6. Final output files:
+   - ""output.xlsx"" (output format: Excel)
+   - Ensure all relevant data is included in the output for evaluation purposes. 
+
+7. Results should be stored in a folder named ""results"".","acc,format,data integrity,visualization","Please solve the following problem using Python. The description is as follows:
+ First, read four Excel sheets named points, A1, A2, and B. Assign the numbers 0-1007 to n points, with the possibility of repeating the same number for different points (the point numbers are read from the first column of the Excel sheet points). These points form three n*n matrices A1, A2, and B among themselves. A1, A2, and B are independent of each other and have two independent cases: Matrices A1 and A2 are independent of each other, where each element a1[i][j] or a2[i][j] (where i represents the row and j the column) depends on the Excel sheets A1 and A2 (read from the third column when the first column is i and the second column is j). If the values assigned to i and j are the same, then the value of a[i][j] is doubled; each element b[i][j] in matrix B depends on the Excel sheet B (read from the third column when the first column is i and the second column is j), and if the values assigned to i and j have the same remainder when divided by 3, then the value of b[i][j] is doubled.
+ The program you write needs to determine how to assign the A1, A2, and B matrices to minimize their sum and find the minimum value. Output the corresponding values of the n points as an Excel sheet, with the first column being the point numbers, the second column being the assigned values, and draw a progress bar for the optimization process. The final results should be saved in a folder named results.",N,"Please solve the following problem using Python. The description is as follows:
+
+1. Read four files named ""points.csv"", ""A1.csv"", ""A2.csv"", and ""B.csv"".
+   - Input files: 
+     - ""points.csv"" (contains point numbers in the first column)
+     - ""A1.csv"" (contains matrix data for A1)
+     - ""A2.csv"" (contains matrix data for A2)
+     - ""B.csv"" (contains matrix data for B)
+
+2. Assign the numbers 0-1007 to n points, allowing repetitions from the first column of the ""points.csv"" file. These points will form three n*n matrices A1, A2, and B.
+
+3. Create the matrices A1, A2, and B as follows:
+   - A1: Each element a1[i][j] is derived from ""A1.csv"" based on the third column when the first column is i and the second column is j. If i equals j, then double the value of a1[i][j].
+   - A2: Each element a2[i][j] is derived similarly from ""A2.csv"", with the same doubling condition.
+   - B: Each element b[i][j] is derived from ""B.csv"" based on similar column rules. If the indices i and j have the same remainder when divided by 3, then double the value of b[i][j].
+
+4. The program must determine the optimal assignment of matrices A1, A2, and B to minimize their total sum and compute the minimum value.
+
+5. Output requirements:
+   - Save the results in an Excel file named ""output.xlsx"". The first column should contain the point numbers, and the second column should contain the assigned values corresponding to those points.
+   - Create a progress bar for the optimization process, displayed in the console during execution.
+
+6. Final output files:
+   - ""output.xlsx"" (output format: Excel)
+   - Ensure all relevant data is included in the output for evaluation purposes. 
+
+7. Results should be stored in a folder named ""results"".",3=human written data
+27,"Please write code to solve the following problem:
+
+1. Load text information from the ""input/word_test.csv"" file.
+   - **Input:** ""input/word_test.csv""
+   - **Output:** ""text_info.json"" (JSON format)
+
+2. Load image IDs from the ""input/image_data.csv"" file.
+   - **Input:** ""input/image_data.csv""
+   - **Output:** ""image_ids.json"" (JSON format)
+
+3. Perform image retrieval on the images located in the ""input/ImageData"" folder using the loaded text information.
+   - **Input:** ""text_info.json"", ""image_ids.json"", and images from ""input/ImageData""
+   - **Output:** ""results.csv"" (CSV format) containing the image IDs of the top five images with the highest retrieval similarity, along with their similarity scores. 
+
+Please ensure the outputs reflect comprehensive and high-quality results for evaluation.","consistency,acc","Please write code to solve the following problem:
+ Based on the image retrieval model and algorithm, use the text information from the ""input/word_test.csv"" file to perform image retrieval on the images in the input/ImageData folder. List the top five images with higher retrieval similarity and save the results in the ""results.csv"" file. The image IDs in the ImageData folder can be found in the ""input/image_data.csv"" file.",N,"Please write code to solve the following problem:
+
+1. Load text information from the ""input/word_test.csv"" file.
+   - Input: ""input/word_test.csv""
+   - Output: ""text_info.json"" (JSON format)
+
+2. Load image IDs from the ""input/image_data.csv"" file.
+   - Input: ""input/image_data.csv""
+   - Output: ""image_ids.json"" (JSON format)
+
+3. Perform image retrieval on the images located in the ""input/ImageData"" folder using the loaded text information.
+   - Input: ""text_info.json"", ""image_ids.json"", and images from ""input/ImageData""
+   - Output: ""results.csv"" (CSV format) containing the image IDs of the top five images with the highest retrieval similarity, along with their similarity scores. 
+
+Please ensure the outputs reflect comprehensive and high-quality results for evaluation.",2=open source data
+28,"Please write code to solve the following problem: 
+
+1. Read the 'input/word_data.csv' file (input) to extract relevant text entries for retrieval.
+2. Read the 'input/image_test.csv' file (input) to obtain the image IDs for which text retrieval is to be performed.
+3. Perform text retrieval using the specified text retrieval model and algorithm on the extracted texts corresponding to the image IDs. 
+4. List the top five texts with the highest retrieval similarity for each image ID and save the results in 'results.csv' (output).
+5. Additionally, extract and store the corresponding image data associated with the image IDs from the 'input/ImageData' folder and compile it into 'image_output.zip' (output). 
+
+Please ensure that the output files allow further evaluation of the completed tasks.","consistency,acc","Please write code to solve the following problem: \n\nBased on the text retrieval model and algorithm, perform text retrieval on the 'input/word_data.csv' file using the image IDs mentioned in the 'input/image_test.csv' file. List the top five texts with higher retrieval similarity and save the results in the 'results.csv' file. The image data corresponding to the image IDs mentioned in the 'image_test.csv' file can be obtained from the 'input/ImageData' folder.",N,"Please write code to solve the following problem: 
+
+1. Read the 'input/word_data.csv' file (input) to extract relevant text entries for retrieval.
+2. Read the 'input/image_test.csv' file (input) to obtain the image IDs for which text retrieval is to be performed.
+3. Perform text retrieval using the specified text retrieval model and algorithm on the extracted texts corresponding to the image IDs. 
+4. List the top five texts with the highest retrieval similarity for each image ID and save the results in 'results.csv' (output).
+
+Please ensure that the output files allow further evaluation of the completed tasks.",2=open source data
+29,"Please complete the following task:
+Write a complete LSTM (Long Short-Term Memory) neural network for time series prediction based on PyTorch. Use 'data.csv' as the dataset for this task. Implement the actual training and prediction of the LSTM model. 
+
+1. **Subtask 1**: Load the dataset.
+   - **Input**: 'data.csv'
+   - **Output**: 'loaded_data.csv' (CSV file containing the loaded dataset for evaluation)
+
+2. **Subtask 2**: Allow the user to select the column name with numerical values from the CSV file.
+   - **Input**: 'loaded_data.csv'
+   - **Output**: 'selected_column.txt' (TXT file containing the name of the selected column for verification)
+
+3. **Subtask 3**: Train the LSTM model using the selected column data.
+   - **Input**: 'loaded_data.csv' and 'selected_column.txt'
+   - **Output**: 'training_log.csv' (CSV file containing training metrics such as loss and accuracy for evaluation)
+
+4. **Subtask 4**: Make predictions using the trained model.
+   - **Input**: 'loaded_data.csv' and 'selected_column.txt'
+   - **Output**: 'predictions.csv' (CSV file containing the predictions for the selected column to assess performance)
+
+5. **Subtask 5**: Display a line chart of the predicted results for the selected column using tkinter.
+   - **Input**: 'predictions.csv'
+   - **Output**: 'predictions_chart.png' (PNG image file of the line chart for visual evaluation)
+
+Ensure that the program is complete without any omitted parts and save all final results in the specified formats as listed above.","mae,rmse,visualization","Please complete the following task:
+Write a complete LSTM (Long Short-Term Memory) neural network for time series prediction based on PyTorch. Choose 'data.csv' as the dataset and implement the actual training and prediction of the LSTM model. Then pop up a window to select the column name with numerical values from the csv file, and another window to display the line chart of the predicted results for the selected column (implement this using tkinter, and make sure the program is complete without any omitted parts). The final results should be saved in the 'results' folder.",N,"Please complete the following task:
+Write a complete LSTM (Long Short-Term Memory) neural network for time series prediction based on PyTorch. Use 'data.csv' as the dataset for this task. Implement the actual training and prediction of the LSTM model. Use data from column ""Value1"" from the CSV file 'data.csv' to train the LSTM model. Then make predicions and save to 'predictions.csv' and visualize it with a image 'predictions_chart.png'.
+",3=human written data
+30,"There are three sets of strings: ""230203199611020216"" and ""230203196201020236"", ""g7amms3t"" and ""ms3t"", ""9ojhg65t6754"" and ""ijg8g65t67ui"". For each pair of strings, calculate their similarity using Jaccard, Sorensen Dice, Levenshtein, and cosine similarity, expressed as a percentage. The results should be organized in a table format and saved in the output file named ""results.csv"". 
+
+Input file: None required since the strings are explicitly provided in the prompt. 
+
+Output format: ""results.csv"" containing a table with columns for each similarity measure and corresponding similarity percentages for each pair.","cossim,consistency","There are three sets of strings: 230203199611020216 and 230203196201020236, g7amms3t and ms3t, 9ojhg65t6754 and ijg8g65t67ui. Calculate their similarity using Jaccard, Sorensen Dice, Levenshtein, and cosine similarity, expressed as a percentage, and list the results in a table. The final results are saved in the results.csv file.",N,"There are three sets of strings: ""230203199611020216"" and ""230203196201020236"", ""g7amms3t"" and ""ms3t"", ""9ojhg65t6754"" and ""ijg8g65t67ui"". For each pair of strings, calculate their similarity using Jaccard, Sorensen Dice, Levenshtein, and cosine similarity, expressed as a percentage. The results should be organized in a table format and saved in the output file named ""results.csv"". 
+
+Output format: ""results.csv"" containing a table with columns for each similarity measure and corresponding similarity percentages for each pair.",1=no dependency
+31,"Use the credit card data from the Kaggle platform, KaggleCredit.csv, to train the model and make predictions on the test set, and finally calculate the model score. The steps are as follows:
+
+(1) Prepare to import the credit card data;  
+   - **Input:** KaggleCredit.csv  
+   - **Output:** import_log.txt  
+
+(2) Standardize the feature columns;  
+   - **Input:** KaggleCredit.csv  
+   - **Output:** standardized_data.csv  
+
+(3) Divide into training and test sets;  
+   - **Input:** standardized_data.csv  
+   - **Output:** train_set.csv, test_set.csv  
+
+(4) Create an SVM model and train it;  
+   - **Input:** train_set.csv  
+   - **Output:** svm_model.pkl  
+
+(5) Use the test set to make predictions;  
+   - **Input:** test_set.csv, svm_model.pkl  
+   - **Output:** predictions.csv  
+
+(6) Calculate the model score;  
+   - **Input:** test_set.csv, predictions.csv  
+   - **Output:** model_score.txt  
+
+The final results are saved in the results folder.","data consistency,acc,precision,recall","Use the credit card data from the Kaggle platform, KaggleCredit.csv, to train the model and make predictions on the test set, and finally calculate the model score. The steps are as follows:\n(1) Prepare to import the credit card data;\n(2) Standardize the feature columns;\n(3) Divide into training and test sets;\n(4) Create an SVM model and train it;\n(5) Use the test set to make predictions;\n(6) Calculate the model score.\n\nThe final results are saved in the results folder.",N,"Use the credit card data from the Kaggle platform, saved in KaggleCredit.csv, to train the model and make predictions on the test set, and finally calculate the model score. The steps are as follows:
+(1) Prepare to import the credit card data;
+(2) Standardize the feature columns;
+(3) Divide into training and test sets;
+(4) Create an SVM model and train it;
+(5) Use the test set to make predictions;
+(6) Calculate the model score.
+
+The final results are saved in the results folder. The model should be saved as ""model.pkl"" and the predictions saved in ""predictions.csv"" and the model score saved in ""model_score.txt"".",2=open source data
+32,"The dataset `PimaIndiansdiabetes.csv` contains information on whether Pima Indian female patients have had diabetes in the past 5 years. The dataset includes multiple medical predictive variables and one target variable, Outcome. When the value of Outcome is 1, it indicates the presence of diabetes; when the value is 0, it means the patient does not have diabetes. The meanings of the other attributes are: Pregnancies: number of pregnancies; Glucose: glucose level; BloodPressure: blood pressure (mm Hg); SkinThickness: skin fold thickness (mm); Insulin: insulin, 2-hour serum insulin; BMI: body mass index (weight/height)^2; DiabetesPedigreeFunction: diabetes pedigree function; Age: age (years).
+
+Please complete the following tasks:
+
+1. **Preprocess the Data**: Clean the dataset for any missing values and standardize the feature scales.
+   - Input: `PimaIndiansdiabetes.csv`
+   - Output: `preprocessed_data.csv`
+
+2. **Train Neural Network Classification Model**: Use the preprocessed data to train a neural network classification model for predicting diabetes.
+   - Input: `preprocessed_data.csv`
+   - Output: `model_summary.pdf` (contains model architecture and training summary)
+
+3. **Evaluate Model Accuracy**: Perform 10-fold cross-validation on the trained model and calculate its accuracy.
+   - Input: `preprocessed_data.csv`
+   - Output: `accuracy_results.csv` (contains accuracy metrics for each fold)
+
+4. **Save Final Results**: Compile the accuracy results and model summary in a results folder.
+   - Output: `results/final_results.txt` (contains overall model accuracy and insights)
+
+Ensure that each output file reflects the quality of the completion of each subtask for further evaluation.",acc,"The dataset PimaIndiansdiabetes.csv contains information on whether Pima Indian female patients have had diabetes in the past 5 years. The dataset consists of multiple medical predictive variables and one target variable, Outcome. When the value of Outcome is 1, it indicates the presence of diabetes; when the value is 0, it means the patient does not have diabetes. The meanings of the other attributes are: Pregnancies: number of pregnancies; Glucose: glucose level; BloodPressure: blood pressure (mm Hg); SkinThickness: skin fold thickness (mm); Insulin: insulin, 2-hour serum insulin; BMI: body mass index (weight/height)^2; DiabetesPedigreeFunction: diabetes pedigree function; Age: age (years). \nPlease complete the following tasks: Use neural network classification to make predictive classifications. Require the output of the algorithm's accuracy through 10-fold cross-validation. Save the final results in the 'results' folder.",N,"The dataset `PimaIndiansdiabetes.csv` contains information on whether Pima Indian female patients have had diabetes in the past 5 years. The dataset includes multiple medical predictive variables and one target variable, Outcome. When the value of Outcome is 1, it indicates the presence of diabetes; when the value is 0, it means the patient does not have diabetes. The meanings of the other attributes are: Pregnancies: number of pregnancies; Glucose: glucose level; BloodPressure: blood pressure (mm Hg); SkinThickness: skin fold thickness (mm); Insulin: insulin, 2-hour serum insulin; BMI: body mass index (weight/height)^2; DiabetesPedigreeFunction: diabetes pedigree function; Age: age (years).
+
+Please complete the following tasks:
+
+1. Preprocess the Data: Clean the dataset for any missing values and standardize the feature scales.
+   - Input: `PimaIndiansdiabetes.csv`
+   - Output: `preprocessed_data.csv`
+
+2. Train Neural Network Classification Model: Use the preprocessed data to train a neural network classification model for predicting diabetes.
+   - Input: `preprocessed_data.csv`
+   - Output: `model_summary.txt` (contains model architecture and training summary)
+
+3. Evaluate Model Accuracy: Perform 10-fold cross-validation on the trained model and calculate its accuracy.
+   - Input: `preprocessed_data.csv`
+   - Output: `accuracy_results.csv` (contains accuracy metrics for each fold)
+
+4. Save Final Results: Compile the accuracy results and model summary in a results folder.
+   - Output: `results/final_results.txt` (contains overall model accuracy and insights)
+
+Ensure that each output file reflects the quality of the completion of each subtask for further evaluation.",2=open source data
+33,"**Task: Clustering Negative Samples Classification**
+
+**Input File:**  
+- `data.csv`: This file contains the columns `dt2IC`, `dt2CIdbz`, `date_first`, and any other necessary features for clustering.
+
+**Output File:**  
+- `1combine_land.csv`: This file will include the original data with two additional columns: `clus` and `keep`.
+
+**Subtasks:**
+
+1. **Clustering for 'clus' Column:**
+   - **Operations:** 
+     - For rows where `dt2IC=1`, `dt2CIdbz=1`, and `date_first < 20230810000000`, perform Agglomerative clustering, calculating the number of clusters from 2 to 10.
+     - Select the number of clusters corresponding to the largest Silhouette Index (SI) coefficient as the final number of clusters.
+     - Assign the cluster labels to the `clus` column for the respective rows and leave the rest empty.
+   - **Output Format:** Append results to `1combine_land.csv`.
+
+2. **Processing for 'keep' Column:**
+   - **Operations:**
+     - For the updated `clus` column, calculate the count of each cluster.
+     - Determine the median of all counts.
+     - Assign a value of 1 to all clusters with a count less than or equal to the median.
+     - Randomly select a number of rows from clusters with a count higher than the median equivalent to the median itself and assign them a value of 1.
+     - All other rows should be assigned a value of 0.
+     - Maintain the original sorting order of the data in `1combine_land.csv`.
+   - **Output Format:** The updated `1combine_land.csv` will reflect these changes and contain the `keep` column alongside the `clus` column. 
+
+**Final Outputs:**  
+- The completed `1combine_land.csv` will contain the processed data with `clus` and `keep` columns, facilitating further evaluation of the retained negative samples and positive samples from the training, validation, and test datasets.","data integrity,consistency","Clustering: The result achieved is the classification of negative samples, where samples with fewer instances are fully preserved, and samples with more instances randomly retain a portion equivalent to the number of positive samples.\nTwo columns, 'clus' and 'keep', are added to the 1combine_land.csv file.\nOperations for the 'clus' column:\nFor rows where dt2IC=1 and dt2CIdbz=1 and date_first < 20230810000000,\nperform Agglomerative clustering, calculating the number of clusters from 2 to 10, and select the number with the largest SI coefficient as the final number of clusters.\nThen assign their clusters to 'clus'; all other rows are left empty.\nOperations for the 'keep' column:\nFor the 'clus' column, calculate the count of each cluster, find the median of all counts, assign 1 to all clusters with a count less than or equal to the median,\nrandomly select the same number of rows as the median from clusters with a count higher than the median, and assign them the value 1; all others are assigned 0. The new file obtained maintains the same sorting as the original file.\nTherefore, the rows with keep=1 are the final retained negative samples in the training data + all positive samples + validation + test, which can be found using date_first >= 20230810000000.",N,"Task: Clustering Negative Samples Classification
+
+Input File:  
+- `combine_land.csv`: This file contains the columns `dt2IC`, `dt2CIdbz`, `date_first`, `feature1`, `feature2`, `feature3` for clustering.
+
+Output File:  
+- `combine_land.csv`: This file will include the original data with two additional columns: `clus` and `keep`.
+
+Subtasks:
+
+1. Clustering for 'clus' Column:
+   - Operations: 
+     - For rows where `dt2IC=1`, `dt2CIdbz=1`, and `date_first < 20230810000000`, perform Agglomerative clustering, calculating the number of clusters from 2 to 10.
+     - Select the number of clusters corresponding to the largest Silhouette Index (SI) coefficient as the final number of clusters.
+     - Assign the cluster labels to the `clus` column for the respective rows and leave the rest empty.
+   - Output Format: Append results to `1combine_land.csv`.
+
+2. Processing for 'keep' Column:
+   - Operations:
+     - For the updated `clus` column, calculate the count of each cluster.
+     - Determine the median of all counts.
+     - Assign a value of 1 to all clusters with a count less than or equal to the median.
+     - Randomly select a number of rows from clusters with a count higher than the median equivalent to the median itself and assign them a value of 1.
+     - All other rows should be assigned a value of 0.
+     - Maintain the original sorting order of the data in `1combine_land.csv`.
+   - Output Format: The updated `1combine_land.csv` will reflect these changes and contain the `keep` column alongside the `clus` column. 
+
+Final Outputs:  
+- The completed `combine_land.csv` will contain the processed data with `clus` and `keep` columns, facilitating further evaluation of the retained negative samples and positive samples from the training, validation, and test datasets.",3=human written data
+34,"Please use the public microdata sample from the 2000 U.S. Census (refer to the 'data_pums_2000.csv' file) to perform the following subtasks:
+
+1. **Data Preparation**  
+   - Input: 'data_pums_2000.csv'  
+   - Output: 'cleaned_data.csv' (This file should contain the cleaned and preprocessed data, suitable for further analysis.)
+
+2. **Plot the Lorenz Curve**  
+   - Input: 'cleaned_data.csv'  
+   - Output: 'lorenz_curve.png' (This image should visually represent the Lorenz curve based on the income distribution in the dataset.)
+
+3. **Calculate the Gini Coefficient**  
+   - Input: 'cleaned_data.csv'  
+   - Output: 'gini_coefficient.txt' (This text file should contain the calculated Gini coefficient value, formatted as a simple numeric output.)
+
+Please complete this task using Python, and ensure all output files are saved in the 'results' folder.","consistency,visualization","Please use the public microdata sample from the 2000 U.S. Census (refer to the 'data_pums_2000.csv' file) to plot the Lorenz curve and calculate the Gini coefficient. \n\nPlease complete this task using Python, and save the final results in the 'results' folder.",N,"Please use the public microdata sample from the 2000 U.S. Census (refer to the 'data_pums_2000.csv' file) to perform the following subtasks:
+
+1. Data Preparation  
+   - Input: 'data_pums_2000.csv'  
+   - Output: 'cleaned_data.csv' (This file should contain the cleaned and preprocessed data, suitable for further analysis.)
+
+2. Plot the Lorenz Curve  
+   - Input: 'cleaned_data.csv'  
+   - Output: 'lorenz_curve.png' (This image should visually represent the Lorenz curve based on the income distribution in the dataset.)
+
+3. Calculate the Gini Coefficient  
+   - Input: 'cleaned_data.csv'  
+   - Output: 'gini_coefficient.txt' (This text file should contain the calculated Gini coefficient value, formatted as a simple numeric output.)
+
+Please complete this task using Python, and ensure all output files are saved in the 'results' folder.",2=open source data
+35,"Please build a feedforward neural network (FNN) using PyTorch for data regression. 
+
+**Task Input:**
+- **Input File:** ""data.xlsx"" (Excel spreadsheet containing 1,000,000 data records with columns for x, y, and sign)
+
+**Subtasks and Output Requirements:**
+1. **Data Preprocessing:**
+   - **Output Format:** ""processed_data.csv"" (CSV file)
+   - **Description:** Clean and preprocess the data, including normalization, encoding of the 'sign' character, and splitting into training and testing datasets.
+
+2. **Model Construction:**
+   - **Output Format:** ""model.py"" (Python script)
+   - **Description:** Construct the feedforward neural network architecture and define the forward pass.
+
+3. **Hyperparameter Tuning:**
+   - **Output Format:** ""hyperparameters.json"" (JSON file)
+   - **Description:** Document the chosen hyperparameters (e.g., learning rate, batch size, number of epochs) to evaluate model performance.
+
+4. **Model Training:**
+   - **Output Format:** ""training_results.csv"" (CSV file)
+   - **Description:** Save the training results, including loss values and accuracy at each epoch, throughout the training process.
+
+5. **Model Evaluation:**
+   - **Output Format:** ""evaluation_results.pdf"" (PDF file)
+   - **Description:** Include visualizations and metrics of the model performance on the test dataset, such as mean squared error and comparison plots.
+
+6. **Model Saving:**
+   - **Output Format:** ""final_model.pth"" (PyTorch model file)
+   - **Description:** Save the trained neural network model for future inference.
+
+Make sure to clearly label and document all files to facilitate further evaluation.","mae,rmse","Please build a feedforward neural network (FNN) using PyTorch for data regression. The inputs are x (a floating-point number with a range of [-10, 10]), y (a floating-point number with a range of [-10, 10]), and sign (a character that is either 'P', 'N', or 'U'). The output is z (a floating-point number with an unknown range). There are a total of 1,000,000 data records, all saved in an Excel spreadsheet (it's not necessary to use all of them).\n\nPlease construct such a neural network and choose appropriate hyperparameters. Save the model and results in the 'results' folder.",N,"Please build a feedforward neural network (FNN) using PyTorch for data regression. 
+
+Task Input:
+- Input File: ""data.xlsx"" (Excel spreadsheet containing 1,000,000 data records with columns for x, y, and sign)
+
+Subtasks and Output Requirements:
+1. Data Preprocessing:
+   - Output Format: ""processed_data.csv"" (CSV file)
+   - Description: Clean and preprocess the data, including normalization, encoding of the 'sign' character, and splitting into training and testing datasets.
+
+2. Model Construction:
+   - Output Format: ""model.py"" (Python script)
+   - Description: Construct the feedforward neural network architecture and define the forward pass.
+
+3. Hyperparameter Tuning:
+   - Output Format: ""hyperparameters.json"" (JSON file)
+   - Description: Document the chosen hyperparameters (e.g., learning rate, batch size, number of epochs) to evaluate model performance.
+
+4. Model Training:
+   - Output Format: ""training_results.csv"" (CSV file)
+   - Description: Save the training results, including loss values and accuracy at each epoch, throughout the training process.
+
+5. Model Evaluation:
+   - Output Format: ""evaluation_results.pdf"" (PDF file)
+   - Description: Include visualizations and metrics of the model performance on the test dataset, such as mean squared error and comparison plots.
+
+6. Model Saving:
+   - Output Format: ""final_model.pth"" (PyTorch model file)
+   - Description: Save the trained neural network model for future inference.
+
+Make sure to clearly label and document all files to facilitate further evaluation.",3=human written data
+36,"In financial data analysis, assume the variables date, Mkt-RF, SMB, HML, RF, PERMNO, shrcd, exchcd, RET, sprtrn, price, shrout, mktcap, and size are in a CSV file named ""trd.csv"". Use Python to solve the following tasks:
+
+1. **Calculate Beta**: Compute the beta for the three-factor model using data from ""trd.csv"".
+   - **Output**: A CSV file named ""beta.csv"" containing the calculated beta values for each asset.
+
+2. **Form Portfolios**: Create portfolios based on the breakpoints (5th quantiles) of the beta.
+   - **Output**: A CSV file named ""portfolios.csv"" listing the formed portfolios including asset identifiers and their respective beta groups.
+
+3. **Calculate Excess Returns**: Compute the excess returns of the portfolios based on the previously calculated returns.
+   - **Output**: A CSV file named ""excess_returns.csv"" containing the excess returns for each portfolio.
+
+4. **Calculate Abnormal Returns**: Adjust the returns by the Fama and French three-factor model to find abnormal returns.
+   - **Output**: A CSV file named ""abnormal_returns.csv"" with the calculated abnormal returns for each portfolio.
+
+5. **Sample Distribution**: Analyze the sample distribution of the abnormal returns.
+   - **Output**: A PDF file named ""sample_distribution.pdf"" containing graphs and summary statistics of the sample distribution.
+
+6. **Final Results**: Compile all calculated data into a comprehensive results file.
+   - **Output**: A CSV file named ""results.csv"" that includes all relevant calculated metrics from the previous tasks.","consistency,distribution","In financial data analysis, assume the variables date, Mkt-RF, SMB, HML, RF, PERMNO, date, shrcd, exchcd, RET, sprtrn, price, shrout, mktcap, and size are in a CSV file named trd. Use Python to solve the following problem: Conduct portfolio analysis by first calculating the beta in the three-factor model. Then, form portfolios based on the breakpoints (5th quantiles) of the beta. Next, calculate the excess returns of the portfolios and the abnormal returns adjusted by the Fama and French three-factor model, as well as the sample distribution. Finally, output these data to a file named results.csv.",N,"In financial data analysis, assume the variables date, Mkt-RF, SMB, HML, RF, PERMNO, shrcd, exchcd, RET, sprtrn, price, shrout, mktcap, and size are in a CSV file named ""trd.csv"". Use Python to solve the following tasks:
+
+1. Calculate Beta: Compute the beta for the three-factor model using data from ""trd.csv"".
+   - Output: A CSV file named ""beta.csv"" containing the calculated beta values for each asset.
+
+2. Form Portfolios: Create portfolios based on the breakpoints (5th quantiles) of the beta.
+   - Output: A CSV file named ""portfolios.csv"" listing the formed portfolios including asset identifiers and their respective beta groups.
+
+3. Calculate Excess Returns: Compute the excess returns of the portfolios based on the previously calculated returns.
+   - Output: A CSV file named ""excess_returns.csv"" containing the excess returns for each portfolio.
+
+4. Calculate Abnormal Returns: Adjust the returns by the Fama and French three-factor model to find abnormal returns.
+   - Output: A CSV file named ""abnormal_returns.csv"" with the calculated abnormal returns for each portfolio.
+
+5. Sample Distribution: Analyze the sample distribution of the abnormal returns.
+   - Output: A PDF file named ""sample_distribution.pdf"" containing graphs and summary statistics of the sample distribution.
+
+6. Final Results: Compile all calculated data into a comprehensive results file.
+   - Output: A CSV file named ""results.csv"" that includes all relevant calculated metrics from the previous tasks.",3=human written data
+37,"I currently have a structured dataset named ""data.csv"" with 6 columns and 5960 rows of data. The first column is named X, the second column is named Y, both of which are structural parameters set for simulation. The following four columns, ff, ft, tt, and tf, represent the simulation results. 
+
+Please complete the following subtasks:
+
+1. **Data Preprocessing**  
+   Input: ""data.csv""  
+   Output: ""preprocessed_data.csv"" (this file should contain cleaned and normalized data)
+
+2. **Feature Selection**  
+   Input: ""preprocessed_data.csv""  
+   Output: ""selected_features.csv"" (this file should contain the selected features that are most relevant for the model)
+
+3. **Model Training**  
+   Input: ""selected_features.csv""  
+   Output: ""trained_model.pkl"" (this file should contain the saved machine learning model)
+
+4. **Model Evaluation**  
+   Input: ""trained_model.pkl"" and ""selected_features.csv""  
+   Output: ""evaluation_results.pdf"" (this file should contain plots and metrics for model evaluation)
+
+5. **Prediction Generation**  
+   Input: ""selected_features.csv""  
+   Output: ""predictions.csv"" (this file should contain predicted values for the columns ff, ft, tt, and tf based on new structural parameters)
+
+All model-related content and outputs will be saved in the ""results"" folder.",acc,"I currently have a structured dataset named date.csv with 6 columns and 5960 rows of data. The first column is named X, the second column is named Y, both of which are structural parameters set for simulation. The following four columns, ff, ft, tt, and tf, represent the simulation results. Now, I need to train a model that can accurately predict the four simulation results for other structural parameters. The model and related content will be saved in the results folder.",N,"I currently have a structured dataset named date.csv with 6 columns and 5960 rows of data. The first column is named X, the second column is named Y, both of which are structural parameters set for simulation. The following four columns, ff, ft, tt, and tf, represent the simulation results. Now, I need to train a model that can accurately predict the four simulation results for other structural parameters. The model and related content will be saved in the results folder. The model should be saved as ""model.pkl"" and the final accuracy should be saved in ""acc.txt"".",3=human written data
+38,"Load data from the following input files:
+- ""genome-scores.csv""
+- ""genome-tags.csv""
+- ""links.csv""
+- ""movies.csv""
+- ""ratings.csv""
+- ""tags.csv""
+
+**Subtasks:**
+1. **Data Cleaning and Preprocessing**
+   - Check for missing values, handle missing values, convert data types, deal with outliers, select specific columns.
+   - **Output:** ""cleaned_data.csv""
+
+2. **Data Merging**
+   - Merge relevant datasets based on movieId and userId to create a comprehensive dataset for analysis.
+   - **Output:** ""merged_data.csv""
+
+3. **User Preference Analysis**
+   - Conduct user rating analysis (calculate the average rating, standard deviation of ratings, and number of ratings for each user on movies) and user tag analysis.
+   - Combine results from the user preference analyses.
+   - **Output:** ""user_preference_analysis.csv""
+
+4. **Feature Engineering**
+   - Perform movie feature engineering, user feature engineering, and interaction feature engineering to enhance the dataset for model training.
+   - **Output:** ""feature_engineering_results.csv""
+
+5. **Model Construction**
+   - Implement a collaborative filtering algorithm (combination of user-based and item-based) and integrate a content-based recommendation model using deep learning.
+   - **Output:** ""model_construction_summary.pdf""
+
+6. **Evaluation and Training**
+   - Train the model and evaluate its performance using appropriate metrics.
+   - **Output:** ""model_evaluation_results.csv""
+
+7. **Generate Recommendations**
+   - Generate personalized movie recommendations for users based on the trained model.
+   - **Output:** ""recommendations.csv""
+
+Implement the tasks using Python code in a detailed and comprehensive manner.","data integrity,consistency,statistics,acc","Load data, data cleaning and preprocessing (check for missing values, handle missing values, convert data types, deal with outliers, select specific columns), data merging, user preference analysis (user rating analysis (calculate the average rating, standard deviation of ratings, and number of ratings for each user on movies), user tag analysis, combine user preference analysis results), feature engineering (movie feature engineering, user feature engineering, interaction feature engineering, etc.), model construction (collaborative filtering algorithm (combination of user-based and item-based collaborative filtering), content-based recommendation model integrated with deep learning), evaluation and training, generate recommendations. The dataset includes genome-scores.csv (movieId, tagId, relevance), genome-tags.csv (tagId, tag), links.csv (movieId, imdbId, tmdbId), movies.csv (movieId, title, genres, year), ratings.csv (userId, movieId, rating, timestamp), tags.csv (userId, movieId, tag, timestamp). Implement with Python code in a detailed and comprehensive manner.",N,"Load data from the following input files:
+- ""links.csv""
+- ""movies.csv""
+- ""ratings.csv""
+- ""tags.csv""
+
+Subtasks:
+1. Data Cleaning and Preprocessing
+   - Check for missing values, handle missing values, convert data types, deal with outliers, select specific columns.
+   - Output: ""cleaned_data.csv""
+
+2. Data Merging
+   - Merge relevant datasets based on movieId and userId to create a comprehensive dataset for analysis.
+   - Output: ""merged_data.csv""
+
+3. User Preference Analysis
+   - Conduct user rating analysis (calculate the average rating, standard deviation of ratings, and number of ratings for each user on movies) and user tag analysis.
+   - Combine results from the user preference analyses.
+   - Output: ""user_preference_analysis.csv""
+
+4. Feature Engineering
+   - Perform movie feature engineering, user feature engineering, and interaction feature engineering to enhance the dataset for model training.
+   - Output: ""feature_engineering_results.csv""
+
+5. Model Construction
+   - Implement a collaborative filtering algorithm (combination of user-based and item-based) and integrate a content-based recommendation model using deep learning.
+   - Output: ""model_construction_summary.pdf""
+
+6. Evaluation and Training
+   - Train the model and evaluate its performance using appropriate metrics.
+   - Output: ""model_evaluation_results.csv""
+
+7. Generate Recommendations
+   - Generate personalized movie recommendations for users based on the trained model.
+   - Output: ""recommendations.csv""
+
+Implement the tasks using Python code in a detailed and comprehensive manner.",2=open source data
+39,"# Data source for this case: the whole year of Beijing weather in 2018, input file: beijing_tianqi_2018.csv (file encoding: utf-8)
+
+Attribute description:
+- ymd: Year, month, day
+- bWendu: Maximum temperature
+- yWendu: Minimum temperature
+- tianqi: Weather status (sunny, sunny to cloudy)
+- fengxiang: Wind direction (southwest wind, north wind)
+- fengli: Wind force level
+- aqi: Air quality
+- aqiInfo: Air Quality Index (excellent, good, light pollution)
+- aqiLevel: Air quality score
+
+# Please complete the following data analysis tasks and provide the specified outputs:
+
+1. Set the index to the date for easy filtering by date.
+   - Output: output_indexed.csv (csv)
+   
+2. Look up the weather conditions on March 1, 2018.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_march_01_2018.csv (csv)
+
+3. Replace the temperature units with ℃ removed.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_temperature_cleaned.csv (csv)
+
+4. Check the maximum and minimum temperatures for the consecutive 7 days starting from August 1, 2018.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_august_temperatures.csv (csv)
+
+5. Check results where the minimum temperature is below -10.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_below_negative_10.csv (csv)
+
+6. Check for ""my perfect weather"" (maximum temperature less than 30, minimum temperature greater than 15, sunny, air quality excellent).
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_perfect_weather.csv (csv)
+
+7. Add a new column 'wencha' (maximum temperature - minimum temperature).
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_wencha_added.csv (csv)
+
+8. Add a new column 'wenduType' (marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise normal temperature).
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_wenduType_added.csv (csv)
+
+9. How many types of 'fengxiang' are there in the whole year of 2018? How many days does each type correspond to?
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_fengxiang_counts.csv (csv)
+
+10. What is the correlation coefficient between air quality 'aqi' and maximum temperature?
+    - Input: beijing_tianqi_2018.csv (csv)
+    - Output: output_corr_aqi_max_temp.csv (csv)
+
+11. What is the correlation coefficient between air quality 'aqi' and temperature difference 'wencha'?
+    - Input: beijing_tianqi_2018.csv (csv)
+    - Output: output_corr_aqi_wencha.csv (csv)","consistency,correlation coefficients","# Data source for this case, the whole year of Beijing weather in 2018, beijing_tianqi_2018.csv, file encoding utf-8\n'''\nAttribute description:\nymd: Year, month, day\nbWendu: Maximum temperature\nyWendu: Minimum temperature\ntianqi: Weather status: sunny, sunny to cloudy\nfengxiang: Wind direction, southwest wind, north wind\nfengli: Wind force level\naqi: Air quality\naqiInfo: Air Quality Index: excellent, good, light pollution\naqiLevel: Air quality score\n'''\n\n# According to the prompts, complete the following data analysis:\n# 1. Set the index to the date for easy filtering by date. New knowledge: set_index() Example df.set_index('ymd', inplace=True)\n# 2. Look up the weather conditions on March 1, 2018. Hint: .loc\n# 3. Replace the temperature units with ℃ removed. Hint: replacement\n# 4. Check the maximum and minimum temperatures for the consecutive 7 days starting from August 1, 2018. Hint: slicing\n# 5. Check results where the minimum temperature is below -10. Hint: conditional expression query\n# 6. Check for ""my perfect weather"" (maximum temperature less than 30, and minimum temperature greater than 15, sunny, air quality excellent). Hint: conditional expression query\n# 7. Add a new column 'wencha', maximum temperature - minimum temperature.\n# 8. Add a new column 'wenduType', marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise normal temperature. Hint: apply\n# 9. How many types of 'fengxiang' are there in the whole year of 2018? How many days does each type correspond to? Hint: data statistical function [enumerate]\n# 10. What is the correlation coefficient between air quality 'aqi' and maximum temperature?\n# 11. What is the correlation coefficient between air quality 'aqi' and temperature difference 'wencha'?",N,"Data source for this case: the whole year of Beijing weather in 2018, input file: beijing_tianqi_2018.csv (file encoding: utf-8)
+
+Attribute description:
+- ymd: Year, month, day
+- bWendu: Maximum temperature
+- yWendu: Minimum temperature
+- tianqi: Weather status (sunny, sunny to cloudy)
+- fengxiang: Wind direction (southwest wind, north wind)
+- fengli: Wind force level
+- aqi: Air quality
+- aqiInfo: Air Quality Index (excellent, good, light pollution)
+- aqiLevel: Air quality score
+
+Please complete the following data analysis tasks and provide the specified outputs:
+
+1. Set the index to the date for easy filtering by date.
+   - Output: output_indexed.csv (csv)
+   
+2. Look up the weather conditions on March 1, 2018.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_march_01_2018.csv (csv)
+
+3. Replace the temperature units with ℃ removed.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_temperature_cleaned.csv (csv)
+
+4. Check the maximum and minimum temperatures for the consecutive 7 days starting from August 1, 2018.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_august_temperatures.csv (csv)
+
+5. Check results where the minimum temperature is below -10.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_below_negative_10.csv (csv)
+
+6. Check for ""my perfect weather"" (maximum temperature less than 30, minimum temperature greater than 15, sunny, air quality excellent).
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_perfect_weather.csv (csv)
+
+7. Add a new column 'wencha' (maximum temperature - minimum temperature).
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_wencha_added.csv (csv)
+
+8. Add a new column 'wenduType' (marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise normal temperature).
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_wenduType_added.csv (csv)
+
+9. How many types of 'fengxiang' are there in the whole year of 2018? How many days does each type correspond to?
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_fengxiang_counts.csv (csv)
+
+10. What is the correlation coefficient between air quality 'aqi' and maximum temperature?
+    - Input: beijing_tianqi_2018.csv (csv)
+    - Output: output_corr_aqi_max_temp.csv (csv)
+
+11. What is the correlation coefficient between air quality 'aqi' and temperature difference 'wencha'?
+    - Input: beijing_tianqi_2018.csv (csv)
+    - Output: output_corr_aqi_wencha.csv (csv)",2=open source data
+40,"(1) Read the 'Chinese provinces population data.csv' file.  
+**Input:** 'Chinese provinces population data.csv'  
+**Output:** None  
+
+(2) Check the dimensions, size, and other information of the file.  
+**Input:** 'Chinese provinces population data.csv'  
+**Output:** 'file_info.txt' (Text file containing dimensions, size, and additional information)  
+
+(3) Use the describe() method to perform descriptive statistics on the population characteristics in the file.  
+**Input:** 'Chinese provinces population data.csv'  
+**Output:** 'descriptive_statistics.csv' (CSV file containing descriptive statistics of population characteristics)  
+
+(4) Use the sum function to sum the population characteristics in the file and calculate the population growth.  
+**Input:** 'Chinese provinces population data.csv'  
+**Output:** 'population_growth_summary.csv' (CSV file summarizing total populations and calculated growth)  ",statistics,"(1) Read the 'Chinese provinces population data.csv' file.\n\n
+ (2) And check the dimensions, size, and other information of the file.\n\n
+ (3) Use the describe() method to perform descriptive statistics on the population characteristics in the file.\n\n
+ (4) Use the sum function to sum the population characteristics in the file and calculate the population growth.",N,"(1) Read the 'GDP.csv' file.  
+
+(2) Check the dimensions, size, and other information of the file.  
+Input: 'GDP.csv'  
+Output: 'file_info.txt' (Text file containing dimensions, size, and additional information)  
+
+(3) Use the describe() method to perform descriptive statistics on the GDP characteristics in the file.  
+Input: 'GDP.csv'  
+Output: 'descriptive_statistics.csv' (CSV file containing descriptive statistics of GDP characteristics)  
+
+(4) Use the sum function to sum the population characteristics in the file and calculate the GDP growth.  
+Input: 'GDP.csv'  
+Output: 'GDP_growth_summary.csv' (CSV file summarizing total GDP and calculated growth)  ",2=open source data
+41,"Given a dataset with missing values in a file named ""data.csv,"" which records the region, height, weight, age, and salary of 36 individuals, please address the following issues:
+
+(a) Calculate the proportion of missing values in each column and select the rows with at least two non-missing values in the last three columns. Save your output in a CSV file named ""missing_values_proportion.csv.""
+
+(b) Fill in the weight column reasonably by combining the data from the height and region columns. Save this updated dataset in a CSV file named ""updated_data.csv.""","missing value,data consistency","There is a dataset with missing values in a CSV file, which records the region, height, weight, age, and salary of 36 individuals. Please address the following issues: (a) Calculate the proportion of missing values in each column and select the rows with at least two non-missing values in the last three columns. (b) Please fill in the weight column reasonably by combining the data from the height and region columns.",Y,"Given a dataset with missing values in a file named ""data.csv,"" which records the region, height, weight, age, and salary of 36 individuals, please address the following issues:
+
+(a) Calculate the proportion of missing values in each column and select the rows with at least two non-missing values in the last three columns. Save your output in a CSV file named ""missing_values_proportion.csv.""
+
+(b) Fill in the weight column reasonably by combining the data from the height and region columns. Save this updated dataset in a CSV file named ""updated_data.csv.""",2=open source data
+42,"Import tushare as ts  
+Import pandas as pd  
+
+# Set the Tushare token  
+ts.set_token('e645a17966d0fc3a182e82e1834f00868fad58657d143ddfbc0b3731')  
+
+# Initialize the pro interface  
+pro = ts.pro_api()  
+
+# Define the stock code and date range  
+stock_code = '601318.SH' # Modify to the stock code of China Ping An  
+start_date = '20230101'  
+end_date = '20231031'  
+
+# Use Tushare's daily interface to get the data  
+df = pro.daily(ts_code=stock_code, start_date=start_date, end_date=end_date)  
+
+# Rename the columns to standard names  
+df.columns = [c.lower() for c in df.columns]  
+df.rename(columns={'trade_date': 'date', 'close': 'close', 'vol': 'volume', 'open': 'open', 'high': 'high', 'low': 'low'}, inplace=True)  
+
+# Convert the date column to datetime type and set as index  
+df['date'] = pd.to_datetime(df['date'])  
+df = df.set_index('date')  
+
+# Save to a local .csv file  
+df.to_csv('pingan_daily_data.csv')  
+
+print(""The data has been saved to a local csv file."")  
+
+# Subtask 1: Calculate Cumulative Simple Return  
+# Input: 'pingan_daily_data.csv'  
+# Output: Cumulative simple return data as a .csv file  
+# Output Filename: 'cumulative_simple_return.csv'  
+# Description: Calculate the cumulative simple return over n trading days and save to a CSV file.  
+
+# Subtask 2: Calculate Cumulative Logarithmic Return  
+# Input: 'pingan_daily_data.csv'  
+# Output: Cumulative logarithmic return data as a .csv file  
+# Output Filename: 'cumulative_log_return.csv'  
+# Description: Calculate the cumulative logarithmic return over n trading days and save to a CSV file.  
+
+# Subtask 3: Plot Cumulative Returns  
+# Input: 'cumulative_simple_return.csv', 'cumulative_log_return.csv'  
+# Output: Cumulative return plots as image files  
+# Output Filenames: 'cumulative_simple_return_plot.png', 'cumulative_log_return_plot.png'  
+# Description: Generate plots for cumulative simple and logarithmic returns, saving each plot as a PNG file.",visualization,"Import tushare as ts\nImport pandas as pd\n\n# Set the Tushare token\nts.set_token('e645a17966d0fc3a182e82e1834f00868fad58657d143ddfbc0b3731')\n\n# Initialize the pro interface\npro = ts.pro_api()\n\n# Define the stock code and date range\nstock_code = '601318.SH' # Modify to the stock code of China Ping An\nstart_date = '20230101'\nend_date = '20231031'\n\n# Use Tushare's daily interface to get the data\ndf = pro.daily(ts_code=stock_code, start_date=start_date, end_date=end_date)\n\n# Rename the columns to standard names\ndf.columns = [c.lower() for c in df.columns]\ndf.rename(columns={'trade_date': 'date', 'close': 'close', 'vol': 'volume', 'open': 'open', 'high': 'high', 'low': 'low'}, inplace=True)\n\n# Convert the date column to datetime type and set as index\ndf['date'] = pd.to_datetime(df['date'])\ndf = df.set_index('date')\n\n# Save to a local .csv file\ndf.to_csv('pingan_daily_data.csv')\n\nprint(\""The data has been saved to a local csv file.\"")\nHelp me use the data obtained from the above code to plot the cumulative simple return and cumulative logarithmic return of China Ping An [601318] stock trading days. The cumulative (simple/logarithmic) return over n trading days is the sum of the returns of each trading day among those n trading days.",Y,"Import tushare as ts  
+Import pandas as pd  
+
+# Set the Tushare token  
+ts.set_token('e645a17966d0fc3a182e82e1834f00868fad58657d143ddfbc0b3731')  
+
+# Initialize the pro interface  
+pro = ts.pro_api()  
+
+# Define the stock code and date range  
+stock_code = '601318.SH' # Modify to the stock code of China Ping An  
+start_date = '20230101'  
+end_date = '20231031'  
+
+# Use Tushare's daily interface to get the data  
+df = pro.daily(ts_code=stock_code, start_date=start_date, end_date=end_date)  
+
+# Rename the columns to standard names  
+df.columns = [c.lower() for c in df.columns]  
+df.rename(columns={'trade_date': 'date', 'close': 'close', 'vol': 'volume', 'open': 'open', 'high': 'high', 'low': 'low'}, inplace=True)  
+
+# Convert the date column to datetime type and set as index  
+df['date'] = pd.to_datetime(df['date'])  
+df = df.set_index('date')  
+
+# Save to a local .csv file  
+df.to_csv('pingan_daily_data.csv')  
+
+print(""The data has been saved to a local csv file."")  
+
+# Subtask 1: Calculate Cumulative Simple Return  
+# Input: 'pingan_daily_data.csv'  
+# Output: Cumulative simple return data as a .csv file  
+# Output Filename: 'cumulative_simple_return.csv'  
+# Description: Calculate the cumulative simple return over n trading days and save to a CSV file.  
+
+# Subtask 2: Calculate Cumulative Logarithmic Return  
+# Input: 'pingan_daily_data.csv'  
+# Output: Cumulative logarithmic return data as a .csv file  
+# Output Filename: 'cumulative_log_return.csv'  
+# Description: Calculate the cumulative logarithmic return over n trading days and save to a CSV file.  
+
+# Subtask 3: Plot Cumulative Returns  
+# Input: 'cumulative_simple_return.csv', 'cumulative_log_return.csv'  
+# Output: Cumulative return plots as image files  
+# Output Filenames: 'cumulative_simple_return_plot.png', 'cumulative_log_return_plot.png'  
+# Description: Generate plots for cumulative simple and logarithmic returns, saving each plot as a PNG file.",1=no dependency
+43,"1. Preprocess the People's Daily corpus from 1998 (input: ""people_daily_1998.txt"") and vectorize the text using the WordVec model. Output the preprocessed data as ""preprocessed_data.csv"".
+
+2. Write a Naive Bayes classification algorithm and train it with the preprocessed data (""preprocessed_data.csv""). Output the trained model as ""naive_bayes_model.pkl"".
+
+3. Use the trained model to classify the corpus in ""news.csv"". Output the classification results as ""classification_results.csv"".
+
+4. Analyze the classification results from ""classification_results.csv"". Output the analysis report as ""classification_analysis.pdf"".","consistency,acc","1. Preprocess the People's Daily corpus from 1998 and vectorize the text using the WordVec model.
+ \n\n2. Write a Naive Bayes classification algorithm and train it with the corpus.
+ \n\n3. Use the trained model to classify the corpus in news.csv.
+ \n\n4. Analyze the classification results.",N,"1. Preprocess the People's Daily corpus from input files (input: from ""199801.txt"" to ""199806.txt"") and vectorize the text using the WordVec model. Output the preprocessed data as ""preprocessed_data.csv"".
+
+2. Write a Naive Bayes classification algorithm and train it with the preprocessed data (""preprocessed_data.csv""). Output the trained model as ""naive_bayes_model.pkl"".
+
+3. Use the trained model to classify the corpus in ""news.csv"". Output the classification results as ""classification_results.csv"".
+
+4. Analyze the classification results from ""classification_results.csv"". Output the analysis report as ""classification_analysis.pdf"".",2=open source data
+44,"I currently have a CSV dataset file named ""titanic_data.csv"" for Titanic disaster prediction, and I need to preprocess the data. The following are the labels: PassengerId, HomePlanet, CryoSleep, Cabin, Destination, Age, VIP, RoomService, FoodCourt, ShoppingMall, Spa, VRDeck, Name, Transported. I need you to complete the following tasks for me:
+
+(1) Check if there are any null values in the dataset;  
+   **Output Format:** CSV  
+   **Output Filename:** ""null_values_report.csv""  
+
+(2) Describe the source data;  
+   **Output Format:** PDF  
+   **Output Filename:** ""data_description.pdf""  
+
+(3) Fill in missing values (consider using mean, median, or mode for filling);  
+   **Input Filename:** ""titanic_data.csv""  
+   **Output Format:** CSV  
+   **Output Filename:** ""filled_data.csv""  
+
+(4) Delete unnecessary fields, such as 'Cabin', 'PassengerId', 'Ticket', etc.;  
+   **Input Filename:** ""filled_data.csv""  
+   **Output Format:** CSV  
+   **Output Filename:** ""cleaned_data.csv""  
+
+(5) Build features, such as family_size, single status, and title;  
+   **Input Filename:** ""cleaned_data.csv""  
+   **Output Format:** CSV  
+   **Output Filename:** ""feature_engineered_data.csv""  
+
+(6) Discretize age and fare information;  
+   **Input Filename:** ""feature_engineered_data.csv""  
+   **Output Format:** CSV  
+   **Output Filename:** ""discretized_data.csv""  
+
+(7) Other data preprocessing (design as needed);  
+   **Input Filename:** ""discretized_data.csv""  
+   **Output Format:** CSV  
+   **Output Filename:** ""final_preprocessed_data.csv""  
+
+Please provide me with executable code.","data quality,data consistency,data integrity","I currently have a CSV dataset file for Titanic disaster prediction, and I need to preprocess the data. The following are the labels: PassengerId, HomePlanet, CryoSleep, Cabin, Destination, Age, VIP, RoomService, FoodCourt, ShoppingMall, Spa, VRDeck, Name, Transported. I need you to complete the following tasks for me:
+ (1) Check if there are any null values in the dataset;
+ (2) Describe the source data;
+ (3) Fill in missing values (consider using mean, median, or mode for filling);
+ (4) Delete unnecessary fields, such as 'cabin', 'passengerid', 'ticket', etc.;
+ (5) Build features, such as family_size, single status, and title;
+ (6) Discretize age and fare information;
+ (7) Other data preprocessing (design as needed).
+ Please provide me with executable code.",N,"I currently have a CSV dataset file named ""titanic_data.csv"" for Titanic disaster prediction, and I need to preprocess the data. The following are the labels: PassengerId, HomePlanet, CryoSleep, Cabin, Destination, Age, VIP, RoomService, FoodCourt, ShoppingMall, Spa, VRDeck, Name, Transported. I need you to complete the following tasks for me:
+
+(1) Check if there are any null values in the dataset;  
+   Output Filename: ""null_values_report.csv""  
+
+(2) Describe the source data;  
+   Output Filename: ""data_description.pdf""  
+
+(3) Fill in missing values (consider using mean, median, or mode for filling);  
+   Input Filename: ""titanic_data.csv""  
+   Output Filename: ""filled_data.csv""  
+
+(4) Delete unnecessary fields, such as 'Cabin', 'PassengerId', 'Ticket', etc.;  
+   Input Filename: ""filled_data.csv""
+   Output Filename: ""cleaned_data.csv""  
+
+(5) Build features, such as family_size, single status, and title;  
+   Input Filename: ""cleaned_data.csv""  
+   Output Filename: ""feature_engineered_data.csv""  
+
+(6) Discretize age and fare information;  
+   Input Filename: ""feature_engineered_data.csv""  
+   Output Filename: ""discretized_data.csv""  
+
+(7) Other data preprocessing (design as needed);  
+   Input Filename: ""discretized_data.csv""  
+   Output Filename: ""final_preprocessed_data.csv""  
+
+Please provide me with executable code.",2=open source data
+45,"(1) Use TF-IDF to find the keywords in two articles. Please input the articles from ""article1.txt"" and ""article2.txt"". The output should be saved as ""keywords.csv"" containing two columns: ""Article"" and ""Keyword"", listing the keywords extracted from each article.
+
+(2) Select 20 keywords from each article, combine them into one set with position information, and calculate the term frequency for the words in this set. Output the results in ""term_frequencies.csv"" with columns: ""Keyword"", ""Article1_Term_Frequency"", ""Article2_Term_Frequency"", and ""Position"".
+
+(3) Generate the term frequency vectors for each of the two articles. The output should be saved in ""term_frequency_vectors.csv"" with rows representing the keywords and columns for ""Article1_Vector"" and ""Article2_Vector"".
+
+(4) Calculate the cosine similarity of the two vectors. Present the results in a table format and save it as ""cosine_similarity.csv"" containing columns: ""Similarity_Score"", ""Description"" (with a brief note on similarity interpretation).","cossim,consistency","(1) Use TF-IDF to find the keywords in two articles;\n\n
+ \n\n(2) Select several keywords from each article (for example, 20), combine them into one set with position information, and calculate the term frequency of each article for the words in this set (weights can also be introduced);\n\n
+ \n\n(3) Generate the term frequency vectors for each of the two articles;\n\n
+ \n\n(4) Calculate the cosine similarity of the two vectors, the higher the value, the more similar they are (compare in a table).""",Y,"(1) Use TF-IDF to find the keywords in two articles. Please input the articles from ""article1.txt"" and ""article2.txt"". The output should be saved as ""keywords.csv"" containing two columns: ""Article"" and ""Keyword"", listing the keywords extracted from each article.
+
+(2) Select 20 keywords from each article, combine them into one set with position information, and calculate the term frequency for the words in this set. Output the results in ""term_frequencies.csv"" with columns: ""Keyword"", ""Article1_Term_Frequency"", ""Article2_Term_Frequency"", and ""Position"".
+
+(3) Generate the term frequency vectors for each of the two articles. The output should be saved in ""term_frequency_vectors.csv"" with rows representing the keywords and columns for ""Article1_Vector"" and ""Article2_Vector"".
+
+(4) Calculate the cosine similarity of the two vectors. Present the results in a table format and save it as ""cosine_similarity.csv"" containing columns: ""Similarity_Score"", ""Description"" (with a brief note on similarity interpretation).",2=open source data
+46,"Using the dataset of house prices and economic indicators provided below, please complete the following subtasks. Each subtask should generate an output file for evaluation, with specific input files where applicable.
+
+Dataset:
+```
+Year, M2 Year-on-Year Growth, Land Supply Increases, Net Inflow of Population, House Price Rise
+2014, 1, 0, 1, 0
+2015, 1, 0, 1, 1
+2016, 1, 0, 1, 1
+2017, 0, 1, 0, 0
+2018, 0, 1, 0, 0
+```
+
+Subtasks:
+1. **Data Preparation**: Clean and preprocess the dataset to handle any missing values or incorrect data types.  
+   **Input**: `data.csv` (dataset provided above)  
+   **Output**: `cleaned_data.csv` 
+
+2. **Gaussian Naive Bayes Training**: Train a Gaussian Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
+   **Input**: `cleaned_data.csv`  
+   **Output**: `gaussian_model_accuracy.csv` (contains accuracy metrics)
+
+3. **Multinomial Naive Bayes Training**: Train a Multinomial Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
+   **Input**: `cleaned_data.csv`  
+   **Output**: `multinomial_model_accuracy.csv` (contains accuracy metrics)
+
+4. **Comparison of Models**: Generate a comparative analysis of the accuracy of both models in a visual format.  
+   **Input**: `gaussian_model_accuracy.csv`, `multinomial_model_accuracy.csv`  
+   **Output**: `model_comparison.png` 
+
+Please ensure that the outputs contain necessary details for further evaluation.",acc,"Year M2 Year-on-Year Growth Exceeds 10% Land Supply Increases by More Than 10% Is There a Net Inflow of Population Does House Price Significantly Rise in the Following Year\n2014 1 0 1 0\n2015 1 0 1 1\n2016 1 0 1 1\n2017 0 1 0 0\n2018 0 1 0 0\nUsing the dataset of house prices and economic indicators in the table, try to train using Gaussian Naive Bayes and Multinomial Naive Bayes, and observe the differences in model accuracy.",N,"Using the dataset of house prices and economic indicators provided below, please complete the following subtasks. Each subtask should generate an output file for evaluation, with specific input files where applicable.
+
+Dataset: `data.csv`
+
+Subtasks:
+
+1. Gaussian Naive Bayes Training: Train a Gaussian Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
+   Input: `data.csv`  
+   Output: `gaussian_model_accuracy.csv` (contains accuracy metrics)
+
+2. Multinomial Naive Bayes Training: Train a Multinomial Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
+   Input: `data.csv`  
+   Output: `multinomial_model_accuracy.csv` (contains accuracy metrics)
+
+3. Comparison of Models: Generate a comparative analysis of the accuracy of both models in a visual format.  
+   Input: `gaussian_model_accuracy.csv`, `multinomial_model_accuracy.csv`  
+   Output: `model_comparison.png` 
+
+Please ensure that the outputs contain necessary details for further evaluation.",3=human written data
+47,"Read the dataset (input file: ""Fish.csv""). Encode the dataset to divide it into training and test sets. From the dataset's four categories of Bream, Roach, Parkki, and Perch, randomly select 2 samples from each category for the test set. The remaining samples will be used as the training set. Output the number of samples in the training and test sets in a CSV file named ""sample_counts.csv"".
+
+Next, implement the KNN algorithm with K values of 1, 5, 15, and 100 to classify all samples in the test set. Output the classification results of the test samples to a CSV file named ""classification_results.csv"".",acc,"Read the dataset (the Fish.csv file in Learning Pass - Materials). Then encode to divide the dataset into training and test sets. From the dataset's four categories of Bream, Roach, Parkki, and Perch, randomly select 2 samples from each category for the test set. The remaining samples will be used as the training set, and output the number of samples in the training and test sets. Finally, encode the KNN algorithm (with K values of 1, 5, 15, 100) to classify all samples in the test set and output the classification results of the test samples.",Y,"Read the dataset (input file: ""Fish.csv""). Encode the dataset to divide it into training and test sets. From the dataset's four categories of Bream, Roach, Parkki, and Perch, randomly select 2 samples from each category for the test set. The remaining samples will be used as the training set. Output the number of samples in the training and test sets in a CSV file named ""sample_counts.csv"".
+
+Next, implement the KNN algorithm with K values of 1, 5, 15, and 100 to classify all samples in the test set. Output the classification results of the test samples to a CSV file named ""classification_results.csv"".",2=open source data
+48,"**Description:** It is recommended to use open-source toolkits, such as scikit-learn, which has an implementation of the Naive Bayes function for the Naive Bayes Classifier.
+
+**Dataset:** 
+- Input files:  
+  - ""Bayesian_Dataset_train.csv""  
+  - ""Bayesian_Dataset_test.csv""
+
+**Data Description:** The column names are ""Age, Occupation, Family Income, Education, Marital Status, Job Type, Family Size, Ethnicity, Gender, Workplace"". The last column is the label, indicating whether the income is greater than 50k (>50K).
+
+**Task Description:** Use the Naïve Bayesian method to predict whether a person's income is higher than 50K annually.
+
+**Subtasks and Requirements:**
+
+1. **Data Preprocessing**  
+   - **Input:** ""Bayesian_Dataset_train.csv""  
+   - **Output:** ""preprocessed_data.csv"" (CSV format)  
+   - **Details:** Clean and prepare the training dataset for modeling.
+
+2. **Model Training**  
+   - **Input:** ""preprocessed_data.csv""  
+   - **Output:** ""naive_bayes_model.pkl"" (Pickle format)  
+   - **Details:** Train the Naïve Bayes Classifier on the training dataset.
+
+3. **Model Evaluation**  
+   - **Input:** ""naive_bayes_model.pkl"", ""Bayesian_Dataset_test.csv""  
+   - **Output:** ""evaluation_results.csv"" (CSV format)  
+   - **Details:** Evaluate the model using cross-validation and leave-one-out methods, and compute statistical results, including Accuracy, Precision, Recall, F1 Score, and ROC AUC.
+
+4. **Parameter Exploration (Optional)**  
+   - **Input:** ""preprocessed_data.csv""  
+   - **Output:** ""parameter_exploration_results.pdf"" (PDF format)  
+   - **Details:** Explore the impact of different parameters on the results and present findings in a report format.","acc,precision,recall,f1,ROC","Description: It is recommended to use open-source toolkits, such as scikit-learn, which has an implementation of the Naive Bayes function for the Naive Bayes Classifier.
+ Dataset: Bayesian_Dataset_train.csv, Bayesian_Dataset_test.csv.
+ Data Description: The column names are ""Age, Occupation, Family Income, Education, Marital Status, Job Type, Family Size, Ethnicity, Gender, Workplace"". The last column is the label, indicating whether the income is greater than 50k (>50K).
+ Task Description: Use the Naïve Bayesian method to predict whether a person's income is higher than 50K annually.
+ Required Output: Employ different evaluation methods, including at least two (such as cross-validation and leave-one-out, etc.), and provide statistical results including Accuracy, Precision, Recall, F1 Score, ROC.
+ Optional: Explore the impact of different parameters on the results.",N,"Description: It is recommended to use open-source toolkits, such as scikit-learn, which has an implementation of the Naive Bayes function for the Naive Bayes Classifier.
+
+Dataset: 
+- Input files:  
+  - ""Bayesian_Dataset_train.csv""  
+  - ""Bayesian_Dataset_test.csv""
+
+Data Description: The column names are ""Age, Occupation, Family Income, Education, Marital Status, Job Type, Family Size, Ethnicity, Gender, Workplace"". The last column is the label, indicating whether the income is greater than 50k (>50K).
+
+Task Description: Use the Naïve Bayesian method to predict whether a person's income is higher than 50K annually.
+
+Subtasks and Requirements:
+
+1. Data Preprocessing  
+   - Input: ""Bayesian_Dataset_train.csv""  
+   - Output: ""preprocessed_data.csv"" (CSV format)  
+   - Details: Clean and prepare the training dataset for modeling.
+
+2. Model Training  
+   - Input: ""preprocessed_data.csv""  
+   - Output: ""naive_bayes_model.pkl"" (Pickle format)  
+   - Details: Train the Naïve Bayes Classifier on the training dataset.
+
+3. Model Evaluation  
+   - Input: ""naive_bayes_model.pkl"", ""Bayesian_Dataset_test.csv""  
+   - Output: ""evaluation_results.csv"" (CSV format)  
+   - Details: Evaluate the model using cross-validation and leave-one-out methods, and compute statistical results, including Accuracy, Precision, Recall, F1 Score, and ROC AUC.",3=human written data

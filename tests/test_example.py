@@ -1,6 +1,8 @@
 import unittest
-from src.schemas.dag import Node, LineairzedDAG
-from src.utils import load_yaml, list_to_dict_by_task
+
+from src.schemas.dag import LineairzedDAG
+from src.utils import list_to_dict_by_task, load_yaml
+
 
 async def run_di(prompt: str):
     test_dag = LineairzedDAG(prompt)
@@ -25,9 +27,9 @@ class TestExample(unittest.TestCase):
         self.assertLess(distance, 10)
 
 def run_tests():
-    suite = unittest.TestLoader().loadTestsFromTestCase(TestMathUtils)
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestExample)
     runner = unittest.TextTestRunner()
-    result = runner.run(suite)
+    runner.run(suite)
     return TestExample.passed_tests_counter
 
 if __name__ == "__main__":

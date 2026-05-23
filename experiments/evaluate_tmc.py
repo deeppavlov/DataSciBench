@@ -1,12 +1,13 @@
-import os
 import argparse
-from src.utils import load_yaml, list_to_dict_by_task
-from utils.test_code import *
-from utils.json_operator import *
-from utils.used_libs import *
-from utils.cr_for_bcb import *
-import shutil
 import concurrent.futures
+import os
+import shutil
+
+from src.utils import load_yaml
+from utils.cr_for_bcb import *
+from utils.json_operator import *
+from utils.test_code import *
+from utils.used_libs import *
 
 
 def parse_arguments():

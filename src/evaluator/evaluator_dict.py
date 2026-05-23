@@ -1,7 +1,6 @@
-from ..schemas.schemas import Metric, Evaluator
 from .cr_evaluator import CREvaluator
-from .within_range_evaluator import WithinRangeEvaluator
 from .larger_than_evaluator import LargerthanEvaluator
+from .within_range_evaluator import WithinRangeEvaluator
 
 TM_2_EVALUATOR = {
     "CR": CREvaluator,

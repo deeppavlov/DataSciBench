@@ -1,6 +1,6 @@
 def evaluate_cr(output_tuple, gt_tuple: tuple):
     # empty
-    if output_tuple is None or ((isinstance(output_tuple, tuple) or isinstance(output_tuple, list)) and not output_tuple):
+    if output_tuple is None or ((isinstance(output_tuple, (tuple, list))) and not output_tuple):
         return 0
 
     else:

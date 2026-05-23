@@ -1,0 +1,91 @@
+{
+    "nodes": [
+        "Vehicle_1",
+        "Vehicle_2",
+        "Vehicle_3",
+        "Vehicle_4",
+        "Vehicle_5"
+    ],
+    "edges": [
+        {
+            "from": "Vehicle_1",
+            "to": "Vehicle_2"
+        },
+        {
+            "from": "Vehicle_1",
+            "to": "Vehicle_3"
+        },
+        {
+            "from": "Vehicle_1",
+            "to": "Vehicle_4"
+        },
+        {
+            "from": "Vehicle_1",
+            "to": "Vehicle_5"
+        },
+        {
+            "from": "Vehicle_2",
+            "to": "Vehicle_1"
+        },
+        {
+            "from": "Vehicle_2",
+            "to": "Vehicle_3"
+        },
+        {
+            "from": "Vehicle_2",
+            "to": "Vehicle_4"
+        },
+        {
+            "from": "Vehicle_2",
+            "to": "Vehicle_5"
+        },
+        {
+            "from": "Vehicle_3",
+            "to": "Vehicle_1"
+        },
+        {
+            "from": "Vehicle_3",
+            "to": "Vehicle_2"
+        },
+        {
+            "from": "Vehicle_3",
+            "to": "Vehicle_4"
+        },
+        {
+            "from": "Vehicle_3",
+            "to": "Vehicle_5"
+        },
+        {
+            "from": "Vehicle_4",
+            "to": "Vehicle_1"
+        },
+        {
+            "from": "Vehicle_4",
+            "to": "Vehicle_2"
+        },
+        {
+            "from": "Vehicle_4",
+            "to": "Vehicle_3"
+        },
+        {
+            "from": "Vehicle_4",
+            "to": "Vehicle_5"
+        },
+        {
+            "from": "Vehicle_5",
+            "to": "Vehicle_1"
+        },
+        {
+            "from": "Vehicle_5",
+            "to": "Vehicle_2"
+        },
+        {
+            "from": "Vehicle_5",
+            "to": "Vehicle_3"
+        },
+        {
+            "from": "Vehicle_5",
+            "to": "Vehicle_4"
+        }
+    ]
+}

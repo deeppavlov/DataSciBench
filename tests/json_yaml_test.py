@@ -1,5 +1,7 @@
 import unittest
+
 from src.utils import json_data_to_yaml
+
 
 class TestUtils(unittest.TestCase):
     def test_json_to_yaml(self):

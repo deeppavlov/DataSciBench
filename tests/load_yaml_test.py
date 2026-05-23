@@ -1,5 +1,7 @@
-from src.utils import load_yaml, list_to_dict_by_task, create_function_from_string
 import unittest
+
+from src.utils import create_function_from_string, list_to_dict_by_task, load_yaml
+
 
 class TestUtils(unittest.TestCase):
     

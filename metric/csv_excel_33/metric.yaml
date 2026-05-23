@@ -5,7 +5,7 @@
         import pandas as pd
         from sklearn.cluster import AgglomerativeClustering
         
-        output = pd.read_csv("1combine_land.csv")
+        output = pd.read_csv("combine_land.csv")
         clustering_data = output[(output['dt2IC'] == 1) & (output['dt2CIdbz'] == 1) & (output['date_first'] < 20230810000000)]
         
         best_silhouette = -1
@@ -43,12 +43,12 @@
     Silhouette Score for Clustering
   "task_name": |-
     Data mining
-  ground_truth: 1combine_land.csv
+  ground_truth: combine_land.csv
 - "code": |-
     def keep_column_accuracy(ground_truth):
         import pandas as pd
         
-        output = pd.read_csv("1combine_land.csv")
+        output = pd.read_csv("combine_land.csv")
         gt_output = pd.read_csv(ground_truth)
         
         # Assuming ground_truth is a correct version of the 'keep' column
@@ -63,7 +63,7 @@
     Keep Column Accuracy
   "task_name": |-
     Data cleaning and preprocessing
-  ground_truth: 1combine_land.csv
+  ground_truth: combine_land.csv
 "prompt": |-
   Task: Clustering Negative Samples Classification
 
@@ -80,7 +80,7 @@
        - For rows where `dt2IC=1`, `dt2CIdbz=1`, and `date_first < 20230810000000`, perform Agglomerative clustering, calculating the number of clusters from 2 to 10.
        - Select the number of clusters corresponding to the largest Silhouette Index (SI) coefficient as the final number of clusters.
        - Assign the cluster labels to the `clus` column for the respective rows and leave the rest empty.
-     - Output Format: Append results to `1combine_land.csv`.
+     - Output Format: Append results to `combine_land.csv`.
    
   2. Processing for 'keep' Column:
      - Operations:
@@ -89,8 +89,8 @@
        - Assign a value of 1 to all clusters with a count less than or equal to the median.
        - Randomly select a number of rows from clusters with a count higher than the median equivalent to the median itself and assign them a value of 1.
        - All other rows should be assigned a value of 0.
-       - Maintain the original sorting order of the data in `1combine_land.csv`.
-     - Output Format: The updated `1combine_land.csv` will reflect these changes and contain the `keep` column alongside the `clus` column. 
+       - Maintain the original sorting order of the data in `combine_land.csv`.
+     - Output Format: The updated `combine_land.csv` will reflect these changes and contain the `keep` column alongside the `clus` column. 
 
   Final Outputs:  
   - The completed `combine_land.csv` will contain the processed data with `clus` and `keep` columns, facilitating further evaluation of the retained negative samples and positive samples from the training, validation, and test datasets.

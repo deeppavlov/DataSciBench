@@ -1,6 +1,8 @@
+from typing import Any
+
 from src.evaluator.generic_evaluator import GenericEvaluator, GenericMetric, Rule
 from src.schemas.schemas import TestFunction
-from typing import Callable, Any
+
 
 class WithinRangeMetric(GenericMetric):
     def __init__(self, f: TestFunction, ground_truth: Any):

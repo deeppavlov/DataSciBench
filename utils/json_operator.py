@@ -6,7 +6,7 @@ def read_json(source):
     json_list = []
     if not os.path.exists(source):
         return json_list
-    with open(source, 'r', encoding='utf-8') as f:
+    with open(source, encoding='utf-8') as f:
         for line in f:
             json_list.append(json.loads(line))
     f.close()

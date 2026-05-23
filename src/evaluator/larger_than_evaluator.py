@@ -1,5 +1,7 @@
-from src.schemas.schemas import Metric, Evaluator, TestFunction, Rule
-from typing import Callable, Any
+from typing import Any
+
+from src.schemas.schemas import Evaluator, Metric, Rule, TestFunction
+
 
 class LargerthanMetric(Metric):
     def __init__(self, f: TestFunction, ground_truth: Any):

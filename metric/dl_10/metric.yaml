@@ -40,7 +40,7 @@
   3. **Model Building**: Build a machine learning model to predict the success rate of study abroad applications.  
   **Output Filename**: ""success_rate_model.pkl""  
 
-  4. **Model Evaluation**: Evaluate the performance of the model and output the prediction results, the column name is "predictions".
+  4. **Model Evaluation**: Evaluate the performance of the model and output the evaluation metrics.
   **Output Filename**: ""model_evaluation_results.csv""  
 
   Please provide the complete code implementation and ensure that the code structure is clear and the comments are comprehensive for understanding and evaluation."

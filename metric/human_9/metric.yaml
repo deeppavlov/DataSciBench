@@ -93,12 +93,12 @@
   You are required to analyze and visualize the "Heart Disease UCI" dataset from the UCI Machine Learning Repository (https://archive.ics.uci.edu/ml/datasets/heart+disease). Please follow the subtasks outlined below and ensure to use the specified input and output formats for each task:
 
   1. **Load the dataset**  
-     - **Input file**: `heart_disease.csv`  
+     - **Input file**: `heart+disease/processed.cleveland.data`  
      - **Output file**: `dataset_loaded.csv` (contains the dataset loaded into a DataFrame)
 
   2. **Data Cleaning**  
      - Handle missing values, encode categorical variables, and remove duplicates.  
-     - **Input file**: `heart_disease.csv`  
+     - **Input file**: `dataset_loaded.csv`  
      - **Output file**: `cleaned_data.csv` (cleaned dataset ready for analysis)
 
   3. **Exploratory Data Analysis (EDA)**  

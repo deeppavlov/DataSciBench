@@ -24,29 +24,17 @@
     Data visualization
   ground_truth: line_chart.png
 - "code": |-
-    def scatter_chart_point_properties(ground_truth):
-        import pandas as pd
-        import matplotlib.pyplot as plt
-        
-        # Load the ground truth data
-        truth_data = pd.read_csv(ground_truth)
-        output_data = pd.read_csv("scatter_chart_data.csv")  # assume the points were saved in a similar format
-        
-        # Verify colors, sizes, and transparency
-        for index, row in output_data.iterrows():
-            expected_row = truth_data.iloc[index]
-            if not (expected_row['Size'] == row['Size'] and 
-                    expected_row['Color'] == row['Color'] and 
-                    expected_row['Transparency'] == row['Transparency']):
-                return False
-                
-        return True
+    def vlm_judge(ground_truth):
+        from src.vlm_utils import vlm_vis_quality
+        score = vlm_vis_quality(ground_truth, "scatter_chart.png")
+        return float(score)
   "function": |-
     Visualization Quality
   "metric": |-
     Scatter Chart Point Properties
   "task_name": |-
     Data visualization
+  ground_truth: scatter_chart.png
 "prompt": |-
   "Using the dataset provided :
 

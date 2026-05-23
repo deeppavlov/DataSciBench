@@ -81,6 +81,6 @@
      - **Output**: "visualizations.pdf" (This file should include all plots and graphs created during the analysis)
 
   5. **Correlation Analysis**:
-     - Specifically investigate the relationship between bill length and flipper length, including a scatter plot with regression line.
+     - Specifically investigate the relationship between culmen length and flipper length, including a scatter plot with regression line.
      - **Input**: "cleaned_data.csv"
      - **Output**: "correlation_analysis.png" (This file should present the scatter plot displaying the correlation between the specified numerical variables)

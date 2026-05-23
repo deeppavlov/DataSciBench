@@ -1,14 +1,14 @@
-import os
 import argparse
-import json
-from src.utils import change_dir
-from src.utils import load_yaml, list_to_dict_by_task
+import csv
+import os
+from dataclasses import dataclass
+
+from src.evaluator.cr_evaluator import CREvaluator
+
 # from src.logs import create_logger, get_model_name
 from src.schemas.dag import LinearizedDAG
-from src.evaluator.cr_evaluator import CREvaluator
-from dataclasses import dataclass
-from typing import Union
-import csv
+from src.utils import change_dir, list_to_dict_by_task, load_yaml
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="For evaluation")
@@ -31,7 +31,7 @@ class FinalResultOutput:
     metric_name: str
     function_name: str
     result_value: str
-    result_cr: Union[int, float]
+    result_cr: int | float
     result_type: str = "single task (bool)"
 
     def to_list(self):
@@ -39,17 +39,14 @@ class FinalResultOutput:
 
 
 def get_result_output_dir(model_name):
-    return os.path.join("evaluation_results", model_name+"_results.csv")
+    # Fix: Put results directly in evaluation_results/results so calculate_final_metric.py finds it
+    return os.path.join("evaluation_results", "results", model_name+"_results.csv")
 
 
 def main(requirement: str, plan: list, args):
     counter = 0
     total_counter = 0
     wrong_counter = 0
-    silicon = [
-        "Qwen/Qwen2.5-Coder-7B-Instruct",
-        "01-ai/Yi-1.5-9B-Chat-16K", "google/gemma-2-9b-it", "meta-llama/Meta-Llama-3-8B-Instruct", "meta-llama/Meta-Llama-3.1-8B-Instruct", "Qwen/Qwen2-1.5B-Instruct", "Qwen/Qwen2-7B-Instruct", "Qwen/Qwen2.5-7B-Instruct", "THUDM/glm-4-9b-chat"
-    ]
     model_name = args.model_id.split("/")[-1]
     csv_output_file = get_result_output_dir(model_name)
     print("CSV output file: ", csv_output_file)
@@ -87,8 +84,6 @@ def main(requirement: str, plan: list, args):
         # output_name = f"{model_name}_outputs.jsonl"
         outputs = []
         # for loading the outputs
-        true = True
-        false = False
         # print("Data path: ", os.listdir(data_path))
         for model_run_id in os.listdir(data_path):
             if args.model_id is not None and not model_run_id.startswith(args.model_id.split("/")[-1]):
@@ -108,14 +103,7 @@ def main(requirement: str, plan: list, args):
                 output_dict['model_name'] = model_name
                 output_dict['run_id'] = run_id
                 outputs.append(output_dict)
-            elif os.path.exists(os.path.join(data_path, model_run_id, "logs.txt")) and os.path.getsize(os.path.join(data_path, model_run_id, "logs.txt")) != 0:
-                output_dict = {}
-                output_dict['dir'] = os.path.join(data_path, model_run_id)
-                output_dict['model_name'] = model_name
-                output_dict['run_id'] = run_id
-                outputs.append(output_dict)
-                counter += 1
-            elif args.debug_mode or model_run_id == 'gt':
+            elif os.path.exists(os.path.join(data_path, model_run_id, "logs.txt")) and os.path.getsize(os.path.join(data_path, model_run_id, "logs.txt")) != 0 or args.debug_mode or model_run_id == 'gt':
                 output_dict = {}
                 output_dict['dir'] = os.path.join(data_path, model_run_id)
                 output_dict['model_name'] = model_name
@@ -126,7 +114,7 @@ def main(requirement: str, plan: list, args):
                 print(f"Model run {model_run_id} is invalid! Skipped.")
         
         # save the results per model run and per task to a single file
-        for idx, output in enumerate(outputs):
+        for _idx, output in enumerate(outputs):
             gt_path = os.path.abspath(data_path)
             # if args.model_id in silicon:
             #     gt_path = os.path.join(gt_path, "../gt")

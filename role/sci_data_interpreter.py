@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
 """
 Modified DI role for DataSciBench
 @Modified by: 2024/8/6. Added a plan_list to capture the completed/failed plans.
@@ -16,14 +15,12 @@ from metagpt.actions.di.execute_nb_code import ExecuteNbCode
 from metagpt.actions.di.write_analysis_code import CheckData, WriteAnalysisCode
 from metagpt.logs import logger
 from metagpt.prompts.di.write_analysis_code import DATA_INFO
-from metagpt.roles import Role
-from metagpt.schema import Message, Task, TaskResult, Plan
+from metagpt.roles.role import Role
+from metagpt.schema import Message, Plan, Task, TaskResult
 from metagpt.strategy.task_type import TaskType
 from metagpt.tools.tool_recommend import BM25ToolRecommender, ToolRecommender
 from metagpt.utils.common import CodeParser
-
 from metagpt.utils.cost_manager import Costs
-from metagpt.config2 import Config
 
 REACT_THINK_PROMPT = """
 # User Requirement
@@ -60,6 +57,7 @@ class SciDataInterpreter(Role):
     error_counter_list: list[int] = [] # a list of error counter for each plan
     hard_retry: bool = False
     max_retry: int = 3
+    _task_attempts: dict[str, int] = {}
     # config: Config
 
     # def __init__(self, config):
@@ -89,7 +87,7 @@ class SciDataInterpreter(Role):
         return json_objects
 
     @model_validator(mode="after")
-    def set_plan_and_tool(self) -> "Interpreter":
+    def set_plan_and_tool(self) -> SciDataInterpreter:
         self._set_react_mode(react_mode=self.react_mode, max_react_loop=self.max_react_loop, auto_run=self.auto_run)
         self.use_plan = (
             self.react_mode == "plan_and_act"
@@ -141,6 +139,17 @@ class SciDataInterpreter(Role):
 
     async def _act_on_task(self, current_task: Task) -> TaskResult:
         """Useful in 'plan_and_act' mode. Wrap the output in a TaskResult for review and confirmation."""
+
+        task_id = current_task.task_id
+        if task_id not in self._task_attempts:
+            self._task_attempts[task_id] = 0
+            
+        self._task_attempts[task_id] += 1
+        
+        if self._task_attempts[task_id] > 5:
+            logger.error(f"Task {task_id} has exceeded the maximum limit of 5 attempts. Raising RuntimeError to abort early.")
+            raise RuntimeError(f"Maximum task attempts (5) exceeded for task_id: {task_id}")
+
         code, result, is_success = await self._write_and_exec_code(max_retry=self.max_retry)
         task_result = TaskResult(code=code, result=result, is_success=is_success)
         self.update_react_results_for_eval(task_result)
@@ -174,6 +183,12 @@ class SciDataInterpreter(Role):
             self.working_memory.add(Message(content=code, role="assistant", cause_by=cause_by))
 
             ### execute code ###
+            from pathlib import Path
+            tools_file = Path(__file__).parent.parent / "code_mode" / "_mcp_tools.py"
+            if tools_file.exists():
+                init_code = f"import sys\nif '{tools_file.parent}' not in sys.path: sys.path.append('{tools_file.parent}')\nfrom _mcp_tools import *\n"
+                code = init_code + code
+
             result, success = await self.execute_code.run(code)
 
             self.working_memory.add(Message(content=result, role="user", cause_by=ExecuteNbCode))
@@ -228,7 +243,9 @@ class SciDataInterpreter(Role):
         ):
             return
         logger.info("Check updated data")
-        code = await CheckData().run(self.planner.plan)
+        check_data_action = CheckData(context=self.context)
+        check_data_action.set_llm(self.llm)
+        code = await check_data_action.run(self.planner.plan)
         if not code.strip():
             return
         result, success = await self.execute_code.run(code)

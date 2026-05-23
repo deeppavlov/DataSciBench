@@ -2,23 +2,27 @@
 # ### Pass@k
 
 # %%
-import os
 import csv
+import os
+
 import pandas as pd
 
-base_path = "/path/to/DataSciBench/evaluation_results/"
+base_path = "evaluation_results/results/"
 model_list = [
-                'o1-mini', 
-                "gpt-4o-2024-05-13", 'gpt-4o-mini','gpt-4-turbo', 'claude-3-5-sonnet-20240620', "glm-4-flash", #"claude-3-opus-20240229", 
-                "meta-llama/Meta-Llama-3.1-8B-Instruct", "meta-llama/Meta-Llama-3-8B-Instruct", 
-                "google/gemma-2-9b-it", "THUDM/glm-4-9b-chat", "Qwen/Qwen2.5-7B-Instruct", 
-                "Qwen/Qwen2-7B-Instruct", "Qwen/Qwen2-1.5B-Instruct", "01-ai/Yi-1.5-9B-Chat-16K",
-                "CodeLlama-34b-Instruct-hf", "CodeLlama-13b-Instruct-hf", "CodeLlama-7b-Instruct-hf", "starcoder2-15b", 
-                "starcoder2-7b", "starcoder2-3b", 
-                "deepseek-coder-33b-instruct", "deepseek-coder-6.7b-instruct",  "deepseek-coder-1.3b-instruct",  
-                "Qwen/Qwen2.5-Coder-7B-Instruct", 
-                "Qwen/Qwen2.5-Coder-1.5B-Instruct",
-                "Meta-Llama-3.1-70B-Instruct", 
+                # 'o1-mini', 
+                # "gpt-4o-2024-05-13", 'gpt-4o-mini','gpt-4-turbo', 'claude-3-5-sonnet-20240620', "glm-4-flash", #"claude-3-opus-20240229", 
+                # "meta-llama/Meta-Llama-3.1-8B-Instruct", "meta-llama/Meta-Llama-3-8B-Instruct", 
+                # "google/gemma-2-9b-it", "THUDM/glm-4-9b-chat", "Qwen/Qwen2.5-7B-Instruct", 
+                # "Qwen/Qwen2-7B-Instruct", "Qwen/Qwen2-1.5B-Instruct", "01-ai/Yi-1.5-9B-Chat-16K",
+                # "CodeLlama-34b-Instruct-hf", "CodeLlama-13b-Instruct-hf", "CodeLlama-7b-Instruct-hf", "starcoder2-15b", 
+                # "starcoder2-7b", "starcoder2-3b", 
+                # "deepseek-coder-33b-instruct", "deepseek-coder-6.7b-instruct",  "deepseek-coder-1.3b-instruct",  
+                # "Qwen/Qwen2.5-Coder-7B-Instruct", 
+                # "Qwen/Qwen2.5-Coder-1.5B-Instruct",
+                # "Meta-Llama-3.1-70B-Instruct", 
+                # "gemma-3-27b-it",
+                "Qwen3-30B-A3B",
+                "Qwen3.5-27B"
                 ]
 # write the header to the final csv file
 df = pd.DataFrame({
@@ -27,6 +31,7 @@ df = pd.DataFrame({
     # "Pass@1 (Fail)": ["Pass@1 (Fail)"],
     "Average CR": ["Average CR"],
     "VLM": ["VLM"],
+    "LLM": ["LLM"],
     "F1": ["F1"],
     "F2": ["F2"],
     "F3": ["F3"],
@@ -65,6 +70,8 @@ F5_NUM_FUNC = 19
 
 F_NUM_LIST = [F1_NUM_FUNC, F2_NUM_FUNC, F3_NUM_FUNC, F4_NUM_FUNC, F5_NUM_FUNC]
 
+MAX_RUNS = 3
+
 for model in model_list:
     model = model.split("/")[-1]
     if not os.path.exists(base_path + model + "_results.csv"):
@@ -81,7 +88,7 @@ for model in model_list:
 
     # %%
     success_dict = {}
-    for index, row in df_crs.iterrows():
+    for _index, row in df_crs.iterrows():
         if row['data_name'] not in success_dict:
             success_dict[row['data_name']] = 0
         if row['result_cr'] == 1:
@@ -95,7 +102,7 @@ for model in model_list:
     total_counter = 0
     for key in success_dict:
         total_counter += 1
-        success_counter += success_dict[key] / 10
+        success_counter += success_dict[key] / MAX_RUNS
         # if success_dict[key] == "Success":
         #     success_counter += 1
         # if success_dict[key] == "Fail":
@@ -114,7 +121,7 @@ for model in model_list:
     for key in success_dict:
         if key.startswith("human"):
             total_counter += 1
-            success_counter += success_dict[key] / 10
+            success_counter += success_dict[key] / MAX_RUNS
             # if success_dict[key] == "Success":
             #     success_counter += 1
 
@@ -128,7 +135,7 @@ for model in model_list:
     for key in success_dict:
         if key.startswith("csv"):
             total_counter += 1
-            success_counter += success_dict[key] / 10
+            success_counter += success_dict[key] / MAX_RUNS
             # if success_dict[key] == "Success":
             #     success_counter += 1
 
@@ -142,8 +149,9 @@ for model in model_list:
     for key in success_dict:
         if key.startswith("dl"):
             total_counter += 1
-            if success_dict[key] == "Success":
-                success_counter += 1
+            success_counter += success_dict[key] / MAX_RUNS
+            # if success_dict[key] == "Success":
+            #     success_counter += 1
 
     dl_pass = success_counter/DL_DATA_NUM * 100
     print("Pass@1 for data_name starting with 'dl': ", dl_pass)
@@ -151,36 +159,36 @@ for model in model_list:
     # %%
     # calculate average completion rate for df_crs
     total_cr = 0
-    for index, row in df_crs.iterrows():
+    for _index, row in df_crs.iterrows():
         total_cr += row['result_cr']
 
-    avg_cr = total_cr/(TOTAL_NUM_FUNC * 10) * 100
+    avg_cr = total_cr/(TOTAL_NUM_FUNC * MAX_RUNS) * 100
     print("Average completion rate: ", avg_cr)
 
     # calculate average completion rate for human, csv and dl
     total_cr = 0
-    for index, row in df_crs.iterrows():
+    for _index, row in df_crs.iterrows():
         if row['data_name'].startswith("human"):
             total_cr += row['result_cr']
 
-    avg_human_cr = total_cr/(HUMAN_NUM_FUNC * 10) * 100
-    print("Average completion rate for data_name starting with 'human': ", total_cr/(HUMAN_NUM_FUNC * 10) * 100)
+    avg_human_cr = total_cr/(HUMAN_NUM_FUNC * MAX_RUNS) * 100
+    print("Average completion rate for data_name starting with 'human': ", total_cr/(HUMAN_NUM_FUNC * MAX_RUNS) * 100)
 
     total_cr = 0
-    for index, row in df_crs.iterrows():
+    for _index, row in df_crs.iterrows():
         if row['data_name'].startswith("csv"):
             total_cr += row['result_cr']
 
-    avg_csv_cr = total_cr/(CSV_NUM_FUNC * 10) * 100
-    print("Average completion rate for data_name starting with 'csv': ", total_cr/(CSV_NUM_FUNC * 10) * 100)
+    avg_csv_cr = total_cr/(CSV_NUM_FUNC * MAX_RUNS) * 100
+    print("Average completion rate for data_name starting with 'csv': ", total_cr/(CSV_NUM_FUNC * MAX_RUNS) * 100)
 
     total_cr = 0
-    for index, row in df_crs.iterrows():
+    for _index, row in df_crs.iterrows():
         if row['data_name'].startswith("dl"):
             total_cr += row['result_cr']
     
-    avg_dl_cr = total_cr/(DL_NUM_FUNC * 10) * 100
-    print("Average completion rate for data_name starting with 'dl': ", total_cr/(DL_NUM_FUNC * 10) * 100)
+    avg_dl_cr = total_cr/(DL_NUM_FUNC * MAX_RUNS) * 100
+    print("Average completion rate for data_name starting with 'dl': ", total_cr/(DL_NUM_FUNC * MAX_RUNS) * 100)
     # %% [markdown]
     # ## Calcualte CR of Top-k functions
 
@@ -196,34 +204,49 @@ for model in model_list:
     # %%
     # calculate average completion rate for each (funciotn, task) in top_5_functions_dict
     f_list = []
-    for function_dict, TOTAL in zip(top_5_functions_dict, F_NUM_LIST):
+    for function_dict, TOTAL in zip(top_5_functions_dict, F_NUM_LIST, strict=False):
         # print("function_name: ", function_dict['function_name'], "task_name: ", function_dict['task_name'])
         total_cr = 0
-        for index, row in df.iterrows():
+        for _index, row in df.iterrows():
             # print(row['function_name'])
             try:
                 if row['function_name'] == function_dict['function_name'] and row['task_name'] == function_dict['task_name']:
                     total_cr += row['result_cr']
-            except:
+            except Exception:
                 print(row)
         try:
-            f_list.append(total_cr/(TOTAL * 2 * 10) * 100)
-            print("Average completion rate for (", function_dict['function_name'], ", ", function_dict['task_name'], "): ", total_cr/(TOTAL * 2 * 10))
-        except:
+            f_list.append(total_cr/(TOTAL * 2 * MAX_RUNS) * 100)
+            print("Average completion rate for (", function_dict['function_name'], ", ", function_dict['task_name'], "): ", total_cr/(TOTAL * 2 * MAX_RUNS))
+        except Exception:
             f_list.append(0)
             print("Average completion rate for (", function_dict['function_name'], ", ", function_dict['task_name'], "): ", 0)
     print('-'*100)
     # %%
     vlm_list = []
-    for index, row in df.iterrows():
-        if row['result_type'] == "single task (int)":
-            vlm_list.append(int(row['result_value']))
+    llm_list = []
+    for _index, row in df.iterrows():
+        if pd.notna(row['result_type']) and row['result_type'] == "single task (int)":
+            try:
+                val = float(row['result_value'])
+                metric = str(row.get('metric_name', ''))
+                if 'LLM' in metric:
+                    llm_list.append(val)
+                else:
+                    vlm_list.append(val)
+            except ValueError:
+                pass
 
     try:
-        vlm_score = sum(vlm_list)/len(vlm_list)
-    except:
-        vlm_score = 0
+        vlm_score = sum(vlm_list) / len(vlm_list) if len(vlm_list) > 0 else 0.0
+    except Exception:
+        vlm_score = 0.0
     print("VLM: ", vlm_score)
+
+    try:
+        llm_score = sum(llm_list) / len(llm_list) if len(llm_list) > 0 else 0.0
+    except Exception:
+        llm_score = 0.0
+    print("LLM: ", llm_score)
 
     # store all the above metircs to a csv file by model name. All float should be converted to .4f
     df = pd.DataFrame({
@@ -232,6 +255,7 @@ for model in model_list:
         # "Pass@1 (Fail)": [f"{total_fail:.2f}"],
         "Average CR": [f"{avg_cr:.2f}"],
         "VLM": [f"{vlm_score:.2f}"],
+        "LLM": [f"{llm_score:.2f}"],
         "F1": [f"{f_list[0]:.2f}"],
         "F2": [f"{f_list[1]:.2f}"],
         "F3": [f"{f_list[2]:.2f}"],

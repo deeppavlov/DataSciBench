@@ -21,6 +21,7 @@ def get_model_name(config_name="config2.yaml"):
 
 def create_logger(id, sub_idx=None, target_dir=None, config_name=None, split=True):
     # Create the log directory if it doesn't exist
+    os.makedirs("logs", exist_ok=True)
     if split:
         model_name = get_model_name(config_name).split('/')[-1]
     else:
