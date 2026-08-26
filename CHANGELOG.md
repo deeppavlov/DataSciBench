@@ -133,6 +133,21 @@ Results were obtained on the standard DataSciBench set (55 tasks: 25 human, 20 c
 
 ---
 
+## 4a. Dataset Revision 2
+
+All 55 tasks were re-audited after two external reviews. The check set is now a new edition of the benchmark, not a patch: 90 nodes kept their `metric` key while their check code changed, and the total volume of check code grew from 1213 to 2601 non-empty lines. **Numbers from earlier runs are not comparable to this edition**; the pre-revision table is preserved in `evaluation_results/final_results_orig.csv`.
+
+What changed in substance:
+
+- Every `except: return True` is gone, so a crashing check can no longer award full marks.
+- Checks were re-anchored to the task's own input data: 32 nodes now read the input file (was 3), and only 29 nodes read neither input nor ground truth (was 33).
+- Unstated format requirements were dropped, so an honest solution is no longer punished for choosing `OneHotEncoder` over `get_dummies`, `factorize` over `LabelEncoder`, or a different train/test seed.
+- Acceptance thresholds that had leaked into task statements were removed.
+- All 23 image-judge nodes now use task-specific rubrics with at least three substantive criteria out of five; the pass threshold of 3/5 is unchanged.
+- `PyPDF2` was replaced with `pypdf`; the interpreter choice in `scripts/` was unified through `scripts/_python.sh`.
+
+Verification: ground truth and the reference solution both score CR = 1.0 on all 55 tasks with zero node exceptions. A blind forgery reproducing the exact output format but with random content scores 0.43 on average, and **no task lets it reach 1.0**.
+
 ## 5. TODO
 
 - [x] **Clean dataset of errors** — incorrect paths, imports, etc. Ensure each error is a bug of the model being tested, not the benchmark itself

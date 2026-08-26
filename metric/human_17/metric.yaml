@@ -32,10 +32,13 @@
     Data mining
 - "code": |-
     def rule_analysis_completeness(ground_truth):
-        import PyPDF2
+        try:
+            from pypdf import PdfReader
+        except ImportError:
+            from PyPDF2 import PdfReader
         # Check if the PDF for rules analysis has been generated and contains expected content
         with open("rules_analysis.pdf", "rb") as f:
-            reader = PyPDF2.PdfReader(f)
+            reader = PdfReader(f)
             text = ""
             for page in reader.pages:
                 text += page.extract_text()
@@ -47,17 +50,16 @@
   "task_name": |-
     Pattern recognition
 "prompt": |-
-  "datadir = ''
-  You are provided with a dataset located at `datadir` named ""data.csv"". The dataset contains retail transaction data with the following columns:
+  You are provided with a dataset named "data.csv". The dataset contains retail transaction data with the following columns:
 
   - `Member_number`: A unique identifier for each customer.
   - `Date`: The date of the transaction.
   - `itemDescription`: The item purchased in the transaction.
-   
+
   The two records are considered to be in the same transaction if they have the same `Member_number` and `Date`.
 
   Your task is to mine association rules from this dataset using an appropriate algorithm. The output requirements are as follows:
-   
+
   1. **Subtask: Data Preparation**
   - **Input:** ""data.csv""
   - **Output:** Cleaned data file with duplicate transactions removed.

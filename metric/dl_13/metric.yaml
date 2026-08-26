@@ -12,12 +12,22 @@
     Predictive modeling
 - "code": |-
     def training_loss_evaluation(ground_truth):
+        import numpy as np
         import pandas as pd
-        output = pd.read_csv("training_log.csv")
-        losses = output.iloc[:, -1].tolist()
-        gt_output = pd.read_csv(ground_truth)
-        gt_losses = gt_output.iloc[:, -1].tolist()
-        return bool(losses[-1] <= gt_losses[-1]) # Return the final loss value
+        def loss_column(df):
+            named = [c for c in df.columns if "loss" in str(c).lower()]
+            return df[named[0]] if named else df.iloc[:, -1]
+        losses = loss_column(pd.read_csv("training_log.csv")).tolist()
+        gt_losses = loss_column(pd.read_csv(ground_truth)).tolist()
+        x = np.load("../X.npy").astype(float).ravel()
+        y = np.load("../y.npy").astype(float).ravel()
+        slope, intercept = np.polyfit(x, y, 1)
+        best = float(np.mean((slope * x + intercept - y) ** 2))
+        print("final loss:", losses[-1], "reference:", gt_losses[-1], "best fit of the input data:", best)
+        if losses[-1] < 0.99 * best:
+            print("reported loss is below the best possible fit of the input data")
+            return False
+        return bool(losses[-1] <= gt_losses[-1])
   "function": |-
     Data Quality Score
   "metric": |-
@@ -39,7 +49,7 @@
   Implement a linear regression model y = wx + b, where w = 0.8 and b = 0.7. You need to:
 
   1. Build the model using Tensorflow. 
-     - Input: "data.csv" (the training dataset)
+     - Input: "X.npy" and "y.npy" (the training dataset)
      - Output: "model.py" (complete code implementation with clear structure and comments)
 
   2. Train the model for 500 steps.

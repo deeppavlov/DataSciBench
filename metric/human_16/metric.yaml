@@ -3,14 +3,21 @@
     def clustering_quality(ground_truth):
         from sklearn.metrics import silhouette_score
         import pandas as pd
-        import numpy as np
+
+        def cluster_labels(frame):
+            for name in frame.columns:
+                if str(name).strip().lower() == 'cluster':
+                    return frame[name].tolist()
+            return frame.iloc[:, -1].tolist()
+
+        source = pd.read_csv('../data.csv')
+        X = source.drop(columns='target').values
 
         output = pd.read_csv('clusters.csv')
-        labels = output['Cluster'].tolist()
-        X = np.load('X.npy')
+        labels = cluster_labels(output)
 
         output_gt = pd.read_csv(ground_truth)
-        labels_gt = output_gt['Cluster'].tolist()
+        labels_gt = cluster_labels(output_gt)
 
         return silhouette_score(X, labels) >= silhouette_score(X, labels_gt)
   "function": |-
@@ -24,7 +31,25 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "clustering_result.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as a scatter chart of a clustering result, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty scatter chart, with the points actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Same Data and Axes: B shows the same point cloud as A, three well separated groups sitting at the same coordinates, roughly -12 to 5 horizontally and -9 to 3.5 vertically, with the first column of the dataset on the horizontal axis and the second column on the vertical axis, and both axes labelled.
+        - add 1 point for Distinct Cluster Colors: the clusters are drawn in different colors, so every cluster can be told apart from the others.
+        - add 1 point for Equal Point Size: all points are drawn with the same marker size.
+        - add 1 point for Darkness Ordered by Cluster Size: the bigger the number of points in a cluster, the darker its color; the large dense group in the lower left, about 500 points, is the darkest, the middle group, about 100 points, is lighter, and the sparse group on the right, about 10 points, is the lightest.
+
+        Judge the last criterion only from B. A does not satisfy it, A colors the clusters by their label number, so in A the 100 point group is the lightest and the 10 point group is a middle shade. Do not copy A here and do not penalize B for disagreeing with A about colors.
+
+        Do not require B to match A in the color palette, in whether the colors are explained by a colorbar or by a legend, in the title text, in the exact wording of the axis labels, in the numbering of the clusters, in marker transparency, in grid lines, in figure size or aspect ratio, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "clustering_result.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -35,7 +60,7 @@
   ground_truth: clustering_result.png
 "prompt": |-
   Load the dataset using the initial code and perform the following subtasks:
-   
+
   1. **Load the Data**  
      Input: `data.csv`  
      Output: `X.npy`, `y.npy` (Numpy arrays for features and target)  
@@ -43,7 +68,7 @@
   2. **Cluster the Points**  
      Input: `X.npy`  
      Output: `clusters.csv` (CSV file with cluster labels for each point)  
-   
+
   3. **Visualize Clustering Result**  
      Input: `clusters.csv`, `data.csv`  
      Output: `clustering_result.png` (Scatter chart image of the clusters)  
@@ -55,10 +80,10 @@
 
   Initial code:
   ```python
-  def load_data(filedir):
-      df = pd.read_csv(filedir + "/data.csv")
+  def load_data():
+      df = pd.read_csv("data.csv")
       X = df.drop(columns='target').values
       y = df['target'].values
       return X, y
-  X, y = load_data('datadir')
+  X, y = load_data()
   ```

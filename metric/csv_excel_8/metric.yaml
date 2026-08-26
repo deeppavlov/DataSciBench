@@ -16,7 +16,51 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "roc_curve.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as the confusion matrix of the BP network trained to tell the 200 positive from the 200 negative samples, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty confusion matrix, with its cells actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Four Counts: the classification is binary, so B is a two by two block of exactly four cells and every cell carries a whole number, the count of test samples that fall into it.
+        - add 1 point for Test Set Size: the four counts add up to the size of a test set held out of the 400 available samples, so their sum is a whole number well below 400, typically somewhere between 40 and 160, and never above 400.
+        - add 1 point for Correct Classification: the two classes are far apart in this data and a correctly trained network separates them almost perfectly, so the two cells on the diagonal hold nearly every test sample while the two off-diagonal cells are zero or close to it; a matrix whose errors are comparable to its correct predictions, or one that puts every sample into a single row or column, does not get this point.
+        - add 1 point for Axis Meaning and Labels: one axis is the predicted class and the other is the actual class, both are labelled as such, and the two classes are identified along both axes, for example as 0 and 1 or as negative and positive.
+
+        How the matrix is rendered is left to the solution. Do not require B to be a colored heat map rather than a plain table, and do not require B to match A in the color map, in the orientation of the two axes, in the exact counts, in the number formatting, in figure size or aspect ratio, or in the exact wording of the title and the axis labels, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "confusion_matrix.png", prompt)
+        return float(score)
+  "function": |-
+    Visualization Quality
+  "metric": |-
+    Confusion Matrix Score
+  "task_name": |-
+    Data visualization
+  ground_truth: confusion_matrix.png
+- "code": |-
+    def vlm_judge(ground_truth):
+        from src.vlm_utils import vlm_vis_quality
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as the ROC curve of the BP network trained to tell the 200 positive from the 200 negative samples, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty chart, with the curve actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for ROC Curve: B plots the true positive rate against the false positive rate as the decision threshold varies, as a single curve that never goes down from left to right.
+        - add 1 point for Unit Square: both axes span the range from 0 to 1 and the curve runs from the lower left corner at 0, 0 to the upper right corner at 1, 1.
+        - add 1 point for Correct Separation: the two classes are far apart in this data and a correctly trained network separates them almost perfectly, so the curve hugs the upper left corner, climbing to a true positive rate near 1 while the false positive rate is still near 0; a curve that follows the diagonal of the random classifier, or that sags below it, does not get this point.
+        - add 1 point for Area under the Curve: a legend, a title or an annotation reports the area under the curve, and the reported value agrees with the drawn curve and is at least about 0.9.
+
+        Do not require B to draw the diagonal chance line of the random classifier, because the task does not ask for it, and do not require B to match A in colors, in line styles, in the exact value of the area, in figure size or aspect ratio, or in the exact wording of the title, the axis labels and the legend, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "roc_curve.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality

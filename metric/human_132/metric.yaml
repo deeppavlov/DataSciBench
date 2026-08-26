@@ -1,19 +1,37 @@
 "TMC-list":
 - "code": |-
-    def silhouette_score(ground_truth):
-        from sklearn.metrics import silhouette_score
+    def clustering_validity(ground_truth):
         import pandas as pd
+        from sklearn.metrics import silhouette_score
 
-        # Load the customer segments
+        features = ["Annual Income (k$)", "Spending Score (1-100)"]
+        source = pd.read_csv("../data.csv")
         data = pd.read_csv("customer_segments.csv")
-        X = data[['Annual Income (k$)', 'Spending Score (1-100)']]
-        labels = data['Cluster']
-
         data_gt = pd.read_csv(ground_truth)
-        X_gt = data[['Annual Income (k$)', 'Spending Score (1-100)']]
-        labels_gt = data['Cluster'] 
-        
-        return silhouette_score(X, labels) >= silhouette_score(X_gt, labels_gt)
+
+        if "Cluster" not in data.columns:
+            print("customer_segments.csv has no Cluster column")
+            return False
+
+        if len(data) < 0.9 * len(source):
+            print("customer_segments.csv covers only", len(data), "of", len(source), "customers")
+            return False
+
+        clusters = data["Cluster"].nunique()
+        if clusters < 2:
+            print("only", clusters, "cluster in customer_segments.csv")
+            return False
+
+        def scored(labelled):
+            if "CustomerID" in labelled.columns:
+                merged = source.merge(labelled[["CustomerID", "Cluster"]], on="CustomerID")
+            else:
+                merged = source.head(len(labelled)).assign(Cluster=labelled["Cluster"].to_numpy())
+            return silhouette_score(merged[features], merged["Cluster"])
+
+        score, score_gt = scored(data), scored(data_gt)
+        print("silhouette:", score, "ground truth:", score_gt, "clusters:", clusters, "rows:", len(data))
+        return bool(score >= score_gt - 0.05)
   "function": |-
     Clustering Validity
   "metric": |-
@@ -25,7 +43,23 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "elbow_method.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as an Elbow method chart used to choose the number of clusters for K-means on the annual income and spending score of the Mall Customers dataset, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty chart with a curve actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Elbow Curve: B plots the within-cluster sum of squares against the number of clusters, as a curve that falls all the way, steeply at first and then flattening out; a curve that rises, or that is a straight line, does not get this point.
+        - add 1 point for Enough Cluster Counts: the horizontal axis covers a run of cluster counts wide enough for the bend to be seen, starting at one or two clusters and reaching at least eight.
+        - add 1 point for Visible Elbow at Five: the curve bends at the same place as in A, around five clusters, after which it flattens, so five can be read off the chart as the optimal number of clusters.
+        - add 1 point for Correct Magnitude: the within-cluster sum of squares is of the right order for this data, a few hundred thousand at one cluster, of the order of a hundred thousand at three and a few tens of thousands from five clusters onwards; values several orders of magnitude away, for example below a hundred or above ten million, do not get this point.
+
+        Do not require B to match A in the line style, in the marker style, in the colors, in the title text, in the exact wording of the axis labels, in grid lines, in figure size or aspect ratio, because the task does not fix any of them. Do not require the vertical values of B to match A exactly: A was built after silently dropping outliers from the data, which lowers the whole curve by a few per cent, and the task does not ask for that cleaning.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "elbow_method.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -36,7 +70,24 @@
   ground_truth: elbow_method.png
 - "code": |-
     def report_completeness(ground_truth):
-        return os.path.exists("customer_segmentation_analysis.pdf")
+        import os
+
+        try:
+            from pypdf import PdfReader
+        except ImportError:
+            from PyPDF2 import PdfReader
+
+        report = "customer_segmentation_analysis.pdf"
+        if not os.path.exists(report) or os.path.getsize(report) == 0:
+            return False
+        with open(report, "rb") as file:
+            pages = PdfReader(file).pages
+            text = "".join(page.extract_text() or "" for page in pages).lower()
+        if len(text) <= 300:
+            return False
+        if "cluster" not in text and "segment" not in text:
+            return False
+        return bool("age" in text and "income" in text and "spending" in text)
   "function": |-
     Report Completeness
   "metric": |-
@@ -44,11 +95,11 @@
   "task_name": |-
     Interpretability and report generation
 "prompt": |-
-    You are tasked with an in-depth analysis of the ""Mall Customers"" dataset from Kaggle (input filename: ""data.csv"") to segment customers and identify their spending behaviors. 1. Develop a predictive model aimed at segmenting customers using the K-means clustering algorithm based on their annual income and spending score.
-    - **Output filename:** ""customer_segments.csv""
+  "You are tasked with an in-depth analysis of the ""Mall Customers"" dataset from Kaggle (input filename: ""data.csv"") to segment customers and identify their spending behaviors. 1. Develop a predictive model aimed at segmenting customers using the K-means clustering algorithm based on their annual income and spending score.
+  - **Output filename:** ""customer_segments.csv""
 
-    2. Determine the optimal number of clusters using the Elbow method, and justify your choice based on the method's output.
-    - **Output filename:** ""elbow_method.png""
+  2. Determine the optimal number of clusters using the Elbow method, and justify your choice based on the method's output.
+  - **Output filename:** ""elbow_method.png""
 
-    3. Conclude your analysis by delving into the customer segments revealed by the clustering. Characterize each segment by describing their distinct attributes, such as average age, income range, and spending score. Discuss any notable patterns or insights that emerge from the clustering results, and consider the implications of these segments for marketing strategies and customer engagement.
-    - **Output filename:** ""customer_segmentation_analysis.pdf
+  3. Conclude your analysis by delving into the customer segments revealed by the clustering. Characterize each segment by describing their distinct attributes, such as average age, income range, and spending score. Discuss any notable patterns or insights that emerge from the clustering results, and consider the implications of these segments for marketing strategies and customer engagement.
+  - **Output filename:** ""customer_segmentation_analysis.pdf"""

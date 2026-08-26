@@ -1,40 +1,93 @@
 "TMC-list":
 - "code": |-
     def data_consistency_ratio(ground_truth):
+        import numpy as np
         import pandas as pd
-        output = pd.read_csv("cleaned_data.csv")
-        gt_output = pd.read_csv(ground_truth)
-        cleaned_data = output['Value1'].dropna()
-        gt_cleaned = gt_output['Value1'].dropna()
-        # consistency_ratio = len(cleaned_data) / len(output)
-        return bool(len(cleaned_data) == len(gt_cleaned))
+
+        source = pd.read_csv("../data.csv")
+        value1 = source["Value1"].astype(float)
+
+        output = pd.read_csv("predictions.csv")
+        pred_cols = [c for c in output.columns if "pred" in c.lower()]
+        if not pred_cols:
+            pred_cols = [c for c in output.columns if pd.api.types.is_numeric_dtype(output[c])]
+        if not pred_cols:
+            return False
+
+        preds = pd.to_numeric(output[pred_cols[-1]], errors="coerce")
+        enough_rows = len(preds) >= 10
+        all_finite = bool(np.isfinite(preds).all())
+        not_constant = float(preds.std()) > 0.1 * float(value1.std())
+        print("rows:", len(preds), "finite:", all_finite, "std:", float(preds.std()))
+        return bool(enough_rows and all_finite and not_constant)
   "function": |-
     Data Quality Score
   "metric": |-
     Data Consistency Ratio
   "task_name": |-
     Data cleaning and preprocessing
-  ground_truth: cleaned_data.csv
 - "code": |-
     def model_mae(ground_truth):
-        from sklearn.metrics import mean_absolute_error
+        import numpy as np
         import pandas as pd
+
+        source = pd.read_csv("../data.csv")
+        actual = pd.Series(
+            source["Value1"].astype(float).values, index=pd.to_datetime(source["Date"])
+        )
+
         output = pd.read_csv("predictions.csv")
-        gt_output = pd.read_csv(ground_truth)
-        predictions = output[output.keys()[-1]].tolist()
-        gt_pred = gt_output[gt_output.keys()[-1]].tolist()
-        return bool(mean_absolute_error(gt_pred, predictions) < 0.1)
+        pred_cols = [c for c in output.columns if "pred" in c.lower()]
+        if not pred_cols:
+            pred_cols = [c for c in output.columns if pd.api.types.is_numeric_dtype(output[c])]
+        if not pred_cols:
+            return False
+        preds = pd.to_numeric(output[pred_cols[-1]], errors="coerce")
+
+        date_cols = [c for c in output.columns if "date" in c.lower() or "time" in c.lower()]
+        if date_cols:
+            idx = pd.to_datetime(output[date_cols[0]], errors="coerce")
+            paired = pd.DataFrame({"pred": preds.values, "actual": actual.reindex(idx).values})
+        else:
+            n = min(len(preds), len(actual))
+            paired = pd.DataFrame({"pred": preds.values[-n:], "actual": actual.values[-n:]})
+        paired = paired.dropna()
+
+        if len(paired) < 10:
+            print("not enough predictions aligned with Value1:", len(paired))
+            return False
+
+        mae = float(np.mean(np.abs(paired["pred"] - paired["actual"])))
+        naive = float(np.mean(np.abs(paired["actual"] - actual.mean())))
+        corr = float(paired["pred"].corr(paired["actual"]))
+        print("MAE against actual Value1:", mae, "on", len(paired), "points; naive mean predictor:", naive, "correlation:", corr)
+        return bool(1e-6 < mae < naive and corr > 0.5)
   "function": |-
     Mean Absolute Error
   "metric": |-
     Model Mean Absolute Error (MAE)
   "task_name": |-
     Predictive modeling
-  ground_truth: predictions.csv
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "predictions_chart.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as a visualization of the LSTM time series predictions for the column "Value1" of data.csv, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty chart, with curves or markers actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Time Series Axes: B plots Value1 against time, with a date or step axis running left to right and the Value1 scale on the vertical axis.
+        - add 1 point for Predicted Series: B shows a predicted Value1 series produced by the model over a run of consecutive time steps, not a single isolated point, and it is drawn inside or right after the span of the data, which runs from 2023-01-01 to 2023-07-19 over 200 daily records.
+        - add 1 point for Correct Level: the observed Value1 wanders between about -1.2 and 1.2 around a mean near zero, so the series drawn sit on that order of magnitude and vary over time; a chart whose values are in the hundreds, or a flat constant line with no variation, does not get this point unless the axis is explicitly a rescaled or normalized one.
+        - add 1 point for Axis Labels and Caption: both axes are labelled with legible tick labels, and a legend or a title identifies what is plotted.
+
+        Whether B also draws the observed series next to the prediction, how the data is split, how many steps are predicted, the colors, the line styles, the figure size and the wording of the titles are left to the solution. Do not require B to match A in any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "predictions_chart.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -43,21 +96,6 @@
   "task_name": |-
     Data visualization
   ground_truth: predictions_chart.png
-# - "code": |-
-#     def report_coverage_ratio(ground_truth):
-#         with open("report.txt", "r") as file:
-#             gt_report = file.read()
-#         with open("report.txt", "r") as file:
-#             report_content = file.read()
-#         coverage = sum(word in report_content for word in gt_report) / len(gt_report)
-#         return coverage
-#   "function": |-
-#     Result Quality
-#   "metric": |-
-#     Report Coverage Ratio
-#   "task_name": |-
-#     Interpretability and report generation
-#   ground_truth: report.txt
 "prompt": |
   Please complete the following task:
   Write a complete LSTM (Long Short-Term Memory) neural network for time series prediction based on PyTorch. Use 'data.csv' as the dataset for this task. Implement the actual training and prediction of the LSTM model. Use data from column "Value1" from the CSV file 'data.csv' to train the LSTM model. Then make predicions and save to 'predictions.csv' and visualize it with a image 'predictions_chart.png'.

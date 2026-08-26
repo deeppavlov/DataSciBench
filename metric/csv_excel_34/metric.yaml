@@ -2,23 +2,53 @@
 - "code": |-
     def data_quality_score(ground_truth):
         import pandas as pd
+
+        source = pd.read_csv("../data_pums_2000.csv")
         output = pd.read_csv("cleaned_data.csv")
-        gt_output = pd.read_csv(ground_truth)
-        # Assuming ground_truth is also a DataFrame
-        total_records = len(gt_output)
-        cleaned_records = len(output)
-        return bool(cleaned_records == total_records)
+        columns = {str(c).strip().upper(): c for c in output.columns}
+        income_column = columns.get("INCTOT") or columns.get("INCOME")
+        if income_column is None:
+            return False
+
+        src_columns = {str(c).strip().upper(): c for c in source.columns}
+        shared = [(c, src_columns[str(c).strip().upper()]) for c in output.columns if str(c).strip().upper() in src_columns]
+        if not shared:
+            return False
+
+        income = pd.to_numeric(output[income_column], errors="coerce")
+        size_ok = 0.2 * len(source) <= len(output) < len(source)
+        clean_ok = bool(income.notna().all()) and bool((income > 0).all())
+        source_rows = set(map(tuple, source[[s for _, s in shared]].apply(pd.to_numeric, errors="coerce").values))
+        output_rows = set(map(tuple, output[[o for o, _ in shared]].apply(pd.to_numeric, errors="coerce").values))
+        subset_ok = output_rows.issubset(source_rows)
+        print("rows:", len(output), "of", len(source), "clean:", clean_ok, "subset of source:", subset_ok)
+        return bool(size_ok and clean_ok and subset_ok)
   "function": |-
     Data Quality Score
   "metric": |-
     Data Quality Score
   "task_name": |-
     Data cleaning and preprocessing
-  ground_truth: cleaned_data.csv
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "lorenz_curve.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as a Lorenz curve of the income distribution of the 2000 census sample, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty chart with a curve actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Lorenz Shape: B shows a single curve running from the bottom left corner at 0, 0 to the top right corner at 1, 1, rising all the way, bending upwards, that is convex, and never going above the diagonal.
+        - add 1 point for Line of Equality: the diagonal from 0, 0 to 1, 1 is drawn as a reference line, so the gap between perfect equality and the curve can be seen.
+        - add 1 point for Correct Inequality: the gap matches the data, whose Gini coefficient is about 0.43, so the curve sits well below the diagonal, the poorer half of the population holds only about a fifth of the total income and the poorest fifth of the population holds a few per cent of it; a curve that almost touches the diagonal, or one that collapses onto the axes, does not get this point.
+        - add 1 point for Axis Labels: both axes are labelled as cumulative shares of population and of income, with legible ticks on a 0 to 1 or a 0 to 100 per cent scale.
+
+        Do not require B to match A in colors, in line styles, in grid lines, in figure size or aspect ratio, or in the wording of the title, and do not require the curvature to match A exactly, because the task does not fix how much cleaning is applied to the data.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "lorenz_curve.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -30,9 +60,28 @@
 - "code": |-
     def calculate_gini_coefficient(ground_truth):
         import numpy as np
-        output = float(open("gini_coefficient.txt").read().strip())
-        gt_output = float(open(ground_truth).read().strip())
-        return output == gt_output
+        import pandas as pd
+
+        value = float(open("gini_coefficient.txt").read().strip())
+        cleaned = pd.read_csv("cleaned_data.csv")
+        columns = {str(c).strip().upper(): c for c in cleaned.columns}
+        income_column = columns.get("INCTOT") or columns.get("INCOME")
+        if income_column is None:
+            return False
+        def gini(values):
+            values = np.sort(values)
+            n = values.size
+            total = values.sum()
+            return (2 * np.sum(np.arange(1, n + 1) * values) - (n + 1) * total) / (n * total)
+
+        income = pd.to_numeric(cleaned[income_column], errors="coerce").dropna().astype(float).values
+        expected = gini(income)
+        source = pd.read_csv("../data_pums_2000.csv")
+        full = gini(pd.to_numeric(source["INCTOT"], errors="coerce").dropna().astype(float).values)
+        reference = float(open(ground_truth).read().strip())
+        low, high = min(reference, full) - 0.05, max(reference, full) + 0.05
+        print("reported:", value, "recomputed from cleaned_data.csv:", expected, "admissible band:", low, high)
+        return bool(low <= value <= high and abs(value - expected) <= 0.01)
   "function": |-
     Data Uniformity
   "metric": |-
@@ -46,7 +95,7 @@
   1. Data Preparation  
      - Input: 'data_pums_2000.csv'  
      - Output: 'cleaned_data.csv' (This file should contain the cleaned and preprocessed data, suitable for further analysis.)
-   
+
   2. Plot the Lorenz Curve  
      - Input: 'cleaned_data.csv'  
      - Output: 'lorenz_curve.png' (This image should visually represent the Lorenz curve based on the income distribution in the dataset.)

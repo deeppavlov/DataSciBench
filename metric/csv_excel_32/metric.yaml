@@ -11,7 +11,6 @@
     Missing Values Percentage
   "task_name": |-
     Data cleaning and preprocessing
-  ground_truth: preprocessed_data.csv
 - "code": |-
     def model_summary_validity(ground_truth):
         with open("model_summary.txt", "r") as file:
@@ -23,7 +22,6 @@
     Model Summary Validity
   "task_name": |-
     Predictive modeling
-  ground_truth: model_summary.txt
 - "code": |-
     def average_accuracy(ground_truth):
         import pandas as pd
@@ -51,7 +49,6 @@
     Report Completeness
   "task_name": |-
     Interpretability and report generation
-  ground_truth: results/final_results.txt
 "prompt": |-
   The dataset `PimaIndiansdiabetes.csv` contains information on whether Pima Indian female patients have had diabetes in the past 5 years. The dataset includes multiple medical predictive variables and one target variable, Outcome. When the value of Outcome is 1, it indicates the presence of diabetes; when the value is 0, it means the patient does not have diabetes. The meanings of the other attributes are: Pregnancies: number of pregnancies; Glucose: glucose level; BloodPressure: blood pressure (mm Hg); SkinThickness: skin fold thickness (mm); Insulin: insulin, 2-hour serum insulin; BMI: body mass index (weight/height)^2; DiabetesPedigreeFunction: diabetes pedigree function; Age: age (years).
 

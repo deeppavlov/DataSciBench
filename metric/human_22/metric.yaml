@@ -3,9 +3,11 @@
     def customer_id_removal_rate(ground_truth):
         import pandas as pd
         output = pd.read_csv("cleaned_no_missing_customer.csv")
-        original_count = pd.read_csv("../data.csv").shape[0]
-        cleaned_count = output.shape[0]
-        return bool((original_count - cleaned_count) == 1)
+        source = pd.read_csv("../data.csv")
+        if source.shape[0] - output.shape[0] != 1 or "CustomerID" not in output.columns:
+            return False
+        kept = source.dropna(subset=["CustomerID"])["CustomerID"].tolist()
+        return bool(output["CustomerID"].tolist() == kept)
   "function": |-
     Data Completeness
   "metric": |-
@@ -16,12 +18,19 @@
     def one_hot_encoding_integrity(ground_truth):
         import pandas as pd
         output = pd.read_csv("final_cleaned_data.csv")
-        country_columns = [col for col in output.columns if col.startswith('Country_')]
-        return bool(len(country_columns) == 2)
+        gt_output = pd.read_csv(ground_truth)
+        country_columns = {col for col in output.columns if col.startswith('Country_')}
+        gt_columns = {col for col in gt_output.columns if col.startswith('Country_')}
+        if country_columns != gt_columns:
+            return False
+        cols = sorted(gt_columns)
+        left = output[cols].apply(pd.to_numeric, errors="coerce").to_numpy()
+        right = gt_output[cols].apply(pd.to_numeric, errors="coerce").to_numpy()
+        return bool(left.shape == right.shape and (left == right).all())
   "function": |-
     Data Quality Score
   "ground_truth": |-
-    ./ground_truth.csv
+    final_cleaned_data.csv
   "metric": |-
     One-Hot Encoding Integrity
   "task_name": |-

@@ -22,7 +22,9 @@ model_list = [
                 # "Meta-Llama-3.1-70B-Instruct", 
                 # "gemma-3-27b-it",
                 "Qwen3-30B-A3B",
-                "Qwen3.5-27B"
+                "Qwen3.5-27B",
+                "claude",
+                "opus-5-max"
                 ]
 # write the header to the final csv file
 df = pd.DataFrame({
@@ -57,9 +59,9 @@ HUMAN_DATA_NUM = 25
 CSV_DATA_NUM = 20
 DL_DATA_NUM = 10
 
-TOTAL_NUM_FUNC = 167
-HUMAN_NUM_FUNC = 82
-CSV_NUM_FUNC = 58
+TOTAL_NUM_FUNC = 169
+HUMAN_NUM_FUNC = 83
+CSV_NUM_FUNC = 59
 DL_NUM_FUNC = 27
 
 F1_NUM_FUNC = 28

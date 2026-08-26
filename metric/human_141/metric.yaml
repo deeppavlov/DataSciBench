@@ -2,7 +2,25 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "numerical_histograms.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as a grid of histograms of the numerical features of the "default of credit card clients" table, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty grid of histograms, with bars actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Numerical Coverage: B has a histogram for every genuinely numerical column of the table, that is the credit limit LIMIT_BAL, the AGE, the six bill amounts BILL_AMT1 to BILL_AMT6 and the six payment amounts PAY_AMT1 to PAY_AMT6, so at least fourteen panels.
+        - add 1 point for Correct Distributions: the shapes match the data, AGE runs from about 21 to about 79 and peaks near 30, LIMIT_BAL peaks at low limits and thins out towards 1e6, and the bill and payment amounts are strongly right skewed with almost all mass near zero and long thin tails.
+        - add 1 point for Full Sample: the counts are counts of the 30000 clients of the table, so the bars of a panel add up to that order of magnitude and the tallest bars run into the thousands or tens of thousands rather than into the tens.
+        - add 1 point for Panel Labels and Count Axis: every panel is identified by the name of the column it shows, in a panel title or in an axis label, its vertical axis is a count or frequency of records with legible tick labels, and its horizontal axis spans the value range of that column.
+
+        The identification of the numerical features is left to the solution, so both readings are correct. B may restrict itself to the fourteen genuine amounts and ages listed above, and B may also add panels for the integer coded columns ID, SEX, EDUCATION, MARRIAGE, PAY_0, PAY_2 to PAY_6 and the default payment target, as A does. Do not penalize B either for showing those extra columns or for leaving them out, and do not penalize B for having a different number of panels than A.
+
+        Do not require B to match A in the number of panels, in the grid layout, in the number of bins, in colors, in bar edges, in grid lines, in figure size or aspect ratio, or in the presence and wording of an overall title, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "numerical_histograms.png", prompt)
         return float(score)
   "function": |-
     Visualization Completeness
@@ -14,7 +32,25 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "categorical_bar_plots.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as a grid of bar plots of the categorical features of the "default of credit card clients" table, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty grid of bar plots, with bars actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Categorical Coverage: B has a bar plot for at least the four categorical columns SEX, EDUCATION, MARRIAGE and the default payment target.
+        - add 1 point for Correct Counts: the counts match the data, SEX has two bars of about 11900 and about 18100, EDUCATION is dominated by level 2 with about 14000 and level 1 with about 10600 followed by level 3 with about 4900 and negligible levels 0, 4, 5 and 6, MARRIAGE is dominated by 2 with about 16000 and 1 with about 13700 with a small bar at 3, and the default payment target has about 23400 non defaulters against about 6600 defaulters.
+        - add 1 point for Full Sample: within every panel the bars add up to the 30000 clients of the table, so no panel silently drops most of the data or shows shares instead of counts.
+        - add 1 point for Panel Labels and Count Axis: every panel is identified by the name of the column it shows, in a panel title or in an axis label, the bars are labelled with the category values of that column, and the bar heights are read against a count axis with legible tick labels.
+
+        The identification of the categorical features is left to the solution, so both readings are correct. B may restrict itself to the four columns listed above, as A does, and B may also add panels for the integer coded repayment status columns PAY_0 and PAY_2 to PAY_6. Do not penalize B either for showing those extra columns or for leaving them out, and do not penalize B for having a different number of panels than A.
+
+        Do not require B to match A in the number of panels, in the grid layout, in the order of the panels, in the order of the bars inside a panel, in colors, in bar edges, in tick label rotation, in figure size or aspect ratio, or in the presence and wording of an overall title, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "categorical_bar_plots.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -26,7 +62,53 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "correlation_heatmap.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as scatter plots of the relationships between key numerical features of the "default of credit card clients" table and the default status, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty set of scatter plots, with points actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Key Features against Default: B shows several key numerical features, at least three, each plotted against the default status, for example the credit limit LIMIT_BAL, the AGE, a bill amount and a payment amount.
+        - add 1 point for Binary Default Axis: the default status is binary, so in every panel the points fall into exactly two bands at the values 0 and 1.
+        - add 1 point for Axis Labels: in every panel both axes are labelled, one with the name of the feature and one with the default status, and the tick labels are legible.
+        - add 1 point for Correct Ranges: the feature axes span the real ranges of the data, LIMIT_BAL up to about 1e6, AGE from about 21 to about 79, bill amounts from slightly below zero up to about 1e6 and payment amounts from zero up to about 9e5.
+
+        Which features count as key is left to the solution. Do not require B to match A in the choice of features, in the number of panels, in the grid layout, in colors, in marker size, in marker transparency, in figure size or aspect ratio, or in the presence and wording of titles, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "scatter_plots.png", prompt)
+        return float(score)
+  "function": |-
+    Visualization Quality
+  "metric": |-
+    Scatter Plot Completeness Score
+  "task_name": |-
+    Data visualization
+  ground_truth: scatter_plots.png
+- "code": |-
+    def vlm_judge(ground_truth):
+        from src.vlm_utils import vlm_vis_quality
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as a correlation heatmap of the features of the "default of credit card clients" table, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty heatmap, with the cells actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Correlation Matrix: B shows the pairwise correlations between the features of the table, one cell per pair of features, with the strength of the correlation encoded by color, the matrix symmetric about its diagonal and every value inside the range -1 to 1, the diagonal itself being the self-correlations equal to 1 or masked away. A heatmap of the raw values of the table, of the covariances or of anything else that is not a correlation matrix does not get this point.
+        - add 1 point for Correct Correlation Blocks: the structure matches the data, the six bill amounts BILL_AMT1 to BILL_AMT6 form a solid block of strong positive correlations of about 0.80 to 0.95, and the repayment status columns PAY_0 and PAY_2 to PAY_6 form a second, weaker block of positive correlations of about 0.47 to 0.82; these two blocks are the only strongly correlated regions of the matrix and they stand out clearly from everything around them.
+        - add 1 point for Correct Weak Links: the weak relations match the data too, the default payment target correlates with nothing strongly, its largest link being about 0.32 with PAY_0 and about -0.15 with LIMIT_BAL, the payment amounts PAY_AMT1 to PAY_AMT6 correlate only weakly with each other and with the bill amounts, and if B includes the row identifier ID then all of its cells are near zero. A chart where the target or ID lights up as strongly correlated with the features does not get this point.
+        - add 1 point for Labels and Readable Scale: the names of the features label the rows and the columns along both axes, and the correlation values can be read off, either because they are annotated in the cells or because a color bar carries legible tick values.
+
+        Which columns count as numerical is left to the solution, so do not penalize B either for including or for leaving out the integer coded columns ID, SEX, EDUCATION, MARRIAGE, PAY_0, PAY_2 to PAY_6 and the default payment target, as A includes them, and do not require B to have the same number of features as A. Judge the two blocks and the weak links only over the features B actually shows.
+
+        Do not require B to show the full square: a triangular or masked heatmap with the redundant half or the diagonal left out is a normal way to draw a correlation matrix and loses no points. Do not require B to match A in the color map, in the presence of annotations in the cells, in the order of the features, in tick label rotation, in figure size or aspect ratio, or in the presence and wording of a title, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "correlation_heatmap.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -37,21 +119,21 @@
   "task_name": |-
     Data visualization
 "prompt": |-
-    You are required to analyze the "Credit Card Default" dataset from the UCI Machine Learning Repository (https://archive.ics.uci.edu/ml/datasets/default+of+credit+card+clients), which contains information on Taiwanese customers' credit card payment defaults. Your tasks are as follows:
+  You are required to analyze the "Credit Card Default" dataset from the UCI Machine Learning Repository (https://archive.ics.uci.edu/ml/datasets/default+of+credit+card+clients), which contains information on Taiwanese customers' credit card payment defaults. Your tasks are as follows:
 
-    1. **Data Visualization**:
-      - Generate histograms for numerical features.  
-        Input: "default of credit card clients.xls"  
-        Output: "numerical_histograms.png" (format: image)
+  1. **Data Visualization**:
+     - Generate histograms for numerical features.  
+       Input: "default of credit card clients.xls"  
+       Output: "numerical_histograms.png" (format: image)
 
-      - Create bar plots for categorical features.  
-        Input: "default of credit card clients.xls"  
-        Output: "categorical_bar_plots.png" (format: image)
+     - Create bar plots for categorical features.  
+       Input: "default of credit card clients.xls"  
+       Output: "categorical_bar_plots.png" (format: image)
 
-      - Use scatter plots to visualize the relationships between key numerical features and the default status.  
-        Input: "default of credit card clients.xls"  
-        Output: "scatter_plots.png" (format: image)
+     - Use scatter plots to visualize the relationships between key numerical features and the default status.  
+       Input: "default of credit card clients.xls"  
+       Output: "scatter_plots.png" (format: image)
 
-      - Generate a correlation heatmap to identify potential relationships between different features.  
-        Input: "default of credit card clients.xls"  
-        Output: "correlation_heatmap.png" (format: image)
+     - Generate a correlation heatmap to identify potential relationships between different features.  
+       Input: "default of credit card clients.xls"  
+       Output: "correlation_heatmap.png" (format: image)

@@ -1,12 +1,23 @@
 "TMC-list":
 - "code": |-
     def analysis_completeness(ground_truth):
-        with open(ground_truth, 'r') as file:
-            gt_analysis = file.read()
+        import os
+        import re
+        import numpy as np
+        import pandas as pd
+        train = pd.read_csv(os.path.join(os.path.dirname(ground_truth), "..", "train.csv"))
         with open("data_analysis.txt", 'r') as file:
-            analysis = file.read()
-        # Compare the content of the analysis with the ground truth
-        return bool((len(set(analysis.split()).intersection(gt_analysis.split())) / len(set(gt_analysis.split()))) > 0.5)
+            analysis = file.read().lower()
+        stat_words = ["mean", "median", "std", "standard deviation", "min", "max", "variance"]
+        reference = np.concatenate([train.mean(), train.median(), train.std(), train.min(), train.max()] + [
+            [g.values.mean(), g.values.std(), g.values.min(), g.values.max(), np.median(g.values)]
+            for _, g in train.drop(columns=["label"]).groupby(train["label"])])
+        numbers = [float(x) for x in re.findall(r"-?\d+\.\d+", analysis)]
+        has_stats = sum(bool(re.search(r"\b" + word + r"\b", analysis)) for word in stat_words) >= 2
+        has_numbers = len(numbers) >= 5 and sum(bool(np.min(np.abs(reference - n)) <= 1e-4) for n in numbers) >= 5
+        has_classes = "class" in analysis or "label" in analysis
+        has_size = bool(re.search(r"\b%d\b" % len(train), analysis) or re.search(r"\b%d\b" % train.shape[1], analysis))
+        return bool(len(analysis.split()) >= 50 and has_stats and has_numbers and has_classes and has_size)
   "function": |-
     Data Integrity
   "metric": |-
@@ -16,12 +27,12 @@
   ground_truth: data_analysis.txt
 - "code": |-
     def outlier_removal_rate(ground_truth):
+        import os
         import pandas as pd
+        train = pd.read_csv(os.path.join(os.path.dirname(ground_truth), "..", "train.csv"))
         output = pd.read_csv("filtered_train.csv")
-        # Assume ground truth contains the original number of samples
-        gt_count = len(pd.read_csv(ground_truth))
-        filtered_count = len(output)
-        return bool(((gt_count - filtered_count) / gt_count) < 0.05)
+        removal_rate = (len(train) - len(output)) / len(train)
+        return bool(list(output.columns) == list(train.columns) and 0 < removal_rate <= 0.2)
   "function": |-
     Data Quality Score
   "metric": |-
@@ -35,10 +46,11 @@
         import numpy as np
         output = pd.read_csv("spectral_images_train.csv")
         gt_output = pd.read_csv(ground_truth)
-        # Measure the variance in spectral images; higher variance indicates clarity
+        filtered_count = len(pd.read_csv("filtered_train.csv"))
         gt_variance = np.var(gt_output.values)
         clarity_score = np.var(output.values)
-        return bool(clarity_score <= gt_variance)
+        shape_ok = len(output) == filtered_count and output.shape[1] > 1
+        return bool(shape_ok and np.isfinite(output.values).all() and 0.1 * gt_variance <= clarity_score <= 10 * gt_variance)
   "function": |-
     Data Validity
   "metric": |-
@@ -70,7 +82,17 @@
 - "code": |-
     def model_accuracy(ground_truth):
         import os
+        import h5py
         import pandas as pd
+        try:
+            with h5py.File("cnn_model.h5", "r") as model_file:
+                sizes = []
+                model_file.visititems(lambda name, obj: sizes.append(getattr(obj, "size", 0)))
+                trained = "model_config" in model_file.attrs and sum(sizes) >= 1000
+        except OSError:
+            trained = False
+        if not trained:
+            return False
         ground_truth_dir = os.path.join(ground_truth, "../test.csv")
         gt_output = pd.read_csv(ground_truth_dir)['label'].tolist()
         from sklearn.metrics import accuracy_score
@@ -93,11 +115,4 @@
     Predictive modeling
   ground_truth: ''
 "prompt": |-
-  Complete the following task based on Python:
-  Task requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set "train.csv" and test set "test.csv") to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).
-  Suggested steps:
-  (1) Data feature analysis: Analyze the dataset (input: "train.csv", output: "data_analysis.txt"). Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge.
-  (2) Sample filtering: Remove any abnormal training samples (input: "train.csv", output: "filtered_train.csv").
-  (3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images (input: "filtered_train.csv", output: "spectral_images_train.csv"). In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.
-  (4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model (input: "spectral_images_train.csv", output: "cnn_model.h5").
-  (5) Model testing: Evaluate the model's output on the test set (input: "test.csv" and "cnn_model.h5", output: "model_evaluation_results.csv").
+  Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set "train.csv" and test set "test.csv") to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: Analyze the dataset (input: "train.csv", output: "data_analysis.txt"). Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge. The file "data_analysis.txt" must be a text report that gives summary statistics of the samples and describes the observed differences between class 0 and class 1.\n(2) Sample filtering: Remove any abnormal training samples (input: "train.csv", output: "filtered_train.csv").\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images (input: "filtered_train.csv", output: "spectral_images_train.csv"). In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model (input: "spectral_images_train.csv", output: "cnn_model.h5").\n(5) Model testing: Evaluate the model's output on the test set (input: "test.csv" and "cnn_model.h5", output: "model_evaluation_results.csv"). The file "model_evaluation_results.csv" must contain one row per test sample, in the same order as "test.csv", and its last column must hold the predicted class label of that sample.

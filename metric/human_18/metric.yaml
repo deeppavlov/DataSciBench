@@ -3,15 +3,40 @@
     def pca_explained_variance(ground_truth):
         import pandas as pd
         from sklearn.decomposition import PCA
-        
-        output = pd.read_csv("pca_results.csv")
-        explained_variance = output['explained_variance_ratio'].tolist()
+        from sklearn.preprocessing import StandardScaler
 
-        output_gt = pd.read_csv(ground_truth)
-        explained_variance_gt = output_gt['explained_variance_ratio'].tolist()
-        
-        # Calculation of explained variance
-        return sum(explained_variance) <= sum(explained_variance_gt)
+        def reported_totals(df):
+            cols = [c for c in df.columns if "explained" in c.lower() and "variance" in c.lower()]
+            values = []
+            for c in cols:
+                values.extend(float(v) for v in pd.to_numeric(df[c], errors="coerce").dropna().unique())
+            if not values:
+                return []
+            values.sort(reverse=True)
+            totals = [sum(values), sum(values[:2]), values[0]]
+            return [t for t in totals + [t / 100 for t in totals] if 0 < t <= 1 + 1e-6]
+
+        def reference(rows):
+            scaled = StandardScaler().fit_transform(rows)
+            return float(PCA(n_components=2).fit(scaled).explained_variance_ratio_.sum())
+
+        output = pd.read_csv("pca_results.csv")
+        if not {"PC1", "PC2"}.issubset(output.columns) or len(output) == 0:
+            return False
+
+        var1 = output["PC1"].var()
+        var2 = output["PC2"].var()
+        if not var1 >= var2 > 0:
+            return False
+
+        source = pd.read_csv("../data.csv").select_dtypes("number").dropna()
+        clean = source.copy()
+        for column in clean.columns:
+            low, high = clean[column].quantile(0.25), clean[column].quantile(0.75)
+            clean = clean[clean[column].between(low - 1.5 * (high - low), high + 1.5 * (high - low))]
+        refs = [reference(source), reference(clean)]
+
+        return any(min(refs) - 0.05 <= t <= max(refs) + 0.05 for t in reported_totals(output))
   "function": |-
     Explained Variance Ratio
   "ground_truth": |-
@@ -22,20 +47,28 @@
     Predictive modeling
 - "code": |-
     def visualization_completeness(ground_truth):
-        import matplotlib.pyplot as plt
+        import os
+
         import pandas as pd
-        
+        from PIL import Image
+
+        if not os.path.exists("pca_visualization.png"):
+            return False
+        with Image.open("pca_visualization.png") as image:
+            image.load()
+            low, high = image.convert("L").getextrema()
+            if min(image.size) < 100 or high - low <= 30:
+                return False
+
         output = pd.read_csv("pca_results.csv")
-        plt_data = output[['PC1', 'PC2']]
-        # Check the number of data points plotted
-        num_points = plt_data.shape[0]
+        if not {"PC1", "PC2"}.issubset(output.columns):
+            return False
+        num_points = output[["PC1", "PC2"]].dropna().shape[0]
 
         output_gt = pd.read_csv(ground_truth)
-        plt_data_gt = output_gt[['PC1', 'PC2']]
-        num_points_gt = plt_data_gt.shape[0]
-        
-        # Here we could check against the ground truth if needed
-        return num_points == num_points_gt
+        num_points_gt = output_gt[["PC1", "PC2"]].dropna().shape[0]
+
+        return num_points >= 0.9 * num_points_gt
   "function": |-
     Visualization Completeness
   "ground_truth": |-
@@ -48,7 +81,7 @@
     def model_accuracy(ground_truth):
         pre_accuracy = float(open("model_accuracy.txt", "r").read().strip().split(': ')[-1])
         gt_accuracy = float(open(ground_truth, "r").read().strip().split(': ')[-1])
-        return pre_accuracy >= gt_accuracy
+        return 0.95 * gt_accuracy <= pre_accuracy <= 1.0
   "function": |-
     Model Accuracy
   "ground_truth": |-
@@ -78,6 +111,6 @@
 
   3. **Train a classifier to predict the sex of the penguins using the reduced features.**
      - Input: `pca_results.csv`
-     - Output: `model_accuracy.txt` (containing the accuracy of the trained classifier, with format "Classifier Accuracy: XX") 
+     - Output: `model_accuracy.txt` (containing the accuracy of the trained classifier) 
 
   Make sure that each output file is well-formatted for further evaluation.

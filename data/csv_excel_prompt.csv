@@ -1,4 +1,4 @@
-,Prompt,Metrics,Original Prompt,Qualified (Y/N),Modified Prompt (If not qualified),data source type
+Unnamed: 0,Prompt,Metrics,Original Prompt,Qualified (Y/N),Modified Prompt (If not qualified),data source type
 0,"Create a dataframe with the following structure, using different years as row indices and different categories as column names, filling in the corresponding values. The input data should be stored in ""data.csv"" with the following format:
 ```
 时间,品类,指标,地区,周期,单位,数值
@@ -56,17 +56,8 @@ The output should be saved in ""output.csv"" in a structured format that allows 
 2012,农业科技进步贡献率,贡献率,全国,年,%,54.5
 ```
 The output should be saved in ""output.csv"".",1=no dependency
-1,"Please complete the following task using Python:
-
-1. **Input**: Open the 'sheet1' worksheet of the Excel file `source.xlsx`.
-   - **Output**: A filtered dataset saved as `filtered_data.csv` containing the rows where:
-     - The value in column D is greater than or equal to 8 and less than 8.0010.
-     - The value in column F is equal to 18.
-     - The value in column G is greater than the value of the second row in column G.
-  
-2. **Input**: Use the filtered data from `filtered_data.csv`.
-   - **Output**: Update the 'sheet1' worksheet in the Excel file `target.xlsx` with the values copied from column G of the filtered rows, and save this updated Excel file as `target_updated.xlsx`.",data integrity,"Please complete the following task using Python: \nOpen the 'sheet1' worksheet of the Excel file source.xlsx, and filter the rows where the value in column D is greater than or equal to 8 and less than 8.0010, at the same time, the value in column F should be equal to 18, and the value in column G should be greater than the value of the second row in column G. Copy the values from the filtered rows in column G and paste them into the corresponding cells of the 'sheet1' worksheet in another Excel file target.xlsx.",N,"Please complete the following task using Python:\n Open the 'sheet1' worksheet of the Excel file source.xlsx, and filter the rows where the value in column D is greater than or equal to 8 and less than 8.0010, at the same time, the value in column F should be equal to 18, and the value in column G should be greater than the value of the second row in column G. Copy the values from the filtered rows in column G and paste them into the corresponding cells of the 'sheet1' worksheet in another Excel file target.xlsx.",3=human written data
-2,"Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set ""train.csv"" and test set ""test.csv"") to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: Analyze the dataset (input: ""train.csv"", output: ""data_analysis.pdf""). Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge.\n(2) Sample filtering: Remove any abnormal training samples (input: ""train.csv"", output: ""filtered_train.csv"").\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images (input: ""filtered_train.csv"", output: ""spectral_images_train.csv""). In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model (input: ""spectral_images_train.csv"", output: ""cnn_model.h5"").\n(5) Model testing: Evaluate the model's output on the test set (input: ""test.csv"" and ""cnn_model.h5"", output: ""model_evaluation_results.csv"").","data integrity,visualization,acc,precision,f1","Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set train.csv, and test set test.csv) to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: This dataset contains 2 classes. Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge.\n(2) Sample filtering: Remove any abnormal training samples.\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images. In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model.\n(5) Model testing: Evaluate the model's output on the test set.",N,"Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set ""train.csv"" and test set ""test.csv"") to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: Analyze the dataset (input: ""train.csv"", output: ""data_analysis.txt""). Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge.\n(2) Sample filtering: Remove any abnormal training samples (input: ""train.csv"", output: ""filtered_train.csv"").\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images (input: ""filtered_train.csv"", output: ""spectral_images_train.csv""). In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model (input: ""spectral_images_train.csv"", output: ""cnn_model.h5"").\n(5) Model testing: Evaluate the model's output on the test set (input: ""test.csv"" and ""cnn_model.h5"", output: ""model_evaluation_results.csv"").",3=human written data
+1,"Please complete the following task using Python:\n Open the 'sheet1' worksheet of the Excel file source.xlsx, and filter the rows where the value in column D is greater than or equal to 8 and less than 8.0010, at the same time, the value in column F should be equal to 18, and the value in column G should be greater than the value of the second row in column G. Copy the values from the filtered rows in column G and write them into the 'sheet1' worksheet in another Excel file target.xlsx. The file target.xlsx does not exist yet: create it with a single worksheet named 'sheet1' where the first row contains the header G and the rows below contain the selected values in their original order.",data integrity,"Please complete the following task using Python: \nOpen the 'sheet1' worksheet of the Excel file source.xlsx, and filter the rows where the value in column D is greater than or equal to 8 and less than 8.0010, at the same time, the value in column F should be equal to 18, and the value in column G should be greater than the value of the second row in column G. Copy the values from the filtered rows in column G and paste them into the corresponding cells of the 'sheet1' worksheet in another Excel file target.xlsx.",N,"Please complete the following task using Python:\n Open the 'sheet1' worksheet of the Excel file source.xlsx, and filter the rows where the value in column D is greater than or equal to 8 and less than 8.0010, at the same time, the value in column F should be equal to 18, and the value in column G should be greater than the value of the second row in column G. Copy the values from the filtered rows in column G and write them into the 'sheet1' worksheet in another Excel file target.xlsx. The file target.xlsx does not exist yet: create it with a single worksheet named 'sheet1' where the first row contains the header G and the rows below contain the selected values in their original order.",3=human written data
+2,"Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set ""train.csv"" and test set ""test.csv"") to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: Analyze the dataset (input: ""train.csv"", output: ""data_analysis.txt""). Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge. The file ""data_analysis.txt"" must be a text report that gives summary statistics of the samples and describes the observed differences between class 0 and class 1.\n(2) Sample filtering: Remove any abnormal training samples (input: ""train.csv"", output: ""filtered_train.csv"").\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images (input: ""filtered_train.csv"", output: ""spectral_images_train.csv""). In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model (input: ""spectral_images_train.csv"", output: ""cnn_model.h5"").\n(5) Model testing: Evaluate the model's output on the test set (input: ""test.csv"" and ""cnn_model.h5"", output: ""model_evaluation_results.csv""). The file ""model_evaluation_results.csv"" must contain one row per test sample, in the same order as ""test.csv"", and its last column must hold the predicted class label of that sample.","data integrity,visualization,acc,precision,f1","Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set train.csv, and test set test.csv) to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: This dataset contains 2 classes. Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge.\n(2) Sample filtering: Remove any abnormal training samples.\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images. In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model.\n(5) Model testing: Evaluate the model's output on the test set.",N,"Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set ""train.csv"" and test set ""test.csv"") to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: Analyze the dataset (input: ""train.csv"", output: ""data_analysis.txt""). Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge. The file ""data_analysis.txt"" must be a text report that gives summary statistics of the samples and describes the observed differences between class 0 and class 1.\n(2) Sample filtering: Remove any abnormal training samples (input: ""train.csv"", output: ""filtered_train.csv"").\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images (input: ""filtered_train.csv"", output: ""spectral_images_train.csv""). In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model (input: ""spectral_images_train.csv"", output: ""cnn_model.h5"").\n(5) Model testing: Evaluate the model's output on the test set (input: ""test.csv"" and ""cnn_model.h5"", output: ""model_evaluation_results.csv""). The file ""model_evaluation_results.csv"" must contain one row per test sample, in the same order as ""test.csv"", and its last column must hold the predicted class label of that sample.",3=human written data
 3,"Please write a segment of Python code that uses the `normalize` method in pandas to extract data from a JSON file into a table. The JSON input file will be named ""data.json"" and should be structured as follows:
 
 ```json
@@ -1342,31 +1333,7 @@ Make sure to clearly label and document all files to facilitate further evaluati
 
 6. Final Results: Compile all calculated data into a comprehensive results file.
    - Output: A CSV file named ""results.csv"" that includes all relevant calculated metrics from the previous tasks.",3=human written data
-37,"I currently have a structured dataset named ""data.csv"" with 6 columns and 5960 rows of data. The first column is named X, the second column is named Y, both of which are structural parameters set for simulation. The following four columns, ff, ft, tt, and tf, represent the simulation results. 
-
-Please complete the following subtasks:
-
-1. **Data Preprocessing**  
-   Input: ""data.csv""  
-   Output: ""preprocessed_data.csv"" (this file should contain cleaned and normalized data)
-
-2. **Feature Selection**  
-   Input: ""preprocessed_data.csv""  
-   Output: ""selected_features.csv"" (this file should contain the selected features that are most relevant for the model)
-
-3. **Model Training**  
-   Input: ""selected_features.csv""  
-   Output: ""trained_model.pkl"" (this file should contain the saved machine learning model)
-
-4. **Model Evaluation**  
-   Input: ""trained_model.pkl"" and ""selected_features.csv""  
-   Output: ""evaluation_results.pdf"" (this file should contain plots and metrics for model evaluation)
-
-5. **Prediction Generation**  
-   Input: ""selected_features.csv""  
-   Output: ""predictions.csv"" (this file should contain predicted values for the columns ff, ft, tt, and tf based on new structural parameters)
-
-All model-related content and outputs will be saved in the ""results"" folder.",acc,"I currently have a structured dataset named date.csv with 6 columns and 5960 rows of data. The first column is named X, the second column is named Y, both of which are structural parameters set for simulation. The following four columns, ff, ft, tt, and tf, represent the simulation results. Now, I need to train a model that can accurately predict the four simulation results for other structural parameters. The model and related content will be saved in the results folder.",N,"I currently have a structured dataset named date.csv with 6 columns and 5960 rows of data. The first column is named X, the second column is named Y, both of which are structural parameters set for simulation. The following four columns, ff, ft, tt, and tf, represent the simulation results. Now, I need to train a model that can accurately predict the four simulation results for other structural parameters. The model and related content will be saved in the results folder. The model should be saved as ""model.pkl"" and the final accuracy should be saved in ""acc.txt"".",3=human written data
+37,"I currently have a structured dataset named date.csv with 6 columns and 5960 rows of data. The first column is named X, the second column is named Y, both of which are structural parameters set for simulation. The following four columns, ff, ft, tt, and tf, represent the simulation results. Now, I need to train a model that can accurately predict the four simulation results for other structural parameters. The model and related content will be saved in the results folder. The model should be saved as ""model.pkl"" and the final accuracy should be saved in ""acc.txt"". The accuracy in ""acc.txt"" must be written as exactly two lines, ""Mean Squared Error: <value>"" on the first line and ""R^2 Score: <value>"" on the second, both computed on a held-out test set of 20% of the rows.",acc,"I currently have a structured dataset named date.csv with 6 columns and 5960 rows of data. The first column is named X, the second column is named Y, both of which are structural parameters set for simulation. The following four columns, ff, ft, tt, and tf, represent the simulation results. Now, I need to train a model that can accurately predict the four simulation results for other structural parameters. The model and related content will be saved in the results folder.",N,"I currently have a structured dataset named date.csv with 6 columns and 5960 rows of data. The first column is named X, the second column is named Y, both of which are structural parameters set for simulation. The following four columns, ff, ft, tt, and tf, represent the simulation results. Now, I need to train a model that can accurately predict the four simulation results for other structural parameters. The model and related content will be saved in the results folder. The model should be saved as ""model.pkl"" and the final accuracy should be saved in ""acc.txt"". The accuracy in ""acc.txt"" must be written as exactly two lines, ""Mean Squared Error: <value>"" on the first line and ""R^2 Score: <value>"" on the second, both computed on a held-out test set of 20% of the rows, and the trained model is expected to reach an R^2 score of at least 0.9 on that test set.",3=human written data
 38,"Load data from the following input files:
 - ""genome-scores.csv""
 - ""genome-tags.csv""
@@ -1442,63 +1409,7 @@ Subtasks:
    - Output: ""recommendations.csv""
 
 Implement the tasks using Python code in a detailed and comprehensive manner.",2=open source data
-39,"# Data source for this case: the whole year of Beijing weather in 2018, input file: beijing_tianqi_2018.csv (file encoding: utf-8)
-
-Attribute description:
-- ymd: Year, month, day
-- bWendu: Maximum temperature
-- yWendu: Minimum temperature
-- tianqi: Weather status (sunny, sunny to cloudy)
-- fengxiang: Wind direction (southwest wind, north wind)
-- fengli: Wind force level
-- aqi: Air quality
-- aqiInfo: Air Quality Index (excellent, good, light pollution)
-- aqiLevel: Air quality score
-
-# Please complete the following data analysis tasks and provide the specified outputs:
-
-1. Set the index to the date for easy filtering by date.
-   - Output: output_indexed.csv (csv)
-   
-2. Look up the weather conditions on March 1, 2018.
-   - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_march_01_2018.csv (csv)
-
-3. Replace the temperature units with ℃ removed.
-   - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_temperature_cleaned.csv (csv)
-
-4. Check the maximum and minimum temperatures for the consecutive 7 days starting from August 1, 2018.
-   - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_august_temperatures.csv (csv)
-
-5. Check results where the minimum temperature is below -10.
-   - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_below_negative_10.csv (csv)
-
-6. Check for ""my perfect weather"" (maximum temperature less than 30, minimum temperature greater than 15, sunny, air quality excellent).
-   - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_perfect_weather.csv (csv)
-
-7. Add a new column 'wencha' (maximum temperature - minimum temperature).
-   - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_wencha_added.csv (csv)
-
-8. Add a new column 'wenduType' (marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise normal temperature).
-   - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_wenduType_added.csv (csv)
-
-9. How many types of 'fengxiang' are there in the whole year of 2018? How many days does each type correspond to?
-   - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_fengxiang_counts.csv (csv)
-
-10. What is the correlation coefficient between air quality 'aqi' and maximum temperature?
-    - Input: beijing_tianqi_2018.csv (csv)
-    - Output: output_corr_aqi_max_temp.csv (csv)
-
-11. What is the correlation coefficient between air quality 'aqi' and temperature difference 'wencha'?
-    - Input: beijing_tianqi_2018.csv (csv)
-    - Output: output_corr_aqi_wencha.csv (csv)","consistency,correlation coefficients","# Data source for this case, the whole year of Beijing weather in 2018, beijing_tianqi_2018.csv, file encoding utf-8\n'''\nAttribute description:\nymd: Year, month, day\nbWendu: Maximum temperature\nyWendu: Minimum temperature\ntianqi: Weather status: sunny, sunny to cloudy\nfengxiang: Wind direction, southwest wind, north wind\nfengli: Wind force level\naqi: Air quality\naqiInfo: Air Quality Index: excellent, good, light pollution\naqiLevel: Air quality score\n'''\n\n# According to the prompts, complete the following data analysis:\n# 1. Set the index to the date for easy filtering by date. New knowledge: set_index() Example df.set_index('ymd', inplace=True)\n# 2. Look up the weather conditions on March 1, 2018. Hint: .loc\n# 3. Replace the temperature units with ℃ removed. Hint: replacement\n# 4. Check the maximum and minimum temperatures for the consecutive 7 days starting from August 1, 2018. Hint: slicing\n# 5. Check results where the minimum temperature is below -10. Hint: conditional expression query\n# 6. Check for ""my perfect weather"" (maximum temperature less than 30, and minimum temperature greater than 15, sunny, air quality excellent). Hint: conditional expression query\n# 7. Add a new column 'wencha', maximum temperature - minimum temperature.\n# 8. Add a new column 'wenduType', marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise normal temperature. Hint: apply\n# 9. How many types of 'fengxiang' are there in the whole year of 2018? How many days does each type correspond to? Hint: data statistical function [enumerate]\n# 10. What is the correlation coefficient between air quality 'aqi' and maximum temperature?\n# 11. What is the correlation coefficient between air quality 'aqi' and temperature difference 'wencha'?",N,"Data source for this case: the whole year of Beijing weather in 2018, input file: beijing_tianqi_2018.csv (file encoding: utf-8)
+39,"Data source for this case: the whole year of Beijing weather in 2018, input file: beijing_tianqi_2018.csv (file encoding: utf-8)
 
 Attribute description:
 - ymd: Year, month, day
@@ -1514,25 +1425,25 @@ Attribute description:
 Please complete the following data analysis tasks and provide the specified outputs:
 
 1. Set the index to the date for easy filtering by date.
-   - Output: output_indexed.csv (csv)
+   - Output: output_indexed.csv (csv, keeping 'ymd' as the index column header)
    
 2. Look up the weather conditions on March 1, 2018.
    - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_march_01_2018.csv (csv)
+   - Output: output_march_01_2018.csv (csv, should be a single-row DataFrame format with header and index; in this file the index column header must be left empty)
 
 3. Replace the temperature units with ℃ removed.
    - Input: beijing_tianqi_2018.csv (csv)
    - Output: output_temperature_cleaned.csv (csv)
 
 4. Check the maximum and minimum temperatures for the consecutive 7 days starting from August 1, 2018.
-   - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_august_temperatures.csv (csv)
+   - Input: beijing_tianqi_2018.csv (csv, with the temperatures cleaned as in subtask 3)
+   - Output: output_august_temperatures.csv (csv with all the original columns kept for those 7 days)
 
 5. Check results where the minimum temperature is below -10.
    - Input: beijing_tianqi_2018.csv (csv)
    - Output: output_below_negative_10.csv (csv)
 
-6. Check for ""my perfect weather"" (maximum temperature less than 30, minimum temperature greater than 15, sunny, air quality excellent).
+6. Check for ""my perfect weather"" (maximum temperature less than 30, minimum temperature greater than 15, sunny, air quality excellent). Sunny means the 'tianqi' value contains 晴, including combined values such as 多云~晴.
    - Input: beijing_tianqi_2018.csv (csv)
    - Output: output_perfect_weather.csv (csv)
 
@@ -1540,21 +1451,77 @@ Please complete the following data analysis tasks and provide the specified outp
    - Input: beijing_tianqi_2018.csv (csv)
    - Output: output_wencha_added.csv (csv)
 
-8. Add a new column 'wenduType' (marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise normal temperature).
+8. Add a new column 'wenduType' (marking 高温 if the maximum temperature is above 30, 低温 if the minimum temperature is below -10, otherwise 正常温度).
+   - Input: output_wencha_added.csv (csv, the result of subtask 7)
+   - Output: output_wenduType_added.csv (csv keeping all the columns of the input)
+
+9. How many types of 'fengxiang' are there in the whole year of 2018? How many days does each type correspond to?
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_fengxiang_counts.csv (csv with columns 'fengxiang' and 'Days')
+
+10. What is the correlation coefficient between air quality 'aqi' and maximum temperature?
+    - Input: beijing_tianqi_2018.csv (csv)
+    - Output: output_corr_aqi_max_temp.csv (csv with single value under column 'Correlation' and index labeled 'aqi and bWendu')
+
+11. What is the correlation coefficient between air quality 'aqi' and temperature difference 'wencha'?
+    - Input: beijing_tianqi_2018.csv (csv)
+    - Output: output_corr_aqi_wencha.csv (csv with single value under column 'Correlation' and index labeled 'aqi and wencha')","consistency,correlation coefficients","# Data source for this case, the whole year of Beijing weather in 2018, beijing_tianqi_2018.csv, file encoding utf-8\n'''\nAttribute description:\nymd: Year, month, day\nbWendu: Maximum temperature\nyWendu: Minimum temperature\ntianqi: Weather status: sunny, sunny to cloudy\nfengxiang: Wind direction, southwest wind, north wind\nfengli: Wind force level\naqi: Air quality\naqiInfo: Air Quality Index: excellent, good, light pollution\naqiLevel: Air quality score\n'''\n\n# According to the prompts, complete the following data analysis:\n# 1. Set the index to the date for easy filtering by date. New knowledge: set_index() Example df.set_index('ymd', inplace=True)\n# 2. Look up the weather conditions on March 1, 2018. Hint: .loc\n# 3. Replace the temperature units with ℃ removed. Hint: replacement\n# 4. Check the maximum and minimum temperatures for the consecutive 7 days starting from August 1, 2018. Hint: slicing\n# 5. Check results where the minimum temperature is below -10. Hint: conditional expression query\n# 6. Check for ""my perfect weather"" (maximum temperature less than 30, and minimum temperature greater than 15, sunny, air quality excellent). Hint: conditional expression query\n# 7. Add a new column 'wencha', maximum temperature - minimum temperature.\n# 8. Add a new column 'wenduType', marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise normal temperature. Hint: apply\n# 9. How many types of 'fengxiang' are there in the whole year of 2018? How many days does each type correspond to? Hint: data statistical function [enumerate]\n# 10. What is the correlation coefficient between air quality 'aqi' and maximum temperature?\n# 11. What is the correlation coefficient between air quality 'aqi' and temperature difference 'wencha'?",N,"Data source for this case: the whole year of Beijing weather in 2018, input file: beijing_tianqi_2018.csv (file encoding: utf-8)
+
+Attribute description:
+- ymd: Year, month, day
+- bWendu: Maximum temperature
+- yWendu: Minimum temperature
+- tianqi: Weather status (sunny, sunny to cloudy)
+- fengxiang: Wind direction (southwest wind, north wind)
+- fengli: Wind force level
+- aqi: Air quality
+- aqiInfo: Air Quality Index (excellent, good, light pollution)
+- aqiLevel: Air quality score
+
+Please complete the following data analysis tasks and provide the specified outputs:
+
+1. Set the index to the date for easy filtering by date.
+   - Output: output_indexed.csv (csv, keeping 'ymd' as the index column header)
+   
+2. Look up the weather conditions on March 1, 2018.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_march_01_2018.csv (csv, should be a single-row DataFrame format with header and index; in this file the index column header must be left empty)
+
+3. Replace the temperature units with ℃ removed.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_temperature_cleaned.csv (csv)
+
+4. Check the maximum and minimum temperatures for the consecutive 7 days starting from August 1, 2018.
+   - Input: beijing_tianqi_2018.csv (csv, with the temperatures cleaned as in subtask 3)
+   - Output: output_august_temperatures.csv (csv with all the original columns kept for those 7 days)
+
+5. Check results where the minimum temperature is below -10.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_below_negative_10.csv (csv)
+
+6. Check for ""my perfect weather"" (maximum temperature less than 30, minimum temperature greater than 15, sunny, air quality excellent). Sunny means the 'tianqi' value contains 晴, including combined values such as 多云~晴.
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_perfect_weather.csv (csv)
+
+7. Add a new column 'wencha' (maximum temperature - minimum temperature).
+   - Input: beijing_tianqi_2018.csv (csv)
+   - Output: output_wencha_added.csv (csv)
+
+8. Add a new column 'wenduType' (marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise 正常温度).
    - Input: beijing_tianqi_2018.csv (csv)
    - Output: output_wenduType_added.csv (csv)
 
 9. How many types of 'fengxiang' are there in the whole year of 2018? How many days does each type correspond to?
    - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_fengxiang_counts.csv (csv)
+   - Output: output_fengxiang_counts.csv (csv with columns 'fengxiang' and 'Days')
 
 10. What is the correlation coefficient between air quality 'aqi' and maximum temperature?
     - Input: beijing_tianqi_2018.csv (csv)
-    - Output: output_corr_aqi_max_temp.csv (csv)
+    - Output: output_corr_aqi_max_temp.csv (csv with single value under column 'Correlation' and index labeled 'aqi and bWendu')
 
 11. What is the correlation coefficient between air quality 'aqi' and temperature difference 'wencha'?
     - Input: beijing_tianqi_2018.csv (csv)
-    - Output: output_corr_aqi_wencha.csv (csv)",2=open source data
+    - Output: output_corr_aqi_wencha.csv (csv with single value under column 'Correlation' and index labeled 'aqi and wencha')",2=open source data
 40,"(1) Read the 'Chinese provinces population data.csv' file.  
 **Input:** 'Chinese provinces population data.csv'  
 **Output:** None  
@@ -1793,32 +1760,21 @@ Please provide me with executable code.",2=open source data
 (4) Calculate the cosine similarity of the two vectors. Present the results in a table format and save it as ""cosine_similarity.csv"" containing columns: ""Similarity_Score"", ""Description"" (with a brief note on similarity interpretation).",2=open source data
 46,"Using the dataset of house prices and economic indicators provided below, please complete the following subtasks. Each subtask should generate an output file for evaluation, with specific input files where applicable.
 
-Dataset:
-```
-Year, M2 Year-on-Year Growth, Land Supply Increases, Net Inflow of Population, House Price Rise
-2014, 1, 0, 1, 0
-2015, 1, 0, 1, 1
-2016, 1, 0, 1, 1
-2017, 0, 1, 0, 0
-2018, 0, 1, 0, 0
-```
+Dataset: `data.csv`
 
 Subtasks:
-1. **Data Preparation**: Clean and preprocess the dataset to handle any missing values or incorrect data types.  
-   **Input**: `data.csv` (dataset provided above)  
-   **Output**: `cleaned_data.csv` 
 
-2. **Gaussian Naive Bayes Training**: Train a Gaussian Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
-   **Input**: `cleaned_data.csv`  
-   **Output**: `gaussian_model_accuracy.csv` (contains accuracy metrics)
+1. Gaussian Naive Bayes Training: Train a Gaussian Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
+   Input: `data.csv`  
+   Output: `gaussian_model_accuracy.csv` (contains accuracy metrics) and `gaussian_predictions.csv` (the held-out rows the accuracy was measured on: their feature columns plus the columns `Actual` and `Predicted` holding the true and the predicted value of the target column)
 
-3. **Multinomial Naive Bayes Training**: Train a Multinomial Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
-   **Input**: `cleaned_data.csv`  
-   **Output**: `multinomial_model_accuracy.csv` (contains accuracy metrics)
+2. Multinomial Naive Bayes Training: Train a Multinomial Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
+   Input: `data.csv`  
+   Output: `multinomial_model_accuracy.csv` (contains accuracy metrics) and `multinomial_predictions.csv` (the held-out rows the accuracy was measured on: their feature columns plus the columns `Actual` and `Predicted` holding the true and the predicted value of the target column)
 
-4. **Comparison of Models**: Generate a comparative analysis of the accuracy of both models in a visual format.  
-   **Input**: `gaussian_model_accuracy.csv`, `multinomial_model_accuracy.csv`  
-   **Output**: `model_comparison.png` 
+3. Comparison of Models: Generate a comparative analysis of the accuracy of both models in a visual format.  
+   Input: `gaussian_model_accuracy.csv`, `multinomial_model_accuracy.csv`  
+   Output: `model_comparison.png` 
 
 Please ensure that the outputs contain necessary details for further evaluation.",acc,"Year M2 Year-on-Year Growth Exceeds 10% Land Supply Increases by More Than 10% Is There a Net Inflow of Population Does House Price Significantly Rise in the Following Year\n2014 1 0 1 0\n2015 1 0 1 1\n2016 1 0 1 1\n2017 0 1 0 0\n2018 0 1 0 0\nUsing the dataset of house prices and economic indicators in the table, try to train using Gaussian Naive Bayes and Multinomial Naive Bayes, and observe the differences in model accuracy.",N,"Using the dataset of house prices and economic indicators provided below, please complete the following subtasks. Each subtask should generate an output file for evaluation, with specific input files where applicable.
 
@@ -1839,43 +1795,38 @@ Subtasks:
    Output: `model_comparison.png` 
 
 Please ensure that the outputs contain necessary details for further evaluation.",3=human written data
-47,"Read the dataset (input file: ""Fish.csv""). Encode the dataset to divide it into training and test sets. From the dataset's four categories of Bream, Roach, Parkki, and Perch, randomly select 2 samples from each category for the test set. The remaining samples will be used as the training set. Output the number of samples in the training and test sets in a CSV file named ""sample_counts.csv"".
+47,"Read the dataset (input file: ""Fish.csv"") and keep only the dataset's four categories of Bream, Roach, Parkki, and Perch. Encode the dataset to divide it into training and test sets. From each of these four categories, randomly select 2 samples for the test set. The remaining samples will be used as the training set. Output the number of samples in the training and test sets in a CSV file named ""sample_counts.csv"" with the columns ""Set"" and ""Sample Count"", the first row holding ""Training"" and the second row holding ""Test"".
 
-Next, implement the KNN algorithm with K values of 1, 5, 15, and 100 to classify all samples in the test set. Output the classification results of the test samples to a CSV file named ""classification_results.csv"".",acc,"Read the dataset (the Fish.csv file in Learning Pass - Materials). Then encode to divide the dataset into training and test sets. From the dataset's four categories of Bream, Roach, Parkki, and Perch, randomly select 2 samples from each category for the test set. The remaining samples will be used as the training set, and output the number of samples in the training and test sets. Finally, encode the KNN algorithm (with K values of 1, 5, 15, 100) to classify all samples in the test set and output the classification results of the test samples.",Y,"Read the dataset (input file: ""Fish.csv""). Encode the dataset to divide it into training and test sets. From the dataset's four categories of Bream, Roach, Parkki, and Perch, randomly select 2 samples from each category for the test set. The remaining samples will be used as the training set. Output the number of samples in the training and test sets in a CSV file named ""sample_counts.csv"".
+Next, implement the KNN algorithm with K values of 1, 5, 15, and 100 to classify all samples in the test set. Output the classification results of the test samples to a CSV file named ""classification_results.csv"" with one row per test sample per K value and the columns ""Test Sample Index"", ""True Species Code"", ""Predicted Species Code"", ""K"", and ""Accuracy"", where the species codes are the encoded species labels and ""Accuracy"" is the accuracy on the test set for that K value.",acc,"Read the dataset (the Fish.csv file in Learning Pass - Materials). Then encode to divide the dataset into training and test sets. From the dataset's four categories of Bream, Roach, Parkki, and Perch, randomly select 2 samples from each category for the test set. The remaining samples will be used as the training set, and output the number of samples in the training and test sets. Finally, encode the KNN algorithm (with K values of 1, 5, 15, 100) to classify all samples in the test set and output the classification results of the test samples.",Y,"Read the dataset (input file: ""Fish.csv"") and keep only the dataset's four categories of Bream, Roach, Parkki, and Perch. Encode the dataset to divide it into training and test sets. From each of these four categories, randomly select 2 samples for the test set. The remaining samples will be used as the training set. Output the number of samples in the training and test sets in a CSV file named ""sample_counts.csv"" with the columns ""Set"" and ""Sample Count"", the first row holding ""Training"" and the second row holding ""Test"".
 
-Next, implement the KNN algorithm with K values of 1, 5, 15, and 100 to classify all samples in the test set. Output the classification results of the test samples to a CSV file named ""classification_results.csv"".",2=open source data
-48,"**Description:** It is recommended to use open-source toolkits, such as scikit-learn, which has an implementation of the Naive Bayes function for the Naive Bayes Classifier.
+Next, implement the KNN algorithm with K values of 1, 5, 15, and 100 to classify all samples in the test set. Output the classification results of the test samples to a CSV file named ""classification_results.csv"" with one row per test sample per K value and the columns ""Test Sample Index"", ""True Species Code"", ""Predicted Species Code"", ""K"", and ""Accuracy"", where the species codes are the encoded species labels and ""Accuracy"" is the accuracy on the test set for that K value.",2=open source data
+48,"Description: It is recommended to use open-source toolkits, such as scikit-learn, which has an implementation of the Naive Bayes function for the Naive Bayes Classifier.
 
-**Dataset:** 
+Dataset: 
 - Input files:  
   - ""Bayesian_Dataset_train.csv""  
   - ""Bayesian_Dataset_test.csv""
 
-**Data Description:** The column names are ""Age, Occupation, Family Income, Education, Marital Status, Job Type, Family Size, Ethnicity, Gender, Workplace"". The last column is the label, indicating whether the income is greater than 50k (>50K).
+Data Description: The column names are ""Age, Occupation, Family Income, Education, Marital Status, Job Type, Family Size, Ethnicity, Gender, Workplace"". The last column is the label, indicating whether the income is greater than 50k (>50K).
 
-**Task Description:** Use the Naïve Bayesian method to predict whether a person's income is higher than 50K annually.
+Task Description: Use the Naïve Bayesian method to predict whether a person's income is higher than 50K annually.
 
-**Subtasks and Requirements:**
+Subtasks and Requirements:
 
-1. **Data Preprocessing**  
-   - **Input:** ""Bayesian_Dataset_train.csv""  
-   - **Output:** ""preprocessed_data.csv"" (CSV format)  
-   - **Details:** Clean and prepare the training dataset for modeling.
+1. Data Preprocessing  
+   - Input: ""Bayesian_Dataset_train.csv""  
+   - Output: ""preprocessed_data.csv"" (CSV format)  
+   - Details: Clean and prepare the training dataset for modeling.
 
-2. **Model Training**  
-   - **Input:** ""preprocessed_data.csv""  
-   - **Output:** ""naive_bayes_model.pkl"" (Pickle format)  
-   - **Details:** Train the Naïve Bayes Classifier on the training dataset.
+2. Model Training  
+   - Input: ""preprocessed_data.csv""  
+   - Output: ""naive_bayes_model.pkl"" (Pickle format)  
+   - Details: Train the Naïve Bayes Classifier on the training dataset.
 
-3. **Model Evaluation**  
-   - **Input:** ""naive_bayes_model.pkl"", ""Bayesian_Dataset_test.csv""  
-   - **Output:** ""evaluation_results.csv"" (CSV format)  
-   - **Details:** Evaluate the model using cross-validation and leave-one-out methods, and compute statistical results, including Accuracy, Precision, Recall, F1 Score, and ROC AUC.
-
-4. **Parameter Exploration (Optional)**  
-   - **Input:** ""preprocessed_data.csv""  
-   - **Output:** ""parameter_exploration_results.pdf"" (PDF format)  
-   - **Details:** Explore the impact of different parameters on the results and present findings in a report format.","acc,precision,recall,f1,ROC","Description: It is recommended to use open-source toolkits, such as scikit-learn, which has an implementation of the Naive Bayes function for the Naive Bayes Classifier.
+3. Model Evaluation  
+   - Input: ""naive_bayes_model.pkl"", ""Bayesian_Dataset_test.csv""  
+   - Output: ""evaluation_results.csv"" (CSV format)  
+   - Details: Evaluate the model using cross-validation and leave-one-out methods, and compute statistical results, including Accuracy, Precision, Recall, F1 Score, and ROC AUC. Save ""evaluation_results.csv"" in long format with exactly two columns, ""Metric"" and ""Score"", and exactly five rows whose ""Metric"" values are ""Accuracy"", ""Precision"", ""Recall"", ""F1 Score"" and ""ROC AUC"".","acc,precision,recall,f1,ROC","Description: It is recommended to use open-source toolkits, such as scikit-learn, which has an implementation of the Naive Bayes function for the Naive Bayes Classifier.
  Dataset: Bayesian_Dataset_train.csv, Bayesian_Dataset_test.csv.
  Data Description: The column names are ""Age, Occupation, Family Income, Education, Marital Status, Job Type, Family Size, Ethnicity, Gender, Workplace"". The last column is the label, indicating whether the income is greater than 50k (>50K).
  Task Description: Use the Naïve Bayesian method to predict whether a person's income is higher than 50K annually.
@@ -1906,4 +1857,4 @@ Subtasks and Requirements:
 3. Model Evaluation  
    - Input: ""naive_bayes_model.pkl"", ""Bayesian_Dataset_test.csv""  
    - Output: ""evaluation_results.csv"" (CSV format)  
-   - Details: Evaluate the model using cross-validation and leave-one-out methods, and compute statistical results, including Accuracy, Precision, Recall, F1 Score, and ROC AUC.",3=human written data
+   - Details: Evaluate the model using cross-validation and leave-one-out methods, and compute statistical results, including Accuracy, Precision, Recall, F1 Score, and ROC AUC. Save ""evaluation_results.csv"" in long format with exactly two columns, ""Metric"" and ""Score"", and exactly five rows whose ""Metric"" values are ""Accuracy"", ""Precision"", ""Recall"", ""F1 Score"" and ""ROC AUC"".",3=human written data

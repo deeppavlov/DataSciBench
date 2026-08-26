@@ -2,7 +2,23 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "prediction_accuracy.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. The task only asks to visualize the prediction accuracy of the SVR model and does not say what kind of chart to draw, so A is one possible answer among many and not a template. Judge B on its own merits as a visualization of prediction accuracy. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty chart, with the data actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Prediction Accuracy: B shows how accurate the predictions are, that is it puts predicted values against actual ones or shows a quantity derived from that comparison. Any of the usual forms earns this point, for example a scatter plot of predicted against actual values, curves of a quality measure such as R2 or the mean squared error along the output index, a distribution or a plot of the residuals, or the predicted and the actual values drawn on top of each other. A chart of the raw inputs or of the raw outputs alone, or of a training loss that never touches the predictions, does not get this point.
+        - add 1 point for Output Scale: every entry of the output matrix a_full.csv lies between 0 and 1 and the entries are spread evenly over that range, so an axis carrying actual or predicted output values spans roughly 0 to 1, and an error measure such as the mean squared error is of the order of 0.1 rather than orders of magnitude away from it.
+        - add 1 point for Honest Accuracy: there is no learnable relation between the inputs and the outputs of this dataset, so an SVR fitted on them predicts little more than the mean and an honest chart shows a poor fit, that is R2 values at or below zero, mean squared errors around 0.1, or a predicted against actual cloud that forms a flat band instead of lining up along the diagonal. A chart that claims a near perfect fit, for example R2 close to 1 or points sitting on the diagonal, does not get this point.
+        - add 1 point for Axis Labels and Caption: both axes of every panel are labelled, and a legend, a title or reported metric values explain what is shown.
+
+        The kind of chart, the number of panels, the choice of the quality measure, the number of output columns covered, the colors, the line and marker styles, the figure size and the wording of the titles and the axis labels are all left to the solution. Do not require B to match A in any of them and do not take a point off for any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "prediction_accuracy.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality

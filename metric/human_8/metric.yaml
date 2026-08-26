@@ -4,9 +4,16 @@
         import pandas as pd
         output = pd.read_csv("cleaned_data.csv")
         ground_truth_df = pd.read_csv(ground_truth)
-        original_shape = ground_truth_df.shape
-        cleaned_shape = output.shape
-        return cleaned_shape[0] == original_shape[0]
+        if output.shape[0] < ground_truth_df.shape[0] or output.shape[1] < 5:
+            return False
+        if output.select_dtypes(include="number").shape[1] < 4:
+            return False
+        source = pd.concat([pd.read_csv(f"../{year}.csv") for year in range(2015, 2020)], ignore_index=True).select_dtypes(include="number")
+        numbers = output.select_dtypes(include="number")
+        shared = [c for c in source.columns if c in numbers.columns and numbers[c].nunique() > 1]
+        if len(shared) < 5 or not ((numbers[shared].corr() - source[shared].corr()).abs().to_numpy() <= 0.25).all():
+            return False
+        return bool(not output.isna().any().any() and not output.duplicated().any())
   "function": |-
     Data Cleaning Completeness
   "ground_truth": |-
@@ -20,12 +27,22 @@
         import pandas as pd
         from sklearn.metrics import silhouette_score
         output = pd.read_csv("clusters.csv")
-        features = output.iloc[:, :-1]
-        labels = output.iloc[:, -1]
-        ground_truth_df = pd.read_csv(ground_truth)
-        ground_truth_features = ground_truth_df.iloc[:, :-1]
-        ground_truth_labels = ground_truth_df.iloc[:, -1]
-        return silhouette_score(features, labels) >= silhouette_score(ground_truth_features, ground_truth_labels)
+        label_col = "Cluster" if "Cluster" in output.columns else output.columns[-1]
+        labels = output[label_col]
+        features = output.drop(columns=[label_col]).select_dtypes(include="number")
+        if features.shape[1] < 2 or features.isna().any().any():
+            return False
+        if labels.nunique() < 2 or labels.nunique() >= len(labels):
+            return False
+        source = pd.concat([pd.read_csv(f"../{year}.csv") for year in range(2015, 2020)], ignore_index=True).select_dtypes(include="number")
+        shared = [c for c in source.columns if c in features.columns and features[c].nunique() > 1]
+        if len(shared) < 5 or not ((features[shared].corr() - source[shared].corr()).abs().to_numpy() <= 0.25).all():
+            return False
+        reference = pd.read_csv(ground_truth)
+        reference_label = "Cluster" if "Cluster" in reference.columns else reference.columns[-1]
+        reference_features = reference.drop(columns=[reference_label]).select_dtypes(include="number")
+        threshold = 0.5 * silhouette_score(reference_features, reference[reference_label])
+        return bool(silhouette_score(features, labels) >= threshold)
   "function": |-
     Silhouette Score
   "metric": |-
@@ -38,36 +55,81 @@
     def association_rule_lift(ground_truth):
         import pandas as pd
         output = pd.read_csv("association_rules.csv")
-        output_gd = pd.read_csv(ground_truth)
-        return all(output['lift'] == (output_gd['lift']))
+        required = ["antecedents", "consequents", "support", "confidence", "lift"]
+        if not set(required).issubset(output.columns) or len(output) < 5:
+            return False
+        if len(output[["antecedents", "consequents"]].drop_duplicates()) < 5:
+            return False
+        numbers = output[["support", "confidence", "lift"]]
+        if numbers.isna().any().any():
+            return False
+        if not ((numbers["confidence"] > 0) & (numbers["confidence"] <= 1)).all():
+            return False
+        import re
+        tokens = set()
+        for year in range(2015, 2020):
+            for column in pd.read_csv(f"../{year}.csv", nrows=0).columns:
+                tokens.update(w for w in re.split(r"[^a-z]+", str(column).lower()) if len(w) > 3)
+        items = " ".join(output["antecedents"].astype(str)) + " " + " ".join(output["consequents"].astype(str))
+        if len(set(re.split(r"[^a-z]+", items.lower())) & tokens) < 3:
+            return False
+        return bool(numbers["lift"].median() > 1)
   "function": |-
     Pattern Recognition Validity
   "metric": |-
     Association Rule Strength (Lift)
   "task_name": |-
     Pattern recognition
-  "ground_truth": |-
-    association_rules.csv
 - "code": |-
     def feature_importance_scores(ground_truth):
+        import os
         import pandas as pd
-        from sklearn.ensemble import RandomForestRegressor
         output = pd.read_csv("pattern_analysis.csv")
-        output_gd = pd.read_csv(ground_truth)
-        return output['Correlation with Happiness Score'].equals((output_gd['Correlation with Happiness Score']))
+        corr_cols = [c for c in output.columns if "correlation" in c.lower()]
+        if not corr_cols:
+            return False
+        corr = pd.to_numeric(output[corr_cols].iloc[:, 0], errors="coerce").dropna()
+        if len(corr) < 3 or corr.abs().max() > 1 or corr.max() < 0.5:
+            return False
+        source = set()
+        for year in range(2015, 2020):
+            source.update(str(c).strip().lower() for c in pd.read_csv(f"../{year}.csv", nrows=0).columns)
+        labels = {str(c).strip().lower() for c in output.columns} | {str(v).strip().lower() for v in output.to_numpy().ravel()}
+        if len(labels & source) < 3:
+            return False
+        data = pd.read_csv("cleaned_data.csv").select_dtypes(include="number")
+        raw = pd.concat([pd.read_csv(f"../{year}.csv") for year in range(2015, 2020)], ignore_index=True).select_dtypes(include="number")
+        shared = [c for c in raw.columns if c in data.columns and data[c].nunique() > 1]
+        if len(shared) < 5 or not ((data[shared].corr() - raw[shared].corr()).abs().to_numpy() <= 0.25).all():
+            return False
+        score_cols = [c for c in data.columns if "score" in str(c).lower()]
+        real = {round(float(v), 3) for c in score_cols for v in data.corr()[c].dropna()}
+        if sum(any(abs(v - r) <= 0.02 for r in real) for v in corr) < 3:
+            return False
+        plots = ["scatter_plot.png", "heatmap.png", "cluster_plot.png"]
+        return all(os.path.exists(f) and os.path.getsize(f) > 1000 for f in plots)
   "function": |-
     Plot Validity
   "metric": |-
     Feature Importance Scores
   "task_name": |-
     Data visualization
-  "ground_truth": |-
-    pattern_analysis.csv
 - "code": |-
     def report_completeness(ground_truth):
         import os
+
+        try:
+            from pypdf import PdfReader
+        except ImportError:
+            from PyPDF2 import PdfReader
+
         report_path = "happiness_analysis_report.pdf"
-        return os.path.exists(report_path)  # Returns True if the report file exists
+        if not os.path.exists(report_path) or os.path.getsize(report_path) == 0:
+            return False
+        with open(report_path, "rb") as file:
+            pages = PdfReader(file).pages
+            text = "".join(page.extract_text() or "" for page in pages)
+        return bool(len(text.strip()) > 300)
   "function": |-
     Report Completeness
   "metric": |-
@@ -78,10 +140,10 @@
   Please conduct a thorough examination of the "World Happiness Report" dataset available on Kaggle (https://www.kaggle.com/unsdsn/world-happiness) to uncover meaningful insights into global happiness trends. 
 
   1. **Data Import and Cleaning:**
-     - **Input Filename:** `data.csv` (the downloaded dataset)
+     - **Input Filename:** `2015.csv` to `2019.csv` (the downloaded dataset)
      - **Output Filename:** `cleaned_data.csv`
      - Execute a rigorous data cleaning process, including addressing missing values, encoding categorical variables, and eliminating duplicate entries.
-   
+
   2. **Data Exploration with Clustering:**
      - **Input Filename:** `cleaned_data.csv`
      - **Output Filename:** `clusters.csv`

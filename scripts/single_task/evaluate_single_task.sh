@@ -1,4 +1,6 @@
 #!/bin/bash
+. "$(dirname "$0")/../_python.sh" 2>/dev/null || PY="${PYTHON:-python}"
+cd "$(dirname "$0")/../.." || exit 1
 
 # Specify TASK_ID here (same as in run_single_task.sh)
 TASK_ID="human_3"
@@ -17,7 +19,7 @@ echo "Logs will be saved to: $LOG_FILE" | tee -a "$LOG_FILE"
 echo "==========================================================" | tee -a "$LOG_FILE"
 
 # Run evaluation
-python -m experiments.evaluate --task_id "$TASK_ID" --model_id "$MODEL_NAME" 2>&1 | tee -a "$LOG_FILE"
+"$PY" -m experiments.evaluate --task_id "$TASK_ID" --model_id "$MODEL_NAME" 2>&1 | tee -a "$LOG_FILE"
 
 echo "==========================================================" | tee -a "$LOG_FILE"
 echo "Evaluation complete." | tee -a "$LOG_FILE"

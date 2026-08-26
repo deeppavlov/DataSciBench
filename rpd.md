@@ -98,7 +98,8 @@ DataSciBench/
   * `list_to_dict_by_task(data_list)` — преобразование списка TMC в словарь по ключу `metric`.
   * `json_data_to_yaml(json_data, yaml_file_path)` — сохранение JSON-данных в YAML.
 * `src/llm_utils.py`, `src/vlm_utils.py`, `src/vlm_config.py`:
-  * Вызов мультимодальных (VLM) и текстовых (LLM) моделей через OpenAI API (`gpt-4o-mini`) для оценки сгенерированных графиков (`vlm_vis_quality` по 5 критериям) и текстов (`llm_text_quality` по 5-балльной шкале).
+  * `vlm_vis_quality` — оценка сгенерированных графиков по 5 критериям (промпт можно переопределить третьим аргументом из `metric.yaml`). По умолчанию судит локальный headless-запуск `claude -p` (модель `sonnet`, `--effort high`), вердикты кэшируются в `evaluation_results/vlm_bridge/{key}.score`. При `VLM_JUDGE=api` работает прежний путь через OpenAI API (`gpt-4o-mini`) с ключами из `src/vlm_config.py`. Переменные окружения: `VLM_JUDGE`, `VLM_JUDGE_CLI`, `VLM_JUDGE_MODEL`, `VLM_JUDGE_EFFORT`, `VLM_BRIDGE_TIMEOUT`.
+  * `llm_text_quality` — оценка текстов по 5-балльной шкале через OpenAI API (`gpt-4o-mini`).
   * Логирование запросов в `evaluation_results/vlm_run_log.txt` и `evaluation_results/llm_run_log.txt`.
 
 ### `/utils` — Строковые сниппеты для BigCodeBench (TMC Evaluation)
@@ -325,7 +326,7 @@ uv run python -m unittest tests/load_yaml_test.py tests/json_yaml_test.py
     model: "gpt-4o"
     api_key: "sk-..."
   ```
-* **Конфигурация VLM/LLM оценки**: `src/vlm_config.py` задает `API_KEY` и `BASE_URL` для вызовов моделей визуальной и текстовой оценки.
+* **Конфигурация VLM/LLM оценки**: `src/vlm_config.py` задает `API_KEY` и `BASE_URL` для текстовой оценки и для судьи по изображениям в режиме `VLM_JUDGE=api`.
 * **Удаленный кластер (GPU)**:
   * Эксперименты запускаются на удаленном сервере (например, `malyshev_sa@gpu10`).
   * Синхронизация данных выполняется через `rsync -avz --delete data/ malyshev_sa@gpu10:~/DataSciBench/data/`.

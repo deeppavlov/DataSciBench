@@ -1,4 +1,4 @@
-,Prompt,Metrics,Original Prompt,Qualified (Y/N),Modified Prompt (If not qualified),data source type
+Unnamed: 0,Prompt,Metrics,Original Prompt,Qualified (Y/N),Modified Prompt (If not qualified),data source type
 0,"You are given a list of tickers and their daily closing prices for a given period stored in an input file named ""data.csv"". Implement the most_corr function that, when given the daily closing prices, returns the pair of tickers that are the most highly (linearly) correlated by daily percentage change. The function should follow these specifications:
 
 1. **Input File**: ""data.csv"" - A CSV file containing a dataframe with columns representing each ticker's daily closing prices.
@@ -586,38 +586,32 @@ You are required to solve an employee churn prediction task using the IBM HR Ana
    Output: `clustering_results.csv` (This should include the results of the clustering analysis, showing which group each incident belongs to.) 
 
 Ensure that each output file reflects the quality of the completion of the respective subtask for further evaluation.","data quality,mean,median,std,visualization,silhouette score","You are required to analyze and visualize the ""Global Terrorism Database"" from Kaggle (https://www.kaggle.com/START-UMD/gtd).Please load the dataset and perform data cleaning by handling missing values, removing duplicates, and correcting any anomalies. Conduct an exploratory data analysis (EDA) to understand the distribution and relationships within the dataset. Calculate basic statistical indicators such as mean, median, standard deviation, and provide summary statistics for key features like attack type, target type, and region.Generate visualizations to uncover patterns and insights. Create histograms and box plots to display the distribution of numerical features, and bar plots to show the frequency of categorical variables. Use scatter plots and heatmaps to visualize relationships and correlations between features.Identify patterns in the data related to terrorist activities. For instance, determine trends over time, geographical hotspots, and common attack methods. Use clustering techniques (e.g., K-means clustering) to identify patterns and group similar incidents together.",Y,,2=open source data
-7,"You are required to perform a comprehensive analysis on the ""Online Retail II"" dataset from UCI Machine Learning Repository (https://archive.ics.uci.edu/ml/datasets/Online+Retail+II). 
-
+7,"""You are required to perform a comprehensive analysis on the """"Online Retail II"""" dataset from UCI Machine Learning Repository 
+- **Input file:** online_retail_II.xlsx
 1. **Data Visualization:**
-   - Conduct data visualizations to understand the dataset better. 
-   - Create the following visualizations:
-     - A bar chart showing the distribution of transactions by country.
-       - **Output format:** PNG
-       - **Output filename:** distribution_by_country.png
-     - A time series plot displaying sales trends over time.
-       - **Output format:** PNG
-       - **Output filename:** sales_trends_over_time.png
-     - A heatmap illustrating the correlation between different features.
-       - **Output format:** PNG
-       - **Output filename:** correlation_heatmap.png
-   - **Input file:** online_retail.csv
+- Conduct data visualizations to understand the dataset better. 
+- Create the following visualizations:
+- A bar chart showing the distribution of transactions by country.
+- **Output filename:** distribution_by_country.png
+- A time series plot displaying sales trends over time.
+- **Output filename:** sales_trends_over_time.png
+- A heatmap illustrating the correlation between different features.
+- **Output filename:** correlation_heatmap.png
 
 2. **Data Mining:**
-   - Use data mining techniques to uncover valuable insights from the dataset.
-   - Perform market basket analysis using the Apriori algorithm to find frequent itemsets and association rules.
-     - **Output format:** CSV
-     - **Output filename:** frequent_itemsets.csv
-   - Identify the most popular products and analyze customer purchasing patterns.
-     - **Output format:** CSV
-     - **Output filename:** popular_products_analysis.csv
+- Use data mining techniques to uncover valuable insights from the dataset.
+- Perform market basket analysis using the Apriori algorithm to find frequent itemsets and association rules.
+- **Output filename:** frequent_itemsets.csv
+- For the market basket analysis use the sheet 'Year 2009-2010', drop the rows with a missing Customer ID, keep only the rows with Quantity > 0 and Price > 0, build the basket with one row per Invoice and one column per Description whose value is 1 when the invoice contains that product and 0 otherwise, and run the Apriori algorithm with a minimum support of 0.01 and item names instead of column indices; frequent_itemsets.csv must have the two columns support and itemsets, where itemsets holds the textual set-of-descriptions form written by pandas, for example frozenset({'ITEM A', 'ITEM B'}).
+- Identify the most popular products and analyze customer purchasing patterns.
+- **Output filename:** popular_products_analysis.csv
 
 3. **Comprehensive Report:**
-   - Generate a comprehensive report detailing the data visualizations and insights gained from data mining.
-   - Include all visualizations, discuss the identified patterns, and their potential business implications.
-   - **Output format:** PDF
-   - **Output filename:** comprehensive_report.pdf
+- Generate a comprehensive report detailing the data visualizations and insights gained from data mining.
+- Include all visualizations, discuss the identified patterns, and their potential business implications.
+- **Output filename:** comprehensive_report.pdf
 
-All outputs should reflect the quality of completion for each subtask, allowing for further evaluation of the analysis performed.","visualization,correlation coefficients","You are required to perform a comprehensive analysis on the ""Online Retail II"" dataset from UCI Machine Learning Repository (https://archive.ics.uci.edu/ml/datasets/Online+Retail+II).
+All outputs should reflect the quality of completion for each subtask, allowing for further evaluation of the analysis performed.""","visualization,correlation coefficients","You are required to perform a comprehensive analysis on the ""Online Retail II"" dataset from UCI Machine Learning Repository (https://archive.ics.uci.edu/ml/datasets/Online+Retail+II).
 Please conduct data visualization to understand the data better. Create visualizations such as bar charts to show the distribution of transactions by country, time series plots to display sales trends over time, and heatmaps to illustrate the correlation between different features.Use data mining techniques to uncover valuable insights from the dataset. For instance, perform market basket analysis using the Apriori algorithm to find frequent itemsets and association rules. Identify the most popular products and analyze customer purchasing patterns.Generate a comprehensive report detailing the data visualizations, and insights gained from data mining. Include all visualizations, discuss the identified patterns, and their potential business implications. Save the report as a PDF file at {report_path}.",N,"""You are required to perform a comprehensive analysis on the """"Online Retail II"""" dataset from UCI Machine Learning Repository 
 - **Input file:** online_retail_II.xlsx
 1. **Data Visualization:**
@@ -634,6 +628,7 @@ Please conduct data visualization to understand the data better. Create visualiz
 - Use data mining techniques to uncover valuable insights from the dataset.
 - Perform market basket analysis using the Apriori algorithm to find frequent itemsets and association rules.
 - **Output filename:** frequent_itemsets.csv
+- For the market basket analysis use the sheet 'Year 2009-2010', drop the rows with a missing Customer ID, drop the duplicate rows, keep only the rows with Quantity > 0 and Price > 0, build the basket with one row per Invoice and one column per Description (descriptions are used exactly as they are stored, without stripping or renaming them) whose value is 1 when the invoice contains that product and 0 otherwise, and run the Apriori algorithm with a minimum support of 0.01 and item names instead of column indices; frequent_itemsets.csv must have the two columns support and itemsets, where itemsets holds the textual set-of-descriptions form written by pandas, for example frozenset({'ITEM A', 'ITEM B'}).
 - Identify the most popular products and analyze customer purchasing patterns.
 - **Output filename:** popular_products_analysis.csv
 
@@ -646,7 +641,7 @@ All outputs should reflect the quality of completion for each subtask, allowing 
 8,"Please conduct a thorough examination of the ""World Happiness Report"" dataset available on Kaggle (https://www.kaggle.com/unsdsn/world-happiness) to uncover meaningful insights into global happiness trends. 
 
 1. **Data Import and Cleaning:**
-   - **Input Filename:** `data.csv` (the downloaded dataset)
+   - **Input Filename:** `2015.csv` to `2019.csv` (the downloaded dataset)
    - **Output Filename:** `cleaned_data.csv`
    - Execute a rigorous data cleaning process, including addressing missing values, encoding categorical variables, and eliminating duplicate entries.
 
@@ -776,26 +771,27 @@ Ensure each output file reflects the quality of completion for the respective su
    - **Output file**: `clustering_results.csv` (CSV file with clustering results and patient groups)
 
 Ensure each output file reflects the quality of completion for the respective subtask, allowing for further evaluation of your analysis and findings.",2=open source data
-10,"Undertake a comprehensive analysis and construct a robust predictive model using the ""Housing Prices"" dataset from Kaggle (https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data) to forecast residential property values.
+10,"""Undertake a comprehensive analysis and construct a robust predictive model using the """"Housing Prices"""" dataset from Kaggle  to forecast residential property values.
 
 1. **Data Import and Cleaning**: 
-   - **Input**: ""housing_prices.csv"" (the downloaded dataset from Kaggle)
-   - **Output**: ""cleaned_data.csv"" (the processed dataset after cleaning)
+- **Input**: ""train.csv"" and ""test.csv""
+- **Output**: """"cleaned_data.csv"""" (the processed dataset after cleaning)
 
 2. **Predictive Model Development**:
-   - **Input**: ""cleaned_data.csv"" (the dataset after cleaning)
-   - **Output**: ""predicted_prices.csv"" (containing the predicted house prices along with actual values for comparison)
+- **Input**: """"cleaned_data.csv"""" (the dataset after cleaning)
+- **Output**: """"predicted_prices.csv"""" (containing the predicted house prices in a """"Predicted Prices"""" column along with actual values in an """"Actual Prices"""" column for comparison)
+
 
 3. **Model Evaluation**:
-   - **Output**: ""model_evaluation_metrics.csv"" (including metrics such as Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE))
+- **Output**: """"model_evaluation_metrics.csv"""" (including metrics such as Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE))
 
 4. **Data Visualization**:
-   - **Output**: ""visualizations.png"" (a compiled image featuring scatter plots, histograms, and box plots)
+- **Output**: """"visualizations.png"""" (a compiled image featuring scatter plots, histograms, and box plots)
 
 5. **Comprehensive Report**:
-   - **Output**: ""housing_prices_analysis_report.pdf"" (a detailed report encapsulating data cleaning procedures, predictive modeling methodologies, model evaluation, and significant insights or trends identified within the dataset, including all visualizations)
+- **Output**: """"housing_prices_analysis_report.pdf"""" (a detailed report encapsulating data cleaning procedures, predictive modeling methodologies, model evaluation, and significant insights or trends identified within the dataset, including all visualizations)
 
-Ensure all files are saved in the specified formats with the provided filenames for further evaluation.","data quality, acc, mae, rmse,visualization,feature integrity","Undertake a comprehensive analysis and construct a robust predictive model using the ""Housing Prices"" dataset from Kaggle (https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data) to forecast residential property values.
+Ensure all files are saved in the specified formats with the provided filenames for further evaluation.""","data quality, acc, mae, rmse,visualization,feature integrity","Undertake a comprehensive analysis and construct a robust predictive model using the ""Housing Prices"" dataset from Kaggle (https://www.kaggle.com/c/house-prices-advanced-regression-techniques/data) to forecast residential property values.
 Commence by importing the dataset and executing a meticulous data cleaning routine, which involves imputing or removing missing values, encoding categorical variables for machine learning compatibility, and deleting any redundant records.Subsequently, develop a predictive model aimed at accurately estimating house prices. Implement a multiple linear regression algorithm for model training. Ensure data is appropriately split into training and testing subsets; train the model on the former and assess its predictive accuracy on the latter using rigorous metrics such as Mean Absolute Error (MAE) and Root Mean Squared Error (RMSE) to gauge performance.
 In the analysis phase, create a suite of visualizations to uncover trends and patterns in the dataset. These should include scatter plots for relationship analysis, histograms for distribution examination, and box plots for outlier detection.Conclude your efforts by drafting a detailed report that encapsulates the data cleaning procedures, the methodologies employed for predictive modeling, and a thorough evaluation of the model's efficacy. The report should feature all visualizations and provide a narrative on significant insights or trends identified within the dataset. Ensure the comprehensive report is formatted and saved as a PDF file at the designated location: {report_path}.",N,"""Undertake a comprehensive analysis and construct a robust predictive model using the """"Housing Prices"""" dataset from Kaggle  to forecast residential property values.
 
@@ -805,7 +801,7 @@ In the analysis phase, create a suite of visualizations to uncover trends and pa
 
 2. **Predictive Model Development**:
 - **Input**: """"cleaned_data.csv"""" (the dataset after cleaning)
-- **Output**: """"predicted_prices.csv"""" (containing the predicted house prices along with actual values for comparison)
+- **Output**: """"predicted_prices.csv"""" (containing the predicted house prices in a """"Predicted Prices"""" column along with actual values in an """"Actual Prices"""" column for comparison)
 
 
 3. **Model Evaluation**:
@@ -871,20 +867,20 @@ Visualize the data to facilitate comprehension. Construct histograms to illustra
 12,"Undertake an in-depth analysis of the UCI Adult Income dataset (https://archive.ics.uci.edu/ml/datasets/adult) with the objective of developing a predictive model to ascertain whether an individual's income surpasses $50,000 annually.
 
 1. **Data Import and Cleaning**  
-   - Input: `data.csv` (UCI Adult Income dataset)  
+   - Input: `adult.data` and ``adult.test` (UCI Adult Income dataset)  
    - Output: `cleaned_data.csv` (cleaned dataset)  
-   Begin the process by importing the dataset and executing a thorough data cleaning routine. Systematically identify and address any missing or anomalous values through imputation or exclusion. Transform categorical variables into a format suitable for machine learning and normalize numerical attributes to standardize their scale.
+   Begin the process by importing the dataset and executing a thorough data cleaning routine. Systematically identify and address any missing or anomalous values through imputation or exclusion. Transform categorical variables into a format suitable for machine learning and normalize numerical attributes to standardize their scale, keeping the target column named `income`.
 
 2. **Model Development**  
    - Input: `cleaned_data.csv`  
    - Output: `model_predictions.csv` (predictions and performance metrics)  
    - Model Checkpoint: `model_checkpoint.pkl` (saved model)  
-   Employ a robust machine learning algorithm, such as Logistic Regression or Random Forest, to construct a classification model capable of predicting whether a person's income exceeds the $50K threshold. Assess the model's efficacy using a comprehensive suite of evaluation metrics, including accuracy, precision, recall, F1-score, and ROC-AUC. Document the model's predictions and performance metrics in a CSV file, and preserve the trained model as a checkpoint.
+   Employ a robust machine learning algorithm, such as Logistic Regression or Random Forest, to construct a classification model capable of predicting whether a person's income exceeds the $50K threshold. Assess the model's efficacy using a comprehensive suite of evaluation metrics, including accuracy, precision, recall, F1-score, and ROC-AUC. Document the model's predictions and performance metrics in a CSV file, using one row per evaluated record and the exact column names `Actual` for the true label and `Predicted` for the predicted label in `model_predictions.csv`, and preserve the trained model as a checkpoint.
 
 3. **Data Mining and Clustering Analysis**  
    - Input: `cleaned_data.csv`  
-   - Output: `clustering_results.csv` (clustering outcomes and profiles)  
-   Engage in data mining to uncover latent patterns and insights. Apply clustering algorithms like K-means or DBSCAN to reveal underlying structures within the dataset. Interrogate the clustering outcomes to delineate the distinct profiles of each cluster and their correlation with the target variable of income exceeding $50K.
+   - Output: `clustering_results.csv` (clustering outcomes)  
+   Engage in data mining to uncover latent patterns and insights. Apply clustering algorithms like K-means or DBSCAN to reveal underlying structures within the dataset. Save `clustering_results.csv` as the whole cleaned dataset with one row per record: every column of `cleaned_data.csv`, including `income`, plus an additional column named `Cluster` holding the cluster label assigned to that record. Interrogate the clustering outcomes to delineate the distinct profiles of each cluster and their correlation with the target variable of income exceeding $50K, and present these cluster profiles in the final report rather than in `clustering_results.csv`.
 
 4. **Final Report Compilation**  
    - Output: `analysis_report.pdf` (comprehensive report)  
@@ -897,18 +893,18 @@ Conclude your analysis by compiling a detailed report that encapsulates the data
 1. **Data Import and Cleaning**  
    - Input: `adult.data` and ``adult.test` (UCI Adult Income dataset)  
    - Output: `cleaned_data.csv` (cleaned dataset)  
-   Begin the process by importing the dataset and executing a thorough data cleaning routine. Systematically identify and address any missing or anomalous values through imputation or exclusion. Transform categorical variables into a format suitable for machine learning and normalize numerical attributes to standardize their scale.
+   Begin the process by importing the dataset and executing a thorough data cleaning routine. Systematically identify and address any missing or anomalous values through imputation or exclusion. Encode every categorical variable as a single numeric column (for example with label encoding) and standardize the scale of every feature column, keeping the target column named `income`.
 
 2. **Model Development**  
    - Input: `cleaned_data.csv`  
-   - Output: `model_predictions.csv` (predictions and performance metrics)  
+   - Output: `model_predictions.csv` and `model_performance_metrics.csv` (predictions and performance metrics)  
    - Model Checkpoint: `model_checkpoint.pkl` (saved model)  
-   Employ a robust machine learning algorithm, such as Logistic Regression or Random Forest, to construct a classification model capable of predicting whether a person's income exceeds the $50K threshold. Assess the model's efficacy using a comprehensive suite of evaluation metrics, including accuracy, precision, recall, F1-score, and ROC-AUC. Document the model's predictions and performance metrics in a CSV file, and preserve the trained model as a checkpoint.
+   Employ a robust machine learning algorithm, such as Logistic Regression or Random Forest, to construct a classification model capable of predicting whether a person's income exceeds the $50K threshold. Assess the model's efficacy using a comprehensive suite of evaluation metrics, including accuracy, precision, recall, F1-score, and ROC-AUC. Document the model's predictions and performance metrics in two CSV files, using one row per evaluated record and the exact column names `Actual` for the true label and `Predicted` for the predicted label in `model_predictions.csv`, and preserve the trained model as a checkpoint.
 
 3. **Data Mining and Clustering Analysis**  
    - Input: `cleaned_data.csv`  
-   - Output: `clustering_results.csv` (clustering outcomes and profiles)  
-   Engage in data mining to uncover latent patterns and insights. Apply clustering algorithms like K-means or DBSCAN to reveal underlying structures within the dataset. Interrogate the clustering outcomes to delineate the distinct profiles of each cluster and their correlation with the target variable of income exceeding $50K.
+   - Output: `clustering_results.csv` (clustering outcomes)  
+   Engage in data mining to uncover latent patterns and insights. Apply clustering algorithms like K-means or DBSCAN to reveal underlying structures within the dataset. Save `clustering_results.csv` as the whole cleaned dataset with one row per record: every column of `cleaned_data.csv`, including `income`, plus an additional column named `Cluster` holding the cluster label assigned to that record. Interrogate the clustering outcomes to delineate the distinct profiles of each cluster and their correlation with the target variable of income exceeding $50K, and present these cluster profiles in the final report rather than in `clustering_results.csv`.
 
 4. **Final Report Compilation**  
    - Output: `analysis_report.pdf` (comprehensive report)  
@@ -1175,12 +1171,12 @@ Please complete the following subtasks and produce the corresponding outputs:
 
 Initial code:
 ```python
-def load_data(filedir):
-    df = pd.read_csv(filedir + ""/data.csv"")
+def load_data():
+    df = pd.read_csv(""data.csv"")
     X = df.drop(columns='target').values
     y = df['target'].values
     return X, y
-X, y = load_data('datadir')
+X, y = load_data()
 ```","visualization,silhouette score","datadir = ''
 Load the dataset with the initial code and cluster the points X using best algorithm and best hyperparameters for the dataset. Then visualize the clustering result with scatter chart. The requirements for the scatter chart are as follows:
 1. x-axis is the first column of the dataset, y-axis is the second column of the dataset.
@@ -1216,12 +1212,12 @@ X, y = load_data('datadir')
 
 Initial code:
 ```python
-def load_data():
-    df = pd.read_csv(""data.csv"")
+def load_data(filedir):
+    df = pd.read_csv(filedir + ""/data.csv"")
     X = df.drop(columns='target').values
     y = df['target'].values
     return X, y
-X, y = load_data('datadir')
+X, y = load_data('..')
 ```",3=human written data
 17,"datadir = ''
 You are provided with a dataset located at `datadir` named ""data.csv"". The dataset contains retail transaction data with the following columns:

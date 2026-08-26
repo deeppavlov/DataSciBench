@@ -33,7 +33,7 @@
     Model Mean Absolute Error (MAE)
   "task_name": |-
     Predictive modeling
-  ground_truth: data.xlsx
+  ground_truth: ../data.xlsx
 - "code": |-
     def r_squared(ground_truth):
         from sklearn.metrics import r2_score
@@ -49,7 +49,7 @@
     R-squared Value
   "task_name": |-
     Interpretability and report generation
-  ground_truth: data.xlsx
+  ground_truth: ../data.xlsx
 "prompt": |-
   "Please write a SSA-BP Sparrow Algorithm in Python to optimize the code of a BP neural network for multivariate regression prediction. The specific requirements are as follows:
 
@@ -57,7 +57,7 @@
   - **Output**: Save the cleaned dataset in an Excel file named ""cleaned_data.xlsx"".
 
   2. **Model Optimization**: Employ the SSA-BP Sparrow Algorithm to optimize the weights and biases of the BP neural network.
-  - **Output**: Save the optimized model parameters in a CSV file named ""model_parameters.csv"" and the model predictions in a CSV file named ""predictions.csv"".
+  - **Output**: Save the optimized model parameters in a CSV file named ""model_parameters.csv"" and the model predictions in a CSV file named ""predictions.csv"". The file ""predictions.csv"" must contain the model prediction for every row of ""data.xlsx"", in the original row order and in the original unscaled units of the output variable, and these predictions must be its first column.
 
   3. **Performance Evaluation**: Output the model's evaluation metrics such as RMSE, MAPE, MAE, and R2 in the command window.
   - **Output**: Save these evaluation metrics in a text file named ""performance_metrics.txt"".

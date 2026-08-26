@@ -35,8 +35,8 @@
   You are given a list of tickers and their daily closing prices for a given period stored in an input file named "data.csv". Implement the most_corr function that, when given the daily closing prices, returns the pair of tickers that are the most highly (linearly) correlated by daily percentage change. The function should follow these specifications:
 
   1. **Input File**: "data.csv" - A CSV file containing a dataframe with columns representing each ticker's daily closing prices.
-     
-   2. **Output Requirements**: The function should generate the following output:
+
+  2. **Output Requirements**: The function should generate the following output:
      - **Output Format**: A CSV file.
      - **Output Filename**: "most_corr_output.csv" - This file should contain two columns labeled "Ticker 1" and "Ticker 2", representing the pair of tickers that are most correlated by daily percentage change.
 

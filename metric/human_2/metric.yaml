@@ -65,7 +65,7 @@
   1. **Data Preparation**:
      - **Input**: Read the previous campaign data from the file named `campaign_data.csv`, which contains the following columns: Campaign, Marketing expenditure, Units sold.
      - **Output**: Prepare cleaned data and save it as `cleaned_campaign_data.csv`.
-   
+
   2. **Model Training**:
      - **Input**: Use the cleaned data from `cleaned_campaign_data.csv`.
      - **Output**: Train a linear regression model and save the model parameters (coefficients) in a file named `model_parameters.csv`.
@@ -73,7 +73,7 @@
   3. **Expenditure Calculation**:
      - **Input**: Use the model parameters from `model_parameters.csv` and the desired number of units to sell.
      - **Output**: Calculate the required marketing expenditure and save the result as `required_expenditure.txt` containing a single float value.
-   
+
   ### Note:
   Use the following previous campaign data to evaluate how the number of units sold grows linearly as the amount of money invested increases:
 
@@ -84,13 +84,13 @@
   #3                                 400,000                  90,000
   #4                                 300,000                  80,000
   #5                                 100,000                  30,000
-   ```
+  ```
 
   Starter Code: 
   ```python
   import numpy as np
   from sklearn import linear_model
-   
+
   def desired_marketing_expenditure(marketing_expenditure, units_sold, desired_units_sold):
       """
       :param marketing_expenditure: (list) A list of integers with the expenditure for each previous campaign.

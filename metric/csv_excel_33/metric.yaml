@@ -74,14 +74,14 @@
   - `combine_land.csv`: This file will include the original data with two additional columns: `clus` and `keep`.
 
   Subtasks:
-   
+
   1. Clustering for 'clus' Column:
      - Operations: 
        - For rows where `dt2IC=1`, `dt2CIdbz=1`, and `date_first < 20230810000000`, perform Agglomerative clustering, calculating the number of clusters from 2 to 10.
        - Select the number of clusters corresponding to the largest Silhouette Index (SI) coefficient as the final number of clusters.
        - Assign the cluster labels to the `clus` column for the respective rows and leave the rest empty.
      - Output Format: Append results to `combine_land.csv`.
-   
+
   2. Processing for 'keep' Column:
      - Operations:
        - For the updated `clus` column, calculate the count of each cluster.

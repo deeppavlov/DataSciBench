@@ -1,14 +1,20 @@
 "TMC-list":
 - "code": |-
     def completeness_filled(ground_truth):
+        import os
         import pandas as pd
-        output = pd.read_csv("step1_filled.csv")
-        filled_count = output['CustomerID'].notnull().sum()
-        pre_output = (filled_count / len(output)) * 100
-        gt = pd.read_csv("step1_filled.csv")
-        gt_count = gt['CustomerID'].notnull().sum()
-        gt_pre_output = (gt_count / len(gt)) * 100
-        return bool(pre_output == gt_pre_output)
+        if not os.path.exists("step1_filled.csv"):
+            raise FileNotFoundError("step1_filled.csv")
+        try:
+            output = pd.read_csv("step1_filled.csv")
+            gt = pd.read_csv(ground_truth)
+            if len(output) != len(gt):
+                return False
+            if output['CustomerID'].isnull().any():
+                return False
+            return bool((output['CustomerID'].values == gt['CustomerID'].values).all())
+        except Exception:
+            return False
   "function": |-
     Data Completeness
   "metric": |-
@@ -18,16 +24,26 @@
   ground_truth: step1_filled.csv
 - "code": |-
     def percentage_outlier_removal(ground_truth):
+        import os
+        import numpy as np
         import pandas as pd
-        output = pd.read_csv("step2_no_outliers.csv")
-        original_count = len(pd.read_csv("step1_filled.csv"))
-        new_count = len(output)
-        pre_output = ((original_count - new_count) / original_count) * 100
-        gt = pd.read_csv("step2_no_outliers.csv")
-        gt_original_count = len(pd.read_csv("step1_filled.csv"))
-        gt_new_count = len(gt)
-        gt_pre_output = ((gt_original_count - gt_new_count) / gt_original_count) * 100
-        return bool(pre_output == gt_pre_output)
+        if not os.path.exists("step2_no_outliers.csv"):
+            raise FileNotFoundError("step2_no_outliers.csv")
+        try:
+            gt_dir = os.path.dirname(ground_truth)
+            output = pd.read_csv("step2_no_outliers.csv")
+            original_count = len(pd.read_csv("step1_filled.csv"))
+            new_count = len(output)
+            pre_output = ((original_count - new_count) / original_count) * 100
+            gt = pd.read_csv(ground_truth)
+            gt_original_count = len(pd.read_csv(os.path.join(gt_dir, "step1_filled.csv")))
+            gt_new_count = len(gt)
+            gt_pre_output = ((gt_original_count - gt_new_count) / gt_original_count) * 100
+            if pre_output != gt_pre_output or new_count != gt_new_count:
+                return False
+            return bool(np.allclose(output['Amount'].values, gt['Amount'].values))
+        except Exception:
+            return False
   "function": |-
     Data Quality Score
   "metric": |-
@@ -37,14 +53,22 @@
   ground_truth: step2_no_outliers.csv
 - "code": |-
     def check_normalization(ground_truth):
+        import os
+        import numpy as np
         import pandas as pd
-        output = pd.read_csv("step3_normalized.csv")
-        min_value = output['Amount'].min()
-        max_value = output['Amount'].max()
-        gt = pd.read_csv("step3_normalized.csv")
-        gt_min_value = gt['Amount'].min()
-        gt_max_value = gt['Amount'].max()
-        return bool(min_value == gt_min_value and max_value == gt_max_value) # Expecting min to be 0 and max to be 1
+        if not os.path.exists("step3_normalized.csv"):
+            raise FileNotFoundError("step3_normalized.csv")
+        try:
+            gt_path = ground_truth if os.path.isfile(ground_truth) else os.path.join(ground_truth, "step3_normalized.csv")
+            output = pd.read_csv("step3_normalized.csv")
+            gt = pd.read_csv(gt_path)
+            if len(output) != len(gt):
+                return False
+            if not np.isclose(output['Amount'].min(), 0.0) or not np.isclose(output['Amount'].max(), 1.0):
+                return False
+            return bool(np.allclose(output['Amount'].values, gt['Amount'].values))
+        except Exception:
+            return False
   "function": |-
     Normalization Range Check
   "metric": |-
@@ -53,11 +77,19 @@
     Data cleaning and preprocessing
 - "code": |-
     def verify_datetime_format(ground_truth):
+        import os
         import pandas as pd
-        output = pd.read_csv("step4_datetime.csv")
+        if not os.path.exists("step4_datetime.csv"):
+            raise FileNotFoundError("step4_datetime.csv")
         try:
-            pd.to_datetime(output['TransactionDate'])
-            return True
+            gt_path = ground_truth if os.path.isfile(ground_truth) else os.path.join(ground_truth, "step4_datetime.csv")
+            output = pd.read_csv("step4_datetime.csv")
+            gt = pd.read_csv(gt_path)
+            parsed = pd.to_datetime(output['TransactionDate'])
+            gt_parsed = pd.to_datetime(gt['TransactionDate'])
+            if len(parsed) != len(gt_parsed):
+                return False
+            return bool((parsed.values == gt_parsed.values).all())
         except Exception:
             return False
   "function": |-
@@ -68,10 +100,33 @@
     Data cleaning and preprocessing
 - "code": |-
     def one_hot_encoding_completeness(ground_truth):
+        import os
+        import numpy as np
         import pandas as pd
-        output = pd.read_csv("final_output.csv")
-        category_columns = set(output.columns) - {'CustomerID', 'TransactionDate', 'Amount'}  # define the expected category columns based on ground truth
-        return bool(len(category_columns) > 0)
+        if not os.path.exists("final_output.csv"):
+            raise FileNotFoundError("final_output.csv")
+        try:
+            gt_dir = ground_truth if os.path.isdir(ground_truth) else os.path.dirname(ground_truth)
+            output = pd.read_csv("final_output.csv")
+            gt = pd.read_csv(os.path.join(gt_dir, "final_output.csv"))
+            categories = pd.read_csv(os.path.join(gt_dir, "step4_datetime.csv"))['Category']
+            if len(output) != len(gt) or 'Category' in output.columns:
+                return False
+            base = {'CustomerID', 'TransactionDate', 'Amount'}
+            encoded = [c for c in output.columns if c not in base and not c.startswith('Unnamed')]
+            if len(encoded) != categories.nunique():
+                return False
+            values = output[encoded].to_numpy(dtype=float)
+            if not np.isin(values, [0.0, 1.0]).all():
+                return False
+            if not (values.sum(axis=1) == 1).all():
+                return False
+            pairs = pd.DataFrame({'category': categories.values, 'column': values.argmax(axis=1)})
+            if pairs.groupby('category')['column'].nunique().max() != 1:
+                return False
+            return bool(pairs.groupby('column')['category'].nunique().max() == 1)
+        except Exception:
+            return False
   "function": |-
     Data Quality Score
   "metric": |-

@@ -2,10 +2,21 @@
 - "code": |-
     def clustering_result_consistency(ground_truth):
         import pandas as pd
-        output = pd.read_csv("clustering_results.csv")
-        gt_output = pd.read_csv(ground_truth).values.tolist()
-        clusters = output.values.tolist()
-        return all(len(cluster) == len(gt_output[i]) for i, cluster in enumerate(clusters))
+        def to_clusters(frame):
+            names = list(frame.columns)
+            groups = []
+            for i in range(0, len(names), 2):
+                points = frame[[names[i], names[i + 1]]].dropna().round(6).values.tolist()
+                groups.append(sorted(tuple(point) for point in points))
+            return sorted(groups)
+        try:
+            output = pd.read_csv("clustering_results.csv")
+            gt_output = pd.read_csv(ground_truth)
+            if len(output.columns) != len(gt_output.columns):
+                return False
+            return bool(to_clusters(output) == to_clusters(gt_output))
+        except Exception:
+            return False
   "function": |-
     Clustering Validity
   "metric": |-
@@ -16,7 +27,23 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "scatter_plot.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as the scatter plot of the population of data.csv split into three kmeans clusters, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty scatter plot with the points actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Same Population: B shows the same point cloud as A, all 500 points of data.csv, spanning roughly -9 to 8 horizontally and roughly -9 to 13 vertically.
+        - add 1 point for Three Separated Clusters: the points are split into exactly three groups, and the groups are the three well separated blobs of this data, centred near -6.8, -6.8 in the lower left, near -2.5, 9.0 at the top and near 4.6, 1.9 on the right, each holding about a third of the points; a split that cuts through the blobs instead of following them does not get this point.
+        - add 1 point for Distinct Shapes: each of the three groups is drawn with its own marker shape, as the task requires, so the groups can be told apart without color.
+        - add 1 point for Distinct Colors: each of the three groups is drawn in its own color, as the task requires.
+
+        Do not require B to match A in the title text, in the axis label text, in the color palette or in which color is given to which group, in the order and the numbering of the groups, in the presence or wording of a legend, in grid lines, in figure size or aspect ratio, because the task does not fix any of them. A additionally draws three black crosses for the initial cluster centers, the task does not ask for them, so B is not required to show them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "scatter_plot.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality

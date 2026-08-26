@@ -1,12 +1,46 @@
 "TMC-list":
 - "code": |-
     def code_completeness(ground_truth):
-        with open("model_definition.py", "r") as f:
-            code_output = f.read()
-        with open(ground_truth, "r") as f:
-            gt_output = f.read()
+        import ast
 
-        return sum([line in code_output for line in gt_output.splitlines()]) / len(gt_output.splitlines()) > 0.9
+        import torch
+
+        def load_state(path):
+            try:
+                state = torch.load(path, map_location="cpu")
+            except Exception:
+                state = torch.load(path, map_location="cpu", weights_only=False)
+            if hasattr(state, "state_dict"):
+                state = state.state_dict()
+            if isinstance(state, dict):
+                for value in state.values():
+                    if isinstance(value, dict) and any(hasattr(item, "abs") for item in value.values()):
+                        return value
+            return state
+
+        with open("model_definition.py", "r") as f:
+            tree = ast.parse(f.read())
+        prefixes = {key.split(".")[0] for key in load_state("trained_model.pth")}
+
+        def is_module(base):
+            return (base.attr if isinstance(base, ast.Attribute) else getattr(base, "id", "")) == "Module"
+
+        for cls in [node for node in ast.walk(tree) if isinstance(node, ast.ClassDef)]:
+            methods = {node.name: node for node in cls.body if isinstance(node, ast.FunctionDef)}
+            if not any(is_module(base) for base in cls.bases) or "forward" not in methods:
+                continue
+            layers = {
+                target.attr
+                for node in ast.walk(cls)
+                if isinstance(node, ast.Assign) and isinstance(node.value, ast.Call)
+                for target in node.targets
+                if isinstance(target, ast.Attribute) and isinstance(target.value, ast.Name) and target.value.id == "self"
+            }
+            returns = [node for node in ast.walk(methods["forward"]) if isinstance(node, ast.Return)]
+            print("class:", cls.name, "layers:", sorted(layers), "saved weights:", sorted(prefixes))
+            if layers and returns and prefixes <= layers:
+                return True
+        return False
   "function": |-
     Model Accuracy
   "metric": |-
@@ -16,10 +50,98 @@
   ground_truth: model_definition.py
 - "code": |-
     def l1_norm(ground_truth):
+        import os
+
         import pandas as pd
+        import torch
+
+        def load_state(path):
+            try:
+                state = torch.load(path, map_location="cpu")
+            except Exception:
+                state = torch.load(path, map_location="cpu", weights_only=False)
+            if hasattr(state, "state_dict"):
+                state = state.state_dict()
+            if isinstance(state, dict):
+                for value in state.values():
+                    if isinstance(value, dict) and any(hasattr(item, "abs") for item in value.values()):
+                        return value
+            return state
+
         output = pd.read_csv("l1_norms.csv")
-        gt_output = pd.read_csv(ground_truth)
-        return abs(output['L1 Norm'].sum() - gt_output['L1 Norm'].sum()) / gt_output['L1 Norm'].sum() <= 0.1  # Sum of L1 norms in the CSV
+        state = load_state("trained_model.pth")
+        weight_norms = sorted(float(param.abs().sum()) for name, param in state.items() if "weight" in name)
+        all_norms = sorted(float(param.abs().sum()) for param in state.values())
+
+        def matches(values, reference):
+            return len(values) == len(reference) and all(
+                abs(value - ref) <= 0.01 * max(abs(ref), 1.0) for value, ref in zip(values, reference)
+            )
+
+        def forward(features):
+            layers = [
+                (param, state.get(name[: -len("weight")] + "bias"))
+                for name, param in state.items()
+                if name.endswith("weight") and param.dim() == 2
+            ]
+            if not layers:
+                return None
+            out = features
+            for index, (weight, bias) in enumerate(layers):
+                if weight.shape[1] != out.shape[1]:
+                    return None
+                out = out @ weight.t()
+                if bias is not None:
+                    if bias.shape != (weight.shape[0],):
+                        return None
+                    out = out + bias
+                if index < len(layers) - 1:
+                    out = torch.relu(out)
+            return out
+
+        def trained_enough():
+            if not (os.path.exists("../train.csv") and os.path.exists("../test.csv")):
+                return False
+            train = pd.read_csv("../train.csv")
+            test = pd.read_csv("../test.csv")
+            if "target" not in train.columns or "target" not in test.columns:
+                return False
+            x_train = torch.tensor(train.drop(columns=["target"]).values, dtype=torch.float32)
+            x_test = torch.tensor(test.drop(columns=["target"]).values, dtype=torch.float32)
+            y_test = torch.tensor(test["target"].values, dtype=torch.float32)
+            baseline = float(((float(train["target"].mean()) - y_test) ** 2).mean())
+            errors = []
+            for features in (x_test, (x_test - x_train.mean(0)) / (x_train.std(0) + 1e-8)):
+                out = forward(features)
+                if out is None:
+                    return False
+                if out.shape[1] == 1:
+                    candidates = [torch.sigmoid(out[:, 0]), out[:, 0]]
+                elif out.shape[1] == 2:
+                    probabilities = torch.softmax(out, dim=1)
+                    candidates = [probabilities[:, 1], probabilities[:, 0]]
+                else:
+                    return False
+                errors += [float(((candidate - y_test) ** 2).mean()) for candidate in candidates]
+            errors = [error for error in errors if error == error]
+            if not errors:
+                return False
+            print("baseline mse:", baseline, "model mse:", min(errors))
+            return min(errors) <= 0.5 * baseline
+
+        matched = False
+        for column in output.columns:
+            values = sorted(float(value) for value in pd.to_numeric(output[column], errors="coerce").dropna())
+            print("column:", column, values, "expected:", weight_norms)
+            if values and (matches(values, weight_norms) or matches(values, all_norms)):
+                matched = True
+                break
+        if not matched:
+            return False
+        try:
+            return trained_enough()
+        except Exception:
+            return False
   "function": |-
     Result Quality
   "metric": |-
@@ -29,41 +151,59 @@
   ground_truth: l1_norms.csv
 - "code": |-
     def pruning_efficiency(ground_truth):
-        # import torch
-        # original_weights = torch.load("trained_model.pth")  # Load original model
-        # pruned_weights = torch.load("pruned_model.pth")  # Load pruned model
-        # return (original_weights != pruned_weights).sum().item()  # Count pruned weights
         import torch
 
-        # Load the state dictionaries of the models
-        original_state_dict = torch.load("trained_model.pth")
-        pruned_state_dict = torch.load("pruned_model.pth")
+        def load_state(path):
+            try:
+                state = torch.load(path, map_location="cpu")
+            except Exception:
+                state = torch.load(path, map_location="cpu", weights_only=False)
+            if hasattr(state, "state_dict"):
+                state = state.state_dict()
+            if isinstance(state, dict):
+                for value in state.values():
+                    if isinstance(value, dict) and any(hasattr(item, "abs") for item in value.values()):
+                        return value
+            return state
+
+        original_state_dict = load_state("trained_model.pth")
+        pruned_state_dict = load_state("pruned_model.pth")
+        if set(original_state_dict) != set(pruned_state_dict):
+            return False
 
         total_weights = 0
         pruned_weights = 0
-
+        pruned_values = []
+        kept_values = []
+        structured = []
         for name, original_param in original_state_dict.items():
-            # Only consider parameters that are tensors
-            if isinstance(original_param, torch.Tensor):
-                total_weights += original_param.numel()  # Total number of weights
+            pruned_param = pruned_state_dict[name]
+            if original_param.shape != pruned_param.shape:
+                return False
+            if "weight" not in name:
+                if not torch.equal(original_param, pruned_param):
+                    return False
+                continue
+            mask = (original_param != 0) & (pruned_param == 0)
+            if not torch.equal(original_param[~mask], pruned_param[~mask]):
+                return False
+            total_weights += original_param.numel()
+            pruned_weights += int(mask.sum())
+            pruned_values.append(original_param[mask].abs())
+            kept_values.append(original_param[~mask].abs())
+            zeros = pruned_param == 0
+            if zeros.dim() == 2:
+                covered = zeros.all(dim=1).unsqueeze(1) | zeros.all(dim=0).unsqueeze(0)
+                structured.append(bool((~zeros | covered).all()))
+            else:
+                structured.append(not bool(mask.any()))
 
-                # Check if the parameter exists in the pruned model
-                if name in pruned_state_dict:
-                    pruned_param = pruned_state_dict[name]
-
-                    # Ensure the parameter is a tensor
-                    if isinstance(pruned_param, torch.Tensor):
-                        # Compare the original and pruned parameters
-                        # A weight is considered pruned if it is zero in the pruned model but non-zero in the original
-                        pruned_weights += ((original_param != 0) & (pruned_param == 0)).sum().item()
-                else:
-                    # If the parameter doesn't exist in the pruned model, consider all its weights as pruned
-                    pruned_weights += original_param.numel()
-
-        # Calculate pruning ratio (optional)
         pruning_ratio = pruned_weights / total_weights if total_weights > 0 else 0
-
-        return pruning_ratio > 0
+        pruned_values = torch.cat(pruned_values)
+        kept_values = torch.cat(kept_values)
+        smallest_first = kept_values.numel() > 0 and float(pruned_values.mean()) <= 0.9 * float(kept_values.mean())
+        print("pruning ratio:", pruning_ratio, "smallest first:", smallest_first, "structured:", all(structured))
+        return bool(0.01 <= pruning_ratio <= 0.9 and (smallest_first or all(structured)))
   "function": |-
     Data Accuracy
   "metric": |-
@@ -76,11 +216,11 @@
   1. **Model definition**: Define a neural network structure using PyTorch's nn.Module class.  
   **Output**: Provide the complete PyTorch code in a file named ""model_definition.py"".  
 
-  2. **Model training**: Train the network model with your training dataset (input: ""data.csv""). Choose an appropriate optimizer (such as SGD, Adam, etc.) to update the network parameters.  
+  2. **Model training**: Train the network model with your training dataset (input: ""train.csv" and "test.csv""). Choose an appropriate optimizer (such as SGD, Adam, etc.) to update the network parameters.  
   **Output**: Save the trained model weights to a file named ""trained_model.pth"".  
 
   3. **Calculate L1 norm**: After training, calculate the L1 norm of each weight in the network. This is the sum of the absolute values of the elements in the weight vector.  
-   **Output**: Save the L1 norms in a CSV file named ""l1_norms.csv"".  
+  **Output**: Save the L1 norms in a CSV file named ""l1_norms.csv"".  
 
   4. **Weight pruning**:  
   1. Set a threshold or pruning ratio to determine the weights that need to be pruned.  
@@ -91,6 +231,6 @@
   5. **Model fine-tuning**: Fine-tune the pruned model to recover or enhance model performance. You can continue training the pruned model with the optimizer used in previous training.  
   **Output**: Save the fine-tuned model weights to a file named ""fine_tuned_model.pth"".  
 
-   Please provide the following:
+  Please provide the following:
   - Complete Python code implementation, including model definition, training process, L1 norm calculation, weight pruning, and model fine-tuning, all integrated within ""model_definition.py"".
   - Comments in the code should clearly explain the purpose and implementation of each step."

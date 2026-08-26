@@ -24,16 +24,27 @@
     Data visualization
 - "code": |-
     def association_rule_coverage(ground_truth):
+        import ast
         import pandas as pd
-        
-        # Load the actual frequent itemsets
-        output = pd.read_csv("frequent_itemsets.csv")
-        output_itemsets = set(output['itemsets'])
 
-        # Load ground truth frequent itemsets
-        ground_truth_itemsets = set(pd.read_csv(ground_truth)['itemsets'])
+        def canonical(itemsets):
+            result = set()
+            for value in itemsets:
+                text = str(value).strip()
+                if text.startswith("frozenset(") and text.endswith(")"):
+                    text = text[len("frozenset("):-1]
+                try:
+                    items = ast.literal_eval(text)
+                except (ValueError, SyntaxError):
+                    items = [text]
+                if isinstance(items, str):
+                    items = [items]
+                result.add(tuple(sorted(str(item).strip() for item in items)))
+            return result
 
-        # Calculate coverage
+        output_itemsets = canonical(pd.read_csv("frequent_itemsets.csv")['itemsets'])
+        ground_truth_itemsets = canonical(pd.read_csv(ground_truth)['itemsets'])
+
         return len(output_itemsets.intersection(ground_truth_itemsets)) / len(ground_truth_itemsets) >= 0.9
   "function": |-
     Association Rule Confidence
@@ -58,27 +69,28 @@
     Interpretability and report generation
 "prompt": |-
   "You are required to perform a comprehensive analysis on the ""Online Retail II"" dataset from UCI Machine Learning Repository 
-  - **Input file:** online_retail.csv
-   1. **Data Visualization:**
+  - **Input file:** online_retail_II.xlsx
+  1. **Data Visualization:**
   - Conduct data visualizations to understand the dataset better. 
   - Create the following visualizations:
   - A bar chart showing the distribution of transactions by country.
   - **Output filename:** distribution_by_country.png
-   - A time series plot displaying sales trends over time.
+  - A time series plot displaying sales trends over time.
   - **Output filename:** sales_trends_over_time.png
   - A heatmap illustrating the correlation between different features.
   - **Output filename:** correlation_heatmap.png
 
   2. **Data Mining:**
-   - Use data mining techniques to uncover valuable insights from the dataset.
+  - Use data mining techniques to uncover valuable insights from the dataset.
   - Perform market basket analysis using the Apriori algorithm to find frequent itemsets and association rules.
   - **Output filename:** frequent_itemsets.csv
+  - For the market basket analysis use the sheet 'Year 2009-2010', drop the rows with a missing Customer ID, keep only the rows with Quantity > 0 and Price > 0, build the basket with one row per Invoice and one column per Description whose value is 1 when the invoice contains that product and 0 otherwise, and run the Apriori algorithm with a minimum support of 0.01 and item names instead of column indices; frequent_itemsets.csv must have the two columns support and itemsets, where itemsets holds the textual set-of-descriptions form written by pandas, for example frozenset({'ITEM A', 'ITEM B'}).
   - Identify the most popular products and analyze customer purchasing patterns.
   - **Output filename:** popular_products_analysis.csv
 
   3. **Comprehensive Report:**
   - Generate a comprehensive report detailing the data visualizations and insights gained from data mining.
-   - Include all visualizations, discuss the identified patterns, and their potential business implications.
+  - Include all visualizations, discuss the identified patterns, and their potential business implications.
   - **Output filename:** comprehensive_report.pdf
 
   All outputs should reflect the quality of completion for each subtask, allowing for further evaluation of the analysis performed."

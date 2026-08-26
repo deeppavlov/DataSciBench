@@ -1,15 +1,35 @@
 "TMC-list":
 - "code": |-
     def gaussian_model_accuracy(ground_truth):
-        from sklearn.metrics import accuracy_score
+        import numpy as np
         import pandas as pd
-        output = pd.read_csv("gaussian_model_accuracy.csv")
-        gt_output = pd.read_csv(ground_truth)
-        gt_acc = gt_output['Accuracy'].values[0]
-        predictions = output['Accuracy'].tolist()  # Assuming 'Accuracy' is the column in the output file
-        acc = sum(predictions) / len(predictions)
-        # return accuracy_score(ground_truth, predictions)
-        return bool(acc >= gt_acc)
+        report = pd.read_csv("gaussian_model_accuracy.csv")
+        accuracy = float(np.mean(pd.to_numeric(report["Accuracy"], errors="coerce")))
+        held_out = pd.read_csv("gaussian_predictions.csv")
+        actual_columns = [c for c in held_out.columns if "actual" in str(c).lower() or "true" in str(c).lower()]
+        predicted_columns = [c for c in held_out.columns if "pred" in str(c).lower()]
+        if not actual_columns or not predicted_columns or len(held_out) < 4:
+            return False
+        actual = pd.to_numeric(held_out[actual_columns[0]], errors="coerce")
+        predicted = pd.to_numeric(held_out[predicted_columns[0]], errors="coerce")
+        if actual.isna().any() or predicted.isna().any():
+            return False
+        source = pd.read_csv("../data.csv")
+        target = source.columns[-1]
+        features = [c for c in source.columns if c != target and c in held_out.columns]
+        if not features:
+            return False
+        allowed = {}
+        for row in source[features + [target]].values.tolist():
+            allowed.setdefault(tuple(row[:-1]), set()).add(row[-1])
+        rows = held_out[features].values.tolist()
+        for row, value in zip(rows, actual.tolist()):
+            if value not in allowed.get(tuple(row), set()):
+                return False
+        measured = float(np.mean(np.asarray(actual) == np.asarray(predicted)))
+        reference = float(np.mean(pd.to_numeric(pd.read_csv(ground_truth)["Accuracy"], errors="coerce")))
+        print("reported:", accuracy, "recomputed on", len(held_out), "held-out rows:", measured, "reference:", reference)
+        return bool(abs(accuracy - measured) <= 0.005 and accuracy >= reference - 0.2)
   "function": |-
     Model Accuracy
   "metric": |-
@@ -19,14 +39,35 @@
   ground_truth: gaussian_model_accuracy.csv
 - "code": |-
     def multinomial_model_accuracy(ground_truth):
-        from sklearn.metrics import accuracy_score
+        import numpy as np
         import pandas as pd
-        output = pd.read_csv("multinomial_model_accuracy.csv")
-        gt_output = pd.read_csv(ground_truth)
-        gt_acc = gt_output['Accuracy'].values[0]
-        predictions = output['Accuracy'].tolist()  # Assuming 'Accuracy' is the column in the output file
-        # return accuracy_score(ground_truth, predictions)
-        return bool((sum(predictions)/len(predictions)) >= gt_acc)
+        report = pd.read_csv("multinomial_model_accuracy.csv")
+        accuracy = float(np.mean(pd.to_numeric(report["Accuracy"], errors="coerce")))
+        held_out = pd.read_csv("multinomial_predictions.csv")
+        actual_columns = [c for c in held_out.columns if "actual" in str(c).lower() or "true" in str(c).lower()]
+        predicted_columns = [c for c in held_out.columns if "pred" in str(c).lower()]
+        if not actual_columns or not predicted_columns or len(held_out) < 4:
+            return False
+        actual = pd.to_numeric(held_out[actual_columns[0]], errors="coerce")
+        predicted = pd.to_numeric(held_out[predicted_columns[0]], errors="coerce")
+        if actual.isna().any() or predicted.isna().any():
+            return False
+        source = pd.read_csv("../data.csv")
+        target = source.columns[-1]
+        features = [c for c in source.columns if c != target and c in held_out.columns]
+        if not features:
+            return False
+        allowed = {}
+        for row in source[features + [target]].values.tolist():
+            allowed.setdefault(tuple(row[:-1]), set()).add(row[-1])
+        rows = held_out[features].values.tolist()
+        for row, value in zip(rows, actual.tolist()):
+            if value not in allowed.get(tuple(row), set()):
+                return False
+        measured = float(np.mean(np.asarray(actual) == np.asarray(predicted)))
+        reference = float(np.mean(pd.to_numeric(pd.read_csv(ground_truth)["Accuracy"], errors="coerce")))
+        print("reported:", accuracy, "recomputed on", len(held_out), "held-out rows:", measured, "reference:", reference)
+        return bool(abs(accuracy - measured) <= 0.005 and accuracy >= reference - 0.2)
   "function": |-
     Model Accuracy
   "metric": |-
@@ -37,7 +78,23 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "model_comparison.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as a visual comparison of the accuracy of a Gaussian Naive Bayes model and a Multinomial Naive Bayes model, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty chart, with the bars or markers actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Both Models: B names and shows both models, the Gaussian Naive Bayes and the Multinomial Naive Bayes, and only those two, so there are exactly two bars or two compared items and no extra series.
+        - add 1 point for Accuracy Scale: the quantity compared is accuracy, laid out on a scale that runs from 0 to 1 or from 0 to 100 per cent, with legible tick labels.
+        - add 1 point for Correct Accuracies: both models reach an accuracy of 1.0 on this data, so the two bars are of equal height and both reach the top of the accuracy scale; a chart whose bars sit noticeably below that, for example at 0.5 or 0.7, or whose two bars differ in height, does not get this point.
+        - add 1 point for Axis Labels and Caption: both axes are labelled and a legend or a title identifies what is plotted.
+
+        Do not require B to match A in colors, in bar width, in figure size or aspect ratio, in tick label rotation or in the exact wording of the title, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "model_comparison.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -50,16 +107,16 @@
   Using the dataset of house prices and economic indicators provided below, please complete the following subtasks. Each subtask should generate an output file for evaluation, with specific input files where applicable.
 
   Dataset: `data.csv`
-   
+
   Subtasks:
 
   1. Gaussian Naive Bayes Training: Train a Gaussian Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
      Input: `data.csv`  
-     Output: `gaussian_model_accuracy.csv` (contains accuracy metrics)
+     Output: `gaussian_model_accuracy.csv` (contains accuracy metrics) and `gaussian_predictions.csv` (the held-out rows the accuracy was measured on: their feature columns plus the columns `Actual` and `Predicted` holding the true and the predicted value of the target column)
 
   2. Multinomial Naive Bayes Training: Train a Multinomial Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
      Input: `data.csv`  
-     Output: `multinomial_model_accuracy.csv` (contains accuracy metrics)
+     Output: `multinomial_model_accuracy.csv` (contains accuracy metrics) and `multinomial_predictions.csv` (the held-out rows the accuracy was measured on: their feature columns plus the columns `Actual` and `Predicted` holding the true and the predicted value of the target column)
 
   3. Comparison of Models: Generate a comparative analysis of the accuracy of both models in a visual format.  
      Input: `gaussian_model_accuracy.csv`, `multinomial_model_accuracy.csv`  

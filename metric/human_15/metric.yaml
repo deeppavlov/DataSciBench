@@ -2,7 +2,23 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "bar_chart.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as the bar chart of total sales per year that the task asks for, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty bar chart, with the bars actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Yearly Totals: B has exactly two bars, one for 2022 and one for 2023, and their heights are the total sales of those years, 4800 for 2022 and 7800 for 2023, so the 2023 bar is clearly the taller one and the sales axis reaches about 8000; a chart showing the seven individual records instead of the two yearly totals does not get this point.
+        - add 1 point for Red Bars with Black Edges: the bars are filled red and outlined in black, as the task requires.
+        - add 1 point for Separated Bars: there is a visible gap between the two bars, they do not touch each other, as the task requires.
+        - add 1 point for Axis Labels: the horizontal axis is the year and the vertical axis is sales, both are labelled and the tick labels are legible.
+
+        Do not require B to match A in figure size or aspect ratio, in bar width, in grid lines, in tick label rotation or in the wording of the title, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "bar_chart.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -14,7 +30,23 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "line_chart.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as the line chart of monthly sales per category that the task asks for, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty chart, with the data actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for One Series per Category: B draws one series per category of the dataset, that is Electronics, Furniture and Clothing, each in its own color, with the months along the horizontal axis and sales along the vertical axis.
+        - add 1 point for Correct Values: the values match the data, Electronics runs 1500, 1600, 1700 over January, February and March, Furniture runs 1800, 1900, 2000 over the same three months, and Clothing has the single value 2100 in December, so Clothing legitimately shows up as one isolated point rather than a line; the sales axis therefore spans about 1500 to 2100.
+        - add 1 point for Dash-Dot Lines: the lines are drawn in a dash-dot style, alternating dashes and dots, as the task requires, and not as solid, dotted or plain dashed lines.
+        - add 1 point for Legend and Axis Labels: a legend names the categories, both axes are labelled and the tick labels are legible.
+
+        Do not require B to match A in the color palette or in which color is given to which category, in the order of the months on the axis, in marker style, in grid lines, in figure size or aspect ratio, or in the wording of the title and the axis labels, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "line_chart.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -26,7 +58,23 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "scatter_chart.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as the scatter chart of sales over time that the task asks for, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty scatter chart, with the points actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for All Seven Records: B draws one point per row of the dataset, seven in all, at the sales values 1500, 1600, 1700, 1800, 1900, 2000 and 2100, against a time axis that covers January 2022 through December 2023.
+        - add 1 point for Category Colors: the points are colored by category, three colors in all, the three 2022 points as Electronics, the January to March 2023 points as Furniture and the December 2023 point as Clothing.
+        - add 1 point for Size Proportional to Sales: the marker area grows with the sales value, so the 2100 point is visibly the largest and the 1500 point the smallest; markers of equal size do not get this point.
+        - add 1 point for Transparency: the markers are semi-transparent rather than solid, so what lies behind them shows through, as the task requires.
+
+        Do not require B to match A in the color palette or in which color is given to which category, in how the time axis is formatted, in the presence or wording of a legend, in grid lines, in figure size or aspect ratio, or in the wording of the title and the axis labels, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "scatter_chart.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -41,16 +89,16 @@
   ```
   Month,Year,Sales,Category
   January,2022,1500,Electronics
-   February,2022,1600,Electronics
+  February,2022,1600,Electronics
   March,2022,1700,Electronics
   January,2023,1800,Furniture
-   February,2023,1900,Furniture
+  February,2023,1900,Furniture
   March,2023,2000,Furniture
   December,2023,2100,Clothing
-   ```
+  ```
 
   Please complete the following subtasks and produce the corresponding outputs:
-   
+
   1. **Bar Chart Visualization**
   **Output**: A bar chart saved as ""bar_chart.png"".
   - **Requirements**: 
@@ -65,7 +113,7 @@
   - **Output**: A line chart saved as ""line_chart.png"".
   - **Requirements**: 
   - x-axis: Month
-   - y-axis: Total Sales for each category.
+  - y-axis: Total Sales for each category.
   - Line style: Dash-dot.
   - Each line should have a different legend and color according to the category.
 

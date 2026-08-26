@@ -1,4 +1,4 @@
-,Prompt,Metrics,Original Prompt,Qualified (Y/N),Modified Prompt (If not qualified),data source type,
+Unnamed: 0,Prompt,Metrics,Original Prompt,Qualified (Y/N),Modified Prompt (If not qualified),data source type,Unnamed: 7
 0,"Write a Graph Recurrent Neural Network (GRNN) model based on attention mechanisms using Python for processing and analyzing time series data. Ensure to meet the following requirements:
 
 1. **Graph network design**: Create a graph network where each graph represents an aerial formation, and the number of nodes corresponds to the number of vehicles in the formation.
@@ -46,21 +46,21 @@ Please provide a complete code implementation and ensure that the code structure
  8. Training parameters: Set the number of training epochs to 60 and record the loss value, accuracy, recall, and F1-Score for each epoch.
  9. Model evaluation: Evaluate the trained model with the test set and generate a classification report and confusion matrix.
 Please provide a complete code implementation and ensure that the code structure is clear and well-commented for understanding and evaluation.",Y,,3=human written data,
-1,"Please write a SSA-BP Sparrow Algorithm in Python to optimize the code of a BP neural network for multivariate regression prediction. The specific requirements are as follows:
+1,"""Please write a SSA-BP Sparrow Algorithm in Python to optimize the code of a BP neural network for multivariate regression prediction. The specific requirements are as follows:
 
-1. **Dataset**: Use an Excel file named ""data.xlsx"" as the dataset, which includes 7 input features and 1 output variable.
-   - **Output**: None (input only)
+1. **Dataset**: Use an Excel file named """"data.xlsx"""" as the dataset, which includes 7 input features and 1 output variable.
+- **Output**: Save the cleaned dataset in an Excel file named """"cleaned_data.xlsx"""".
 
 2. **Model Optimization**: Employ the SSA-BP Sparrow Algorithm to optimize the weights and biases of the BP neural network.
-   - **Output**: Save the optimized model parameters in a CSV file named ""model_parameters.csv"".
+- **Output**: Save the optimized model parameters in a CSV file named """"model_parameters.csv"""" and the model predictions in a CSV file named """"predictions.csv"""". The file """"predictions.csv"""" must contain the model prediction for every row of """"data.xlsx"""", in the original row order and in the original unscaled units of the output variable, and these predictions must be its first column.
 
 3. **Performance Evaluation**: Output the model's evaluation metrics such as RMSE, MAPE, MAE, and R2 in the command window.
-   - **Output**: Save these evaluation metrics in a text file named ""performance_metrics.txt"".
+- **Output**: Save these evaluation metrics in a text file named """"performance_metrics.txt"""".
 
-4. **File Organization**: Make sure all program codes, including the SSA-BP Sparrow Algorithm implementation, are stored in the same folder as the dataset ""data.xlsx"".
-   - **Output**: Organize the code in a Python script named ""ssa_bp_sparrow.py"".
+4. **File Organization**: Make sure all program codes, including the SSA-BP Sparrow Algorithm implementation, are stored in the same folder as the dataset """"data.xlsx"""".
+- **Output**: Organize the code in a Python script named """"ssa_bp_sparrow.py"""".
 
-Please provide a complete code implementation and ensure that the code structure is clear with complete comments for understanding and evaluation.",rmse、mape、mae,"Please write a SSA-BP Sparrow Algorithm in Python to optimize the code of a BP neural network for multivariate regression prediction. The specific requirements are as follows:
+Please provide a complete code implementation and ensure that the code structure is clear with complete comments for understanding and evaluation.""",rmse、mape、mae,"Please write a SSA-BP Sparrow Algorithm in Python to optimize the code of a BP neural network for multivariate regression prediction. The specific requirements are as follows:
  1. Dataset: Use an Excel file as the dataset, which includes 7 input features and 1 output variable.
  2. Model Optimization: Employ SSA-BP Sparrow Algorithm to optimize the weights and biases of the BP neural network.
  3. Performance Evaluation: Output the model's evaluation metrics such as RMSE, MAPE, MAE, and R2 in the command window.
@@ -68,10 +68,10 @@ Please provide a complete code implementation and ensure that the code structure
 Please provide a complete code implementation and ensure that the code structure is clear with complete comments for understanding and evaluation.",N,"""Please write a SSA-BP Sparrow Algorithm in Python to optimize the code of a BP neural network for multivariate regression prediction. The specific requirements are as follows:
 
 1. **Dataset**: Use an Excel file named """"data.xlsx"""" as the dataset, which includes 7 input features and 1 output variable.
-
+- **Output**: Save the cleaned dataset in an Excel file named """"cleaned_data.xlsx"""".
 
 2. **Model Optimization**: Employ the SSA-BP Sparrow Algorithm to optimize the weights and biases of the BP neural network.
-- **Output**: Save the optimized model parameters in a CSV file named """"model_parameters.csv"""".
+- **Output**: Save the optimized model parameters in a CSV file named """"model_parameters.csv"""" and the model predictions in a CSV file named """"predictions.csv"""". The file """"predictions.csv"""" must contain the model prediction for every row of """"data.xlsx"""", in the original row order and in the original unscaled units of the output variable, and these predictions must be its first column.
 
 3. **Performance Evaluation**: Output the model's evaluation metrics such as RMSE, MAPE, MAE, and R2 in the command window.
 - **Output**: Save these evaluation metrics in a text file named """"performance_metrics.txt"""".
@@ -374,7 +374,7 @@ Please provide the complete code implementation and ensure that the code structu
 - **Output filename**: `fitted_values.csv`
 
 Please provide the complete code implementation and ensure that the code structure is clear and the comments are complete for understanding and evaluation.""",1=no dependency,
-9,"Suppose you have a set of sales data in the following format:
+9,"""Suppose you have a set of sales data in the following format:
 ```
 Sales Time\tPurchase Quantity (pcs)\tTotal Amount (CNY)\tPayment Method\tRefund Amount (CNY)\tProduct Details\n
 2018-4-30 22:55\t1\t2.5\tAlipay\t0\tCoca-Cola;\n
@@ -391,25 +391,27 @@ Sales Time\tPurchase Quantity (pcs)\tTotal Amount (CNY)\tPayment Method\tRefund 
 You are required to use a neural network to predict the sales of a certain product for the next week. Here are the specific requirements:
 
 1. **Data Processing:** Convert the above data format into one suitable for neural network input.  
-   - **Input filename:** `sales_data.txt`  
-   - **Output format:** Processed CSV  
-   - **Output filename:** `processed_data.csv`  
+- **Input filename:** `data.csv`
+- **Output format:** Processed CSV  
+- **Output filename:** `processed_data.csv`  
+- **Requirement:** `processed_data.csv` must keep a time column and at least one numeric sales column, and must contain no missing values.  
 
 2. **Neural Network Construction:** Build a neural network model suitable for time series prediction.  
-   - **Output format:** Python script  
-   - **Output filename:** `neural_network_model.py`  
+- **Output format:** Python script  
+- **Output filename:** `neural_network_model.py`  
 
 3. **Model Training:** Train the model using historical sales data.  
-   - **Input filename:** `processed_data.csv` (from the previous step)  
-   - **Output format:** Model weights (H5 format)  
-   - **Output filename:** `sales_model.h5`  
+- **Input filename:** `processed_data.csv` (from the previous step)  
+- **Output format:** Model weights (H5 format)  
+- **Output filename:** `sales_model.h5`  
 
 4. **Predict Future Sales:** Use the trained model to predict sales for the next week.  
-   - **Input filename:** `sales_model.h5` (from the previous step)  
-   - **Output format:** CSV with predictions  
-   - **Output filename:** `predicted_sales.csv`  
+- **Input filename:** `sales_model.h5` (from the previous step)  
+- **Output format:** CSV with predictions  
+- **Output filename:** `predicted_sales.csv`  
+- **Requirement:** the last column of `predicted_sales.csv` must hold the predicted sales, one value per forecast step of the next week.  
 
-Please provide the complete Python code implementation, and ensure that the code structure is clear and well-commented for understanding and evaluation.","data quality,data format,statistics","Suppose you have a set of sales data in the following format:
+Please provide the complete Python code implementation, and ensure that the code structure is clear and well-commented for understanding and evaluation.""","data quality,data format,statistics","Suppose you have a set of sales data in the following format:
  - Sales Time\tPurchase Quantity (pcs)\tTotal Amount (CNY)\tPayment Method\tRefund Amount (CNY)\tProduct Details\n2018-4-30 22:55\t1\t2.5\tAlipay\t0\tCoca-Cola;\n2018-4-29 14:43\t1\t3\tAlipay\t0\tSprite\n2018-4-29 1:09\t1\t2.5\tWeChat\t0\tCoca-Cola;\n2018-4-28 21:19\t1\t3\tWeChat\t0\tCoca-Cola;\n2018-4-28 21:04\t5\t2.5\tWeChat\t0\tSprite\n2018-4-27 19:52\t1\t2.5\tWeChat\t0\tCoca-Cola;\n2018-4-26 22:02\t1\t2.5\tWeChat\t0\tCoca-Cola;\n2018-4-26 16:04\t1\t2.5\tAlipay\t0\tSprite\n2018-4-26 0:57\t1\t2.5\tAlipay\t0\tCoca-Cola;\n2018-4-26 0:56\t1\t2.5\tAlipay\t0\tCoca-Cola;\n
 You are required to use a neural network to predict the sales of a certain product for the next week. Here are the specific requirements:
  1. Data Processing: Convert the above data format into one suitable for neural network input.
@@ -436,6 +438,7 @@ You are required to use a neural network to predict the sales of a certain produ
 - **Input filename:** `data.csv`
 - **Output format:** Processed CSV  
 - **Output filename:** `processed_data.csv`  
+- **Requirement:** `processed_data.csv` must keep a time column and at least one numeric sales column, must contain no missing values, and must not have more rows than `data.csv`.  
 
 2. **Neural Network Construction:** Build a neural network model suitable for time series prediction.  
 - **Output format:** Python script  
@@ -450,6 +453,7 @@ You are required to use a neural network to predict the sales of a certain produ
 - **Input filename:** `sales_model.h5` (from the previous step)  
 - **Output format:** CSV with predictions  
 - **Output filename:** `predicted_sales.csv`  
+- **Requirement:** the last column of `predicted_sales.csv` must hold the forecast as finite non-negative numbers, one value per forecast step of the next week (7 steps for daily aggregation, up to 168 steps for hourly aggregation), on a sales level comparable to `processed_data.csv`.  
 
 Please provide the complete Python code implementation, and ensure that the code structure is clear and well-commented for understanding and evaluation.""",3=human written data,
 10,"Please write a Python code to predict the success rate of applying for overseas university study qualifications using data mining techniques. You need to use a dataset of master's program-related indicators for foreign universities downloaded from Kaggle, named ""data.csv"", to complete the following tasks:
@@ -707,7 +711,7 @@ Please provide a complete experimental report that includes the source code, run
 1. **Model definition**: Define a neural network structure using PyTorch's nn.Module class.  
    **Output**: Provide the complete PyTorch code in a file named ""model_definition.py"".  
 
-2. **Model training**: Train the network model with your training dataset (input: ""data.csv""). Choose an appropriate optimizer (such as SGD, Adam, etc.) to update the network parameters.  
+2. **Model training**: Train the network model with your training dataset (input: ""train.csv"" and ""test.csv""). Choose an appropriate optimizer (such as SGD, Adam, etc.) to update the network parameters.  
    **Output**: Save the trained model weights to a file named ""trained_model.pth"".  
 
 3. **Calculate L1 norm**: After training, calculate the L1 norm of each weight in the network. This is the sum of the absolute values of the elements in the weight vector.  

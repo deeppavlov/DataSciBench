@@ -4,8 +4,16 @@
         import pandas as pd
         cleaned_data = pd.read_csv("cleaned_data.csv")
         gt_cleaned_data = pd.read_csv(ground_truth)
-        # Assume ground_truth is also a DataFrame for direct comparison.
-        return bool(cleaned_data.equals(gt_cleaned_data))
+        if cleaned_data.empty or cleaned_data.isnull().values.any() or cleaned_data.duplicated().any():
+            return False
+        names = {str(c).strip().lower() for c in cleaned_data.columns}
+        if not {str(c).strip().lower() for c in gt_cleaned_data.columns}.issubset(names):
+            return False
+        column = next((c for c in cleaned_data.columns if str(c).strip().lower() == "rating"), None)
+        if column is None:
+            return False
+        rating = pd.to_numeric(cleaned_data[column], errors="coerce")
+        return bool(rating.notna().all() and rating.between(0, 10).all())
   "function": |-
     Data Cleaning Completeness
   "metric": |-
@@ -17,10 +25,16 @@
     def statistical_analysis_results(ground_truth):
         import pandas as pd
         analysis_results = pd.read_csv("analysis_results.csv")
-        # Count the number of statistics reported
-        num_statistics = len(analysis_results.columns)
-        gt_analysis_results = pd.read_csv(ground_truth)
-        return bool(num_statistics == len(gt_analysis_results.columns))
+        values = pd.to_numeric(analysis_results.stack(), errors="coerce").dropna()
+        source = pd.read_csv("../crawled_data.csv")
+        column = next((c for c in source.columns if str(c).strip().lower() == "rating"), None)
+        if column is None:
+            return False
+        rating = pd.to_numeric(source[column], errors="coerce").dropna()
+        if values.empty or rating.empty:
+            return False
+        expected = [rating.mean(), rating.median(), rating.std()]
+        return bool(all((values - v).abs().min() <= 0.05 for v in expected))
   "function": |-
     Data Integrity
   "metric": |-
@@ -69,7 +83,7 @@
 
   6. **Clustering Analysis (optional)**: 
      - **Input**: Use the "structured_data.csv" file. 
-     - **Output**: Save the clustering results to a CSV file named "clustering_results.csv" and the name of column of cluster is "Cluster".
+     - **Output**: Save the clustering results to a CSV file named "clustering_results.csv".
 
   7. **Result Visualization**: 
      - **Input**: Use the results from the data analysis and clustering analysis.

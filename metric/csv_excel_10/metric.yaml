@@ -27,31 +27,43 @@
 #     Predictive modeling
 #   ground_truth: evaluation_results.csv
 - "code": |-
-    # def report_content_accuracy(ground_truth):
-    #     import pandas as pd
-    #     evaluation_report = pd.read_csv("evaluation_results.csv")  # Assuming this file has a 'Report' column
-    #     gt_report = pd.read_csv(ground_truth)
-    #     # Assuming ground_truth consists of key phrases that the report should contain
-    #     report_text = evaluation_report[evaluation_report.keys()[0]] # Get the content of the report
-    #     print("Size of the report: ", gt_report.size)
-    #     print(report_text)
-    #     # accuracy = sum([phrase in report_text for phrase in gt_report]) / len(gt_report)
-    #     # return accuracy  # Returns the ratio of key phrases found in the report
-    #     return 
     def report_content_accuracy(ground_truth):
+        import os
+        import pickle
+        import numpy as np
         import pandas as pd
-        
-        # Load the evaluation report (assuming there's a 'Report' column)
         evaluation_report = pd.read_csv("evaluation_results.csv")
-        
-        # Load the ground truth (assuming it contains a column with key phrases)
         gt_report = pd.read_csv(ground_truth)
-        
-        # Check if the header of evaluation_report is a subset of the ground truth header
-        eval_report_columns = set(evaluation_report.columns)
-        gt_report_columns = set(gt_report.columns)
-        
-        return bool(eval_report_columns.issubset(gt_report_columns))
+        if not set(gt_report.columns).issubset(set(evaluation_report.columns)) or len(evaluation_report) == 0:
+            return False
+        loss = float(evaluation_report["Loss"].iloc[0])
+        mae = float(evaluation_report["MeanAbsoluteError"].iloc[0])
+        if not (np.isfinite(loss) and np.isfinite(mae) and loss > 0 and mae > 0):
+            return False
+        inputs = pd.read_csv("../input_data.csv").values.astype(float)
+        targets = pd.read_csv("../output_data.csv").values.astype(float)
+        if targets.shape[0] != inputs.shape[0] and targets.shape[1] == inputs.shape[0]:
+            targets = targets.T
+        predictions = None
+        for name in ("model.pkl", "model.h5", "model.keras"):
+            if not os.path.exists(name):
+                continue
+            try:
+                if name.endswith(".pkl"):
+                    with open(name, "rb") as handle:
+                        predictions = np.asarray(pickle.load(handle).predict(inputs), dtype=float)
+                else:
+                    import keras
+                    predictions = np.asarray(keras.models.load_model(name).predict(inputs, verbose=0), dtype=float)
+                break
+            except Exception:
+                predictions = None
+        if predictions is None or predictions.shape != targets.shape or float(np.std(predictions, axis=0).max()) < 1e-6:
+            return False
+        rec_mae = float(np.mean(np.abs(predictions - targets)))
+        baseline = float(np.mean(np.abs(targets - targets.mean(axis=0))))
+        print("reported MAE:", mae, "recomputed:", rec_mae, "mean-predictor baseline:", baseline)
+        return bool(abs(rec_mae - mae) <= 0.05 and rec_mae <= baseline * 1.05)
   "function": |-
     Report Quality
   "metric": |-

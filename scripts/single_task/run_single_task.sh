@@ -1,4 +1,5 @@
 #!/bin/bash
+. "$(dirname "$0")/../_python.sh" 2>/dev/null || PY="${PYTHON:-python}"
 
 # Specify TASK_ID here (e.g., from data folder: dl_0, human_12, etc.)
 TASK_ID="code_gen_001"
@@ -17,7 +18,7 @@ echo "Logs will be saved to: $LOG_FILE" | tee -a "$LOG_FILE"
 echo "==========================================================" | tee -a "$LOG_FILE"
 
 # Run generation for a single task. We set data_source_type and data_type to empty to avoid filtering.
-python -m experiments.run_examples --task_id "$TASK_ID" --data_source_type "" --data_type "" --max_runs 1 --config "$CONFIG_FILE" 2>&1 | tee -a "$LOG_FILE"
+"$PY" -m experiments.run_examples --task_id "$TASK_ID" --data_source_type "" --data_type "" --max_runs 1 --config "$CONFIG_FILE" 2>&1 | tee -a "$LOG_FILE"
 
 echo "==========================================================" | tee -a "$LOG_FILE"
 echo "Run complete." | tee -a "$LOG_FILE"

@@ -2,7 +2,25 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "histograms.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as histograms of the distribution of the numerical features of the Mall Customers dataset, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty figure of histograms, with the bars actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Feature Coverage: B has one histogram for each of the three numerical features Age, Annual Income (k$) and Spending Score (1-100).
+        - add 1 point for Correct Ranges: the horizontal axis of each panel spans the real range of its feature, Age from about 18 to 70, Annual Income (k$) from about 15 to 137 and Spending Score (1-100) from about 1 to 99.
+        - add 1 point for Correct Shapes: the shapes match the data, Age is skewed towards the young with its bulk between 20 and 50, Annual Income (k$) peaks around 50 to 80 and thins out towards 137, Spending Score (1-100) is broad with a peak around 40 to 60; three panels of the same shape, or a flat uniform ramp in a panel that names one of these three features, do not get this point.
+        - add 1 point for Counts and Labels: the vertical axis of each panel is a count or a frequency of customers, the whole dataset being about 200 customers, and every panel is identified by a title or an axis label naming the feature it shows.
+
+        A also plots CustomerID, which is a row identifier and not a feature, so its first panel is a flat uniform ramp carrying no information. Do not require B to plot CustomerID and do not penalize B for leaving it out; plotting it as an extra panel is equally acceptable and its flat shape is not held against B.
+
+        Do not require B to match A in the grid layout or the number of panels, in figure size or aspect ratio, in colors, in the number of bins, in whether a density curve is overlaid, in the exact wording of the titles or axis labels, or in the exact bar heights, because the task does not fix any of them. A was built after silently dropping two rows as outliers, which the task never asks for, so B may legitimately show 200 rows against 198 in A.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "histograms.png", prompt)
         return float(score)
   "function": |-
     Visualization Completeness
@@ -14,7 +32,23 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "barplots.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as bar plots of the frequency of the categorical variables of the Mall Customers dataset, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty bar chart, with the bars actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Variable Coverage: B shows Gender, which is the only categorical variable in the dataset, with exactly one bar per category, Male and Female.
+        - add 1 point for Correct Frequencies: the bar heights are how often each category occurs, about 112 for Female and about 88 for Male, so the Female bar is the taller one, both bars sit roughly between 80 and 115, and the two of them together account for all 200 customers.
+        - add 1 point for Count Axis: the bars are measured against a count or frequency axis whose ticks are legible and whose top is near 110, not against a share, a percentage of a different scale or an unlabelled axis.
+        - add 1 point for Category Labels and Caption: the two categories are named on the chart and a title, an axis label or a legend identifies what is plotted.
+
+        Do not require B to match A in colors, figure size or aspect ratio, bar width, bar orientation, tick label rotation, or the exact wording of the title and axis labels, because the task does not fix any of them. A was built after silently dropping two rows as outliers, which the task never asks for, so B may legitimately show 88 males against 86 in A.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "barplots.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -26,7 +60,25 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "scatter_income_spending.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as a scatter plot examining the correlation between annual income and spending score in the Mall Customers dataset, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty scatter chart, with the points actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Correct Variables: Annual Income (k$) is on the horizontal axis and Spending Score (1-100) is on the vertical axis.
+        - add 1 point for Correct Data Range: the points span roughly 15 to 137 horizontally and roughly 1 to 99 vertically, and the whole cloud of about 200 customers is drawn.
+        - add 1 point for Axis Labels: both axes are labelled and the tick labels are legible.
+        - add 1 point for Visible Structure: the characteristic pattern is visible, one dense central group around income 55 to 65 and score 40 to 60, plus four sparser groups in the corners of the cloud.
+
+        A colors its points by Gender and adds a Gender legend. The task never mentions Gender, so do not require B to color by Gender and do not penalize B for drawing all points in a single color and omitting the legend.
+
+        Do not require B to match A in colors, marker style or size, transparency, grid lines, figure size or aspect ratio, or the exact wording of the title and axis labels, because the task does not fix any of them. A was built after silently dropping two rows as outliers, which the task never asks for, so B may legitimately show two extra points near income 137.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "scatter_income_spending.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -39,7 +91,25 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "pairplot.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as a pairplot of the numerical features of the Mall Customers dataset, meant to reveal clusters or patterns, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty matrix of panels, with the points actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Feature Coverage: the grid covers the three numerical features Age, Annual Income (k$) and Spending Score (1-100), with a panel for every pair of them.
+        - add 1 point for Off-Diagonal Scatter Panels: the off-diagonal panels are scatter plots of one feature against another, drawn over the correct ranges, roughly 18 to 70 for Age, 15 to 137 for Annual Income (k$) and 1 to 99 for Spending Score (1-100).
+        - add 1 point for Diagonal Distributions: the diagonal panels show the univariate distribution of each feature, either as a histogram or as a density curve.
+        - add 1 point for Visible Clusters: the Annual Income (k$) against Spending Score (1-100) panels show the characteristic pattern, one dense central group plus four sparser corner groups.
+
+        A also includes CustomerID in the grid, which is a row identifier and not a feature. Because the rows happen to be sorted by income, this produces a spurious near-perfect straight line between CustomerID and Annual Income (k$). Do not require B to include CustomerID and do not penalize B for a three by three grid instead of A's four by four; including CustomerID is acceptable but never required.
+
+        Do not require B to match A on the choice of diagonal, histograms and density curves are equally acceptable, nor in colors, marker style or size, transparency, figure size, the presence or wording of a title, because the task does not fix any of them. A was built after silently dropping two rows as outliers, which the task never asks for, so B may legitimately show 200 points against 198 in A.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "pairplot.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -49,15 +119,15 @@
     Data visualization
   ground_truth: pairplot.png
 "prompt": |-
-    You are tasked with an in-depth analysis of the ""Mall Customers"" dataset from Kaggle (input filename: ""data.csv"") to segment customers and identify their spending behaviors. 
-    1. Construct histograms to depict the distribution of numerical features. 
-    - **Output filename:** ""histograms.png""
+  "You are tasked with an in-depth analysis of the ""Mall Customers"" dataset from Kaggle (input filename: ""data.csv"") to segment customers and identify their spending behaviors. 
+  1. Construct histograms to depict the distribution of numerical features. 
+  - **Output filename:** ""histograms.png""
 
-    2. Create bar plots to illustrate the frequency of categorical variables. 
-    - **Output filename:** ""barplots.png""
+  2. Create bar plots to illustrate the frequency of categorical variables. 
+  - **Output filename:** ""barplots.png""
 
-    3. Utilize scatter plots to examine the correlation between annual income and spending score. 
-    - **Output filename:** ""scatter_income_spending.png""
+  3. Utilize scatter plots to examine the correlation between annual income and spending score. 
+  - **Output filename:** ""scatter_income_spending.png""
 
-    4. Generate a pairplot to investigate the interactions among various numerical features, focusing on potential clusters or patterns. 
-    - **Output filename:** ""pairplot.png""
+  4. Generate a pairplot to investigate the interactions among various numerical features, focusing on potential clusters or patterns. 
+  - **Output filename:** ""pairplot.png""

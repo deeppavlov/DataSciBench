@@ -2,7 +2,23 @@
 - "code": |
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "bar_chart.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as the bar chart of the four categories that the task asks for, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty bar chart, with the bars actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Four Categories: B has exactly four bars, identified as A, B, C and D along the category axis.
+        - add 1 point for Correct Values: the bar heights are the values of the four categories, 23 for A, 17 for B, 35 for C and 29 for D, so C is the tallest bar, B is the shortest, A is a little taller than B, D is a little shorter than C, and the value axis reaches about 35.
+        - add 1 point for Blue Bars: the bars are blue, as the task requires.
+        - add 1 point for Axis Labels: the horizontal axis is the category and the vertical axis is the value, both are labelled and the tick labels are legible.
+
+        This chart is only the first of the three the task asks for; judge it alone and do not look for the line chart or the scatter chart here. Do not require B to match A in figure size or aspect ratio, in bar width, in grid lines, in the shade of blue, or in the wording of the title, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "bar_chart.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -19,10 +35,10 @@
   - Output File: ""bar_chart.png""
   - Specifications: 
   - x-axis is ""Category"", 
-   - y-axis is ""Values"", 
+  - y-axis is ""Values"", 
   - each bar represents the value of each category, 
   - each bar should be colored blue.
-     
+
   2. **Line Chart**:
   - Output File: ""line_chart.png""
   - Specifications: 

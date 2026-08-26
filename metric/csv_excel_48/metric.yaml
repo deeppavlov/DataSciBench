@@ -3,11 +3,11 @@
     def data_quality_score(ground_truth):
         import pandas as pd
         output = pd.read_csv("preprocessed_data.csv")
-        # Example metric: percentage of missing values
-        missing_values = output.isnull().sum().sum()
-        total_values = output.size
-        quality_score = (total_values - missing_values) / total_values
-        return bool(quality_score == 1)
+        gt_output = pd.read_csv(ground_truth)
+        no_missing = output.isnull().sum().sum() == 0
+        same_rows = 0.8 * gt_output.shape[0] <= output.shape[0] <= gt_output.shape[0]
+        all_numeric = all(pd.api.types.is_numeric_dtype(dtype) for dtype in output.dtypes)
+        return bool(no_missing and same_rows and all_numeric)
   "function": |-
     Data Quality Score
   "metric": |-
@@ -17,15 +17,31 @@
   ground_truth: preprocessed_data.csv
 - "code": |-
     def model_accuracy(ground_truth):
-        from sklearn.metrics import accuracy_score
+        from sklearn.metrics import accuracy_score, f1_score
         import pandas as pd
+        def recompute(ground_truth):
+            import os
+
+            import joblib
+            train = pd.read_csv(os.path.join(os.path.dirname(ground_truth), "..", "Bayesian_Dataset_train.csv"))
+            prep = pd.read_csv("preprocessed_data.csv")
+            model = joblib.load("naive_bayes_model.pkl")
+            label = train.columns[-1]
+            names = list(getattr(model, "feature_names_in_", [c for c in prep.columns if c != label]))
+            pred = model.predict(prep[names].to_numpy(dtype=float))
+            y = prep[label].to_numpy()
+            return accuracy_score(y, pred), f1_score(y, pred)
         output = pd.read_csv("evaluation_results.csv")
         accuracy_row = output.loc[output['Metric'].str.lower().str.contains('accuracy')]
         acc = accuracy_row['Score'].values[0]
         gt_output = pd.read_csv(ground_truth)
         gt_acc_row = gt_output.loc[gt_output['Metric'].str.lower().str.contains('accuracy')]
         gt_acc = gt_acc_row['Score'].values[0]
-        return bool(acc >= gt_acc)
+        try:
+            rec_acc, rec_f1 = recompute(ground_truth)
+        except Exception:
+            return False
+        return bool(rec_acc >= gt_acc - 0.05 and abs(rec_acc - acc) <= 0.05)
   "function": |-
     Model Accuracy
   "metric": |-
@@ -35,14 +51,31 @@
   ground_truth: evaluation_results.csv
 - "code": |-
     def cross_validation_f1_score(ground_truth):
+        from sklearn.metrics import accuracy_score, f1_score
         import pandas as pd
+        def recompute(ground_truth):
+            import os
+
+            import joblib
+            train = pd.read_csv(os.path.join(os.path.dirname(ground_truth), "..", "Bayesian_Dataset_train.csv"))
+            prep = pd.read_csv("preprocessed_data.csv")
+            model = joblib.load("naive_bayes_model.pkl")
+            label = train.columns[-1]
+            names = list(getattr(model, "feature_names_in_", [c for c in prep.columns if c != label]))
+            pred = model.predict(prep[names].to_numpy(dtype=float))
+            y = prep[label].to_numpy()
+            return accuracy_score(y, pred), f1_score(y, pred)
         output = pd.read_csv("evaluation_results.csv")
         f1_row = output.loc[output['Metric'].str.lower().str.contains('f1')]
-        f1 = accuracy_row['Score'].values[0]
+        f1 = f1_row['Score'].values[0]
         gt_output = pd.read_csv(ground_truth)
         gt_f1_row = gt_output.loc[gt_output['Metric'].str.lower().str.contains('f1')]
         gt_f1 = gt_f1_row['Score'].values[0]
-        return bool(f1 >= gt_f1)
+        try:
+            rec_acc, rec_f1 = recompute(ground_truth)
+        except Exception:
+            return False
+        return bool(rec_f1 >= gt_f1 - 0.05 and abs(rec_f1 - f1) <= 0.05)
   "function": |-
     Data Accuracy
   "metric": |-
@@ -52,15 +85,15 @@
   ground_truth: evaluation_results.csv
 "prompt": |-
   Description: It is recommended to use open-source toolkits, such as scikit-learn, which has an implementation of the Naive Bayes function for the Naive Bayes Classifier.
-   
+
   Dataset: 
   - Input files:  
     - "Bayesian_Dataset_train.csv"  
     - "Bayesian_Dataset_test.csv"
 
   Data Description: The column names are "Age, Occupation, Family Income, Education, Marital Status, Job Type, Family Size, Ethnicity, Gender, Workplace". The last column is the label, indicating whether the income is greater than 50k (>50K).
-   
-  Task Description: Use the NaÃ¯ve Bayesian method to predict whether a person's income is higher than 50K annually.
+
+  Task Description: Use the Naïve Bayesian method to predict whether a person's income is higher than 50K annually.
 
   Subtasks and Requirements:
 
@@ -68,13 +101,13 @@
      - Input: "Bayesian_Dataset_train.csv"  
      - Output: "preprocessed_data.csv" (CSV format)  
      - Details: Clean and prepare the training dataset for modeling.
-   
+
   2. Model Training  
      - Input: "preprocessed_data.csv"  
      - Output: "naive_bayes_model.pkl" (Pickle format)  
-     - Details: Train the NaÃ¯ve Bayes Classifier on the training dataset.
+     - Details: Train the Naïve Bayes Classifier on the training dataset.
 
   3. Model Evaluation  
      - Input: "naive_bayes_model.pkl", "Bayesian_Dataset_test.csv"  
      - Output: "evaluation_results.csv" (CSV format)  
-     - Details: Evaluate the model using cross-validation and leave-one-out methods, and compute statistical results, including Accuracy, Precision, Recall, F1 Score, and ROC AUC.
+     - Details: Evaluate the model using cross-validation and leave-one-out methods, and compute statistical results, including Accuracy, Precision, Recall, F1 Score, and ROC AUC. Save "evaluation_results.csv" in long format with exactly two columns, "Metric" and "Score", and exactly five rows whose "Metric" values are "Accuracy", "Precision", "Recall", "F1 Score" and "ROC AUC".

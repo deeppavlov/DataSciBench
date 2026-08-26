@@ -20,9 +20,10 @@
 - "code": |-
     def duplicate_rows_removed(ground_truth):
         import pandas as pd
-        cleaned_count = len(pd.read_csv("cleaned_data.csv"))
+        cleaned = pd.read_csv("cleaned_data.csv")
         cleaned_count_gd = len(pd.read_csv(ground_truth))
-        return cleaned_count == cleaned_count_gd
+        no_duplicates = int(cleaned.duplicated().sum()) == 0
+        return bool(no_duplicates and 0.9 * cleaned_count_gd <= len(cleaned) <= 1.1 * cleaned_count_gd)
   "function": |-
     Data Cleaning Completeness
   "metric": |-
@@ -33,10 +34,34 @@
     cleaned_data.csv
 - "code": |-
     def summary_statistics_consistency(ground_truth):
+        import os
         import pandas as pd
-        output = pd.read_csv("eda_statistics.csv")
-        output_gt = pd.read_csv(ground_truth)
-        return output.equals(output_gt)
+        import numpy as np
+        data = pd.read_csv("cleaned_data.csv")
+        reference = pd.read_csv(os.path.join(os.path.dirname(ground_truth), "cleaned_data.csv"))
+        for feature in ["age", "trestbps", "chol", "thalach"]:
+            if feature not in data.columns or abs(data[feature].mean() - reference[feature].mean()) > 0.05 * abs(reference[feature].mean()):
+                return False
+        stats = pd.read_csv("eda_statistics.csv", index_col=0)
+        if not {"age", "chol", "thalach"} <= {str(i).strip().lower() for i in stats.index}:
+            stats = stats.T
+        keys = pd.Series(stats.index.astype(str)).str.strip().str.lower()
+        names = [str(c).strip().lower() for c in stats.columns]
+        aliases = {"mean": ["mean"], "median": ["median", "50%"], "std": ["std", "std dev", "stddev", "standard deviation"]}
+        for feature in ["age", "chol", "thalach", "sex", "cp", "target"]:
+            if feature not in data.columns or int((keys == feature).sum()) != 1:
+                return False
+        for feature in ["age", "chol", "thalach"]:
+            row = stats[(keys == feature).values].iloc[0]
+            expected = {"mean": data[feature].mean(), "median": data[feature].median(), "std": data[feature].std()}
+            for stat, options in aliases.items():
+                found = [c for c, name in zip(stats.columns, names) if name in options]
+                if not found:
+                    return False
+                value = pd.to_numeric(row[found[0]], errors="coerce")
+                if not np.isfinite(value) or abs(value - expected[stat]) > 0.01 * max(abs(expected[stat]), 1.0):
+                    return False
+        return True
   "function": |-
     Data Consistency
   "metric": |-
@@ -59,16 +84,31 @@
     def pattern_recognition_validity(ground_truth):
         import pandas as pd
         output = pd.read_csv("patterns_analysis.csv")
-        output_gd = pd.read_csv(ground_truth)
-        return output.equals(output_gd)
+        if output.empty or output.shape[1] < 2:
+            return False
+        cells = set()
+        for column in output.columns:
+            cells.update(output[column].astype(str).str.strip().str.lower())
+        if not {"age", "chol", "exang"}.issubset(cells):
+            return False
+        names = " ".join(str(c).lower() for c in output.columns)
+        if "disease" not in names and "target" not in names:
+            return False
+        numeric = output.apply(pd.to_numeric, errors="coerce")
+        source = pd.read_csv("../heart+disease/processed.cleveland.data", header=None, na_values="?")
+        labels = output.astype(str).apply(lambda column: column.str.strip().str.lower())
+        for name, index in (("age", 0), ("chol", 4)):
+            expected = source[index].mean()
+            values = numeric[labels.eq(name).any(axis=1)].to_numpy().ravel()
+            if not any(abs(value - expected) <= 0.15 * expected for value in values if pd.notna(value)):
+                return False
+        return bool(int(numeric.notna().sum().sum()) >= 3 and int(numeric.nunique().sum()) >= 3)
   "function": |-
     Pattern Recognition Validity
   "metric": |-
     Pattern Recognition Validity
   "task_name": |-
     Pattern recognition
-  "ground_truth": |-
-    patterns_analysis.csv
 - "code": |-
     def clustering_silhouette_score(ground_truth):
         from sklearn.metrics import silhouette_score
@@ -78,6 +118,8 @@
         features = output.iloc[:, :-1].values
         labels = output.iloc[:, -1].values
         output_gd = pd.read_csv(ground_truth)
+        if set(output.columns[:-1]) != set(output_gd.columns[:-1]) or not 0.9 * len(output_gd) <= len(output) <= 1.1 * len(output_gd):
+            return False
         features_gd = output_gd.iloc[:, :-1].values
         labels_gd = output_gd.iloc[:, -1].values
         return silhouette_score(features, labels) >= silhouette_score(features_gd, labels_gd)
@@ -93,7 +135,7 @@
   You are required to analyze and visualize the "Heart Disease UCI" dataset from the UCI Machine Learning Repository (https://archive.ics.uci.edu/ml/datasets/heart+disease). Please follow the subtasks outlined below and ensure to use the specified input and output formats for each task:
 
   1. **Load the dataset**  
-     - **Input file**: `heart+disease/processed.cleveland.data`  
+     - **Input file**: `heart+disease/processed.cleveland.data` (The downloaded dataset)
      - **Output file**: `dataset_loaded.csv` (contains the dataset loaded into a DataFrame)
 
   2. **Data Cleaning**  

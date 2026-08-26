@@ -30,5 +30,4 @@
     Data exploration and statistics understand
   ground_truth: "target.xlsx"
 "prompt": |-
-  Please complete the following task using Python:
-   Open the 'sheet1' worksheet of the Excel file source.xlsx, and filter the rows where the value in column D is greater than or equal to 8 and less than 8.0010, at the same time, the value in column F should be equal to 18, and the value in column G should be greater than the value of the second row in column G. Copy the values from the filtered rows in column G and paste them into the corresponding cells of the 'sheet1' worksheet in another Excel file target.xlsx.
+  Please complete the following task using Python:\n Open the 'sheet1' worksheet of the Excel file source.xlsx, and filter the rows where the value in column D is greater than or equal to 8 and less than 8.0010, at the same time, the value in column F should be equal to 18, and the value in column G should be greater than the value of the second row in column G. Copy the values from the filtered rows in column G and write them into the 'sheet1' worksheet in another Excel file target.xlsx. The file target.xlsx does not exist yet: create it with a single worksheet named 'sheet1' where the first row contains the header G and the rows below contain the selected values in their original order.

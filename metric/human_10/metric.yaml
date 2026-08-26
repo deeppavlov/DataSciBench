@@ -17,15 +17,26 @@
     Data cleaning and preprocessing
 - "code": |-
     def calculate_mae(ground_truth):
+        import numpy as np
         import pandas as pd
         from sklearn.metrics import mean_absolute_error
+
         output = pd.read_csv("predicted_prices.csv")
-        predictions = output['Predicted Prices'].tolist()
-        actual_values = output['Actual Prices'].tolist()
+        predictions = pd.to_numeric(output["Predicted Prices"], errors="coerce")
+        actual_values = pd.to_numeric(output["Actual Prices"], errors="coerce")
+        if len(output) < 50 or not np.isfinite(predictions).all() or not np.isfinite(actual_values).all():
+            print("predicted_prices.csv holds", len(output), "rows, all values finite:", bool(np.isfinite(predictions).all() and np.isfinite(actual_values).all()))
+            return False
+        prices = pd.read_csv("../train.csv")["SalePrice"]
+        deviation = abs(float(actual_values.mean()) - float(prices.mean())) / float(prices.mean())
+        if deviation > 0.15 or float(predictions.std()) <= 0:
+            print("actual prices deviate from ../train.csv by", deviation, "predictions std is", float(predictions.std()))
+            return False
         output_gt = pd.read_csv(ground_truth)
-        predictions_gt = output['Predicted Prices'].tolist()
-        actual_values_gt = output['Actual Prices'].tolist()
-        return mean_absolute_error(actual_values, predictions) <= mean_absolute_error(actual_values_gt, predictions_gt)
+        reference = mean_absolute_error(output_gt["Actual Prices"], output_gt["Predicted Prices"])
+        error = mean_absolute_error(actual_values, predictions)
+        print("MAE:", error, "reference MAE:", reference)
+        return bool(0.25 * reference <= error <= 2 * reference)
   "function": |-
     Mean Absolute Error
   "ground_truth": |-
@@ -37,9 +48,12 @@
 - "code": |-
     def visualization_completeness(ground_truth):
         import os
+        from PIL import Image
         # Check if the visualizations file exists and is non-empty
         if os.path.exists("visualizations.png") and os.path.getsize("visualizations.png") > 0:
-            return True
+            with Image.open("visualizations.png") as image:
+                low, high = image.convert("L").getextrema()
+            return high - low > 30
         return False
   "function": |-
     Visualization Completeness
@@ -50,7 +64,10 @@
 - "code": |-
     def report_completeness(ground_truth):
         import pandas as pd
-        from PyPDF2 import PdfReader
+        try:
+            from pypdf import PdfReader
+        except ImportError:
+            from PyPDF2 import PdfReader
 
         # Check if report exists
         if not os.path.exists("housing_prices_analysis_report.pdf"):
@@ -59,9 +76,9 @@
         # Read the PDF and count pages
         with open("housing_prices_analysis_report.pdf", "rb") as file:
             reader = PdfReader(file)
-            page_count = len(reader.pages)
+            text = "".join(page.extract_text() or "" for page in reader.pages)
         
-        return page_count > 0  # Verify that report has content
+        return len(text) > 300
   "function": |-
     Report Completeness
   "metric": |-
@@ -72,12 +89,12 @@
   "Undertake a comprehensive analysis and construct a robust predictive model using the ""Housing Prices"" dataset from Kaggle  to forecast residential property values.
 
   1. **Data Import and Cleaning**: 
-  - **Input**: ""housing_prices.csv""
+  - **Input**: "train.csv" and "test.csv"
   - **Output**: ""cleaned_data.csv"" (the processed dataset after cleaning)
-   
+
   2. **Predictive Model Development**:
   - **Input**: ""cleaned_data.csv"" (the dataset after cleaning)
-  - **Output**: ""predicted_prices.csv"" (containing the predicted house prices along with actual values for comparison)
+  - **Output**: ""predicted_prices.csv"" (containing the predicted house prices in a ""Predicted Prices"" column along with actual values in an ""Actual Prices"" column for comparison)
 
 
   3. **Model Evaluation**:
@@ -88,5 +105,5 @@
 
   5. **Comprehensive Report**:
   - **Output**: ""housing_prices_analysis_report.pdf"" (a detailed report encapsulating data cleaning procedures, predictive modeling methodologies, model evaluation, and significant insights or trends identified within the dataset, including all visualizations)
-   
+
   Ensure all files are saved in the specified formats with the provided filenames for further evaluation."

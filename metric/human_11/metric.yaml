@@ -2,37 +2,84 @@
 - "code": |-
     def data_quality_score(ground_truth):
         import pandas as pd
+
         output = pd.read_csv("cleaned_data.csv")
-        output_shape = output.shape
-        duplicates = output.duplicated().sum()
-        missing_values = output.isnull().sum().sum()
-
-        output_gt = pd.read_csv(ground_truth)
-        output_gt_shape = output_gt.shape
-        output_gt_duplicates = output_gt.duplicated().sum()
-        output_gt_missing_values = output_gt.isnull().sum().sum()
-
-        return all([output_shape == output_gt_shape, duplicates == output_gt_duplicates, missing_values == output_gt_missing_values])
+        source = pd.read_csv("../penguins_size.csv").dropna()
+        duplicates = int(output.duplicated().sum())
+        missing = int(output.isnull().sum().sum())
+        numeric_columns = int(output.select_dtypes("number").shape[1])
+        print("shape:", output.shape, "duplicates:", duplicates, "missing:", missing, "numeric columns:", numeric_columns)
+        return bool(len(output) >= max(30, 0.9 * len(source)) and numeric_columns >= 4 and duplicates == 0 and missing == 0)
   "function": |-
     Data Quality Score
   "metric": |-
     Data Quality Score
-  "ground_truth": |-
-    cleaned_data.csv
   "task_name": |-
     Data cleaning and preprocessing
 - "code": |-
     def summary_statistics_accuracy(ground_truth):
+        import re
+
         import pandas as pd
-        output = pd.read_csv("eda_results.csv")
-        output_gt = pd.read_csv(ground_truth)
-        return output.equals(output_gt)
+
+        data = pd.read_csv("cleaned_data.csv")
+        source = pd.read_csv("../penguins_size.csv")
+        reference = {re.sub(r"[^a-z0-9]", "", str(c).lower()): source[c].dropna() for c in source.select_dtypes("number").columns}
+        eda = pd.read_csv("eda_results.csv", index_col=0)
+        eda.index = eda.index.map(str)
+
+        def column(names):
+            for name in names:
+                for col in eda.columns:
+                    if str(col).strip().lower() == name:
+                        return pd.to_numeric(eda[col], errors="coerce")
+            return None
+
+        stats = {
+            "mean": column(["mean", "average"]),
+            "median": column(["median", "50%"]),
+            "std": column(["std", "stddev", "standard deviation"]),
+        }
+        if any(series is None for series in stats.values()):
+            print("mean, median or std is missing among the columns", list(eda.columns))
+            return False
+
+        numeric = list(data.select_dtypes("number").columns)
+        measurements = [c for c in numeric if any(k in c.lower() for k in ["culmen", "bill", "flipper", "body"])]
+        if not measurements:
+            print("no penguin measurement columns in cleaned_data.csv")
+            return False
+
+        for col in measurements:
+            if col not in eda.index:
+                print("no statistics reported for", col)
+                return False
+            base = reference.get(re.sub(r"[^a-z0-9]", "", str(col).lower()))
+            if base is not None:
+                for name in ("mean", "median"):
+                    if abs(float(getattr(data[col], name)()) - float(getattr(base, name)())) > 0.05 * abs(float(getattr(base, name)())):
+                        print(name, "of", col, "does not match ../penguins_size.csv")
+                        return False
+            for name, series in stats.items():
+                expected = float(getattr(data[col], name)())
+                reported = pd.to_numeric(pd.Series(series.loc[col]), errors="coerce").iloc[0]
+                if pd.isna(reported) or abs(float(reported) - expected) > 1e-6 + 0.02 * abs(expected):
+                    print(name, "of", col, "is", reported, "instead of", expected)
+                    return False
+
+        categorical = [c for c in data.columns if c not in numeric]
+        named = [c for c in categorical if c.strip().lower().replace(" ", "_") in ("species", "island", "sex")]
+        for col in named:
+            if col not in eda.index:
+                print("no summary reported for the categorical variable", col)
+                return False
+
+        print("checked", len(measurements), "numerical and", len(named), "categorical variables")
+        return True
   "function": |-
     Data Accuracy
   "metric": |-
     Summary Statistics Accuracy
-  "ground_truth": |-
-    eda_results.csv
   "task_name": |-
     Data exploration and statistics understand
 - "code": |-
@@ -48,7 +95,23 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "correlation_analysis.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as a scatter plot of the correlation between culmen length and flipper length of the Palmer Archipelago penguins, with a regression line. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty scatter plot, with the points actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Same Data: B shows the same point cloud as A, covering the same ranges, roughly 32 to 60 mm horizontally and 170 to 232 mm vertically.
+        - add 1 point for Correct Variables: culmen length in mm is on the horizontal axis and flipper length in mm is on the vertical axis.
+        - add 1 point for Regression Line: a straight regression line is drawn through the point cloud and rises from left to right, as in A.
+        - add 1 point for Axis Labels: both axes are labelled with the variable they show and the tick labels are legible.
+
+        Do not require B to match A in the title text, in the exact wording of the axis labels (culmen length and bill length are two names of the same measurement), in colors, in the marker or line style, in the presence of a confidence band, in grid lines, in figure size or aspect ratio, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "correlation_analysis.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -62,8 +125,7 @@
   Embark on a detailed analysis and visualization of the "Palmer Archipelago (Antarctica) penguin data" dataset available on Kaggle (https://www.kaggle.com/datasets/parulpandey/palmer-archipelago-antarctica-penguin-data/data), aiming to uncover insights about penguin populations.
 
   1. **Import the dataset**:
-     - **Input**: "data.csv"
-     - **Output**: "imported_data.csv" (This file should contain the successfully imported dataset)
+     - **Input**: "penguins_lter.csv" and "penguins_size.csv"
 
   2. **Data Cleaning**:
      - Address missing values through imputation or removal, encode categorical variables for analysis, and eliminate any duplicate entries.

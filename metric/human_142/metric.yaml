@@ -2,19 +2,32 @@
 - "code": |-
     def association_rules_validity(ground_truth):
         import pandas as pd
-        output = pd.read_csv("association_rules.csv")
-        output_rules = set(list(zip(output['antecedents'].tolist(),output['consequents'].tolist())))
 
-        output_gt = pd.read_csv(ground_truth)
-        output_gt_rules = set(list(zip(output_gt['antecedents'].tolist(),output_gt['consequents'].tolist())))
-
-        valid_rule_count = len(output_rules.intersection(output_gt_rules))
-        total_rules = len(output_rules)
-        return (valid_rule_count / total_rules if total_rules > 0 else 0) >= 0.9
+        rules = pd.read_csv("association_rules.csv")
+        columns = {str(name).strip().lower(): name for name in rules.columns}
+        required = ["antecedents", "consequents", "support", "confidence", "lift"]
+        if any(name not in columns for name in required) or len(rules) < 5:
+            return False
+        antecedents = rules[columns["antecedents"]].astype(str).str.strip()
+        consequents = rules[columns["consequents"]].astype(str).str.strip()
+        if (antecedents.str.len() == 0).any() or (consequents.str.len() == 0).any():
+            return False
+        if len(set(zip(antecedents, consequents))) < 5:
+            return False
+        support = rules[columns["support"]].astype(float)
+        confidence = rules[columns["confidence"]].astype(float)
+        lift = rules[columns["lift"]].astype(float)
+        if not support.between(0, 1).all() or not confidence.between(0, 1).all():
+            return False
+        if (support <= 0).any() or (confidence <= 0).any() or (lift <= 0).any():
+            return False
+        if "antecedent support" in columns:
+            derived = support / rules[columns["antecedent support"]].astype(float)
+            if not (derived - confidence).abs().lt(1e-2).all():
+                return False
+        return bool((lift > 1).any())
   "function": |-
     Clustering Validity
-  "ground_truth": |-
-    association_rules.csv
   "metric": |-
     Association Rules Validity
   "task_name": |-
@@ -22,26 +35,40 @@
 - "code": |-
     def frequent_itemsets_validity(ground_truth):
         import pandas as pd
-        output = pd.read_csv("frequent_itemsets.csv")
-        output_itemsets = set(output['itemsets'].tolist())
 
-        output_gt = pd.read_csv(ground_truth)
-        output_gt_itemsets = set(output_gt['itemsets'].tolist())
-
-        valid_itemset_count = len(output_itemsets.intersection(output_gt_itemsets))
-        total_itemsets = len(output_itemsets)
-        return (valid_itemset_count / total_itemsets if total_itemsets > 0 else 0) >= 0.9
+        itemsets = pd.read_csv("frequent_itemsets.csv")
+        columns = {str(name).strip().lower(): name for name in itemsets.columns}
+        if "support" not in columns or "itemsets" not in columns or len(itemsets) < 5:
+            return False
+        items = itemsets[columns["itemsets"]].astype(str).str.strip()
+        support = itemsets[columns["support"]].astype(float)
+        if (items.str.len() == 0).any() or items.nunique() < 5:
+            return False
+        if not support.between(0, 1).all() or (support <= 0).any():
+            return False
+        return bool(items.str.contains("[,;|&+]", regex=True).any())
   "function": |-
     Clustering Validity
-  "ground_truth": |-
-    frequent_itemsets.csv
   "metric": |-
     Frequent Itemsets Validity
   "task_name": |-
     Data mining
 - "code": |-
     def pattern_analysis_completeness(ground_truth):
-        return os.path.exists("pattern_analysis_report.pdf")
+        import os
+
+        try:
+            from pypdf import PdfReader
+        except ImportError:
+            from PyPDF2 import PdfReader
+
+        report = "pattern_analysis_report.pdf"
+        if not os.path.exists(report) or os.path.getsize(report) == 0:
+            return False
+        with open(report, "rb") as file:
+            pages = PdfReader(file).pages
+            text = "".join(page.extract_text() or "" for page in pages).lower()
+        return bool(len(text) > 300 and "default" in text and "trend" in text and "outlier" in text)
   "function": |-
     Completeness
   "metric": |-
@@ -50,7 +77,22 @@
     Pattern recognition
 - "code": |-
     def client_segments_description_cohesion(ground_truth):
-        return os.path.exists("client_segments_analysis.pdf")
+        import os
+
+        try:
+            from pypdf import PdfReader
+        except ImportError:
+            from PyPDF2 import PdfReader
+
+        report = "client_segments_analysis.pdf"
+        if not os.path.exists(report) or os.path.getsize(report) == 0:
+            return False
+        with open(report, "rb") as file:
+            pages = PdfReader(file).pages
+            text = "".join(page.extract_text() or "" for page in pages).lower()
+        if len(text) <= 300 or "risk" not in text:
+            return False
+        return bool("cluster" in text or "segment" in text)
   "function": |-
     Report Quality
   "metric": |-
@@ -58,40 +100,73 @@
   "task_name": |-
     Interpretability and report generation
 - "code": |-
-    def report_completeness(ground_truth):
-        return os.path.exists("customer_segmentation_analysis.pdf")
+    def clustering_validity(ground_truth):
+        import os
+
+        import numpy as np
+        import pandas as pd
+        from sklearn.preprocessing import StandardScaler
+
+        if not os.path.exists("elbow_method.png") or os.path.getsize("elbow_method.png") < 5000:
+            return False
+        clusters = pd.read_csv("kmeans_clusters.csv")
+        label_columns = [name for name in clusters.columns if "cluster" in str(name).lower() or "segment" in str(name).lower() or "label" in str(name).lower()]
+        if not label_columns or len(clusters) < 1000:
+            return False
+        labels = clusters[label_columns[-1]]
+        shares = labels.value_counts(normalize=True)
+        if len(shares) < 2 or len(shares) > 15 or shares.max() > 0.95:
+            return False
+        source = pd.read_excel("../default of credit card clients.xls", header=1)
+        features = [name for name in source.columns if name not in ("ID", "default payment next month")]
+        id_columns = [name for name in clusters.columns if str(name).strip().lower() == "id"]
+        if id_columns:
+            assignment = pd.DataFrame({"ID": clusters[id_columns[0]], "label": labels.to_numpy()})
+            merged = source[["ID"] + features].merge(assignment, on="ID")
+        elif len(clusters) == len(source):
+            merged = source[features].copy()
+            merged["label"] = labels.to_numpy()
+        else:
+            return False
+        if len(merged) < 1000:
+            return False
+        matrix = StandardScaler().fit_transform(merged[features].to_numpy(dtype=float))
+        groups = merged["label"].to_numpy()
+        total = float(((matrix - matrix.mean(axis=0)) ** 2).sum())
+        within = float(sum(((matrix[groups == key] - matrix[groups == key].mean(axis=0)) ** 2).sum() for key in np.unique(groups)))
+        return bool(total > 0 and 1 - within / total >= 0.1)
   "function": |-
-    Report Completeness
+    Clustering Validity
   "metric": |-
-    Report Completeness
+    Clustering Validity
   "task_name": |-
-    Interpretability and report generation
+    Data exploration and statistics understand
 "prompt": |-
     You are required to analyze the "Credit Card Default" dataset from the UCI Machine Learning Repository (https://archive.ics.uci.edu/ml/datasets/default+of+credit+card+clients), which contains information on Taiwanese customers' credit card payment defaults. Your tasks are as follows:
 
     1. **Data Mining**:
-      - Conduct association rule mining to discover relationships between different features and the default status.  
-        Input: "default of credit card clients.xls"  
-        Output: "association_rules.csv" (format: csv)
+       - Conduct association rule mining to discover relationships between different features and the default status.  
+         Input: "default of credit card clients.xls"  
+         Output: "association_rules.csv" (format: csv)
 
-      - Identify frequent itemsets and association rules that reveal how certain combinations of features are related to higher default rates.  
-        Input: "default of credit card clients.xls"  
-        Output: "frequent_itemsets.csv" (format: csv)
+       - Identify frequent itemsets and association rules that reveal how certain combinations of features are related to higher default rates.  
+         Input: "default of credit card clients.xls"  
+         Output: "frequent_itemsets.csv" (format: csv)
 
     2. **Clustering**:
-      - Apply K-means clustering to group clients into distinct segments based on features such as credit limit, bill amounts, and payment history.  
-        Input: "default of credit card clients.xls"  
-        Output: "kmeans_clusters.csv" (format: csv)
+       - Apply K-means clustering to group clients into distinct segments based on features such as credit limit, bill amounts, and payment history.  
+         Input: "default of credit card clients.xls"  
+         Output: "kmeans_clusters.csv" (format: csv)
 
-      - Determine the optimal number of clusters using the Elbow method and present the results.  
-        Input: "default of credit card clients.xls"  
-        Output: "elbow_method.png" (format: image)
+       - Determine the optimal number of clusters using the Elbow method and present the results.  
+         Input: "default of credit card clients.xls"  
+         Output: "elbow_method.png" (format: image)
 
     3. **Pattern Analysis and Interpretation**:
-      - Analyze and interpret the identified patterns, discussing features most strongly associated with defaults, notable trends, and outliers.  
-        Output: "pattern_analysis_report.pdf" (format: pdf)
+       - Analyze and interpret the identified patterns, discussing features most strongly associated with defaults, notable trends, and outliers.  
+         Output: "pattern_analysis_report.pdf" (format: pdf)
 
-      - Describe the characteristics of different client segments identified through clustering and their potential risk levels.  
-        Output: "client_segments_analysis.pdf" (format: pdf)
+       - Describe the characteristics of different client segments identified through clustering and their potential risk levels.  
+         Output: "client_segments_analysis.pdf" (format: pdf)
 
     Ensure the outputs reflect the quality of your analysis and allow for further evaluation of the results.

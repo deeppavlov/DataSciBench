@@ -16,7 +16,7 @@ output_data = output_data.T
 # Assume each row of the input predicts a corresponding column of the output
 # Use the first row as an example
 X = input_data.values
-Y = output_data.values.T  # Transpose to align with X for row-wise prediction
+Y = output_data.values  # Row i of the input corresponds to column i of the output
 
 # Split data into training and testing sets
 X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, random_state=42)

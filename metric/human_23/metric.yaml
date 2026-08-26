@@ -16,7 +16,7 @@
     def percentage_within_bounds(ground_truth):
         import pandas as pd
         output = pd.read_csv("outliers_handled.csv")
-        ground_truth = pd.read_csv("outliers_handled.csv")
+        ground_truth = pd.read_csv(ground_truth)
         count_within_bounds = ((output[['Temperature', 'Humidity', 'WindSpeed']] >= ground_truth[['Temperature', 'Humidity', 'WindSpeed']].quantile(0.02)) &
                                 (output[['Temperature', 'Humidity', 'WindSpeed']] <= ground_truth[['Temperature', 'Humidity', 'WindSpeed']].quantile(0.98))).sum().sum()
         total_count = output[['Temperature', 'Humidity', 'WindSpeed']].size
@@ -35,7 +35,7 @@
         min_vals = output[['Temperature', 'Humidity', 'WindSpeed']].min()
         max_vals = output[['Temperature', 'Humidity', 'WindSpeed']].max()
         pre_output = (max_vals - min_vals).sum()
-        gt = pd.read_csv("normalized_data.csv")
+        gt = pd.read_csv(ground_truth)
         pre_gt = (gt[['Temperature', 'Humidity', 'WindSpeed']].max() - gt[['Temperature', 'Humidity', 'WindSpeed']].min()).sum()
         return bool(pre_output == pre_gt)
   "function": |-
@@ -71,8 +71,9 @@
     Data cleaning and preprocessing
   ground_truth: final_cleaned_data.csv
 "prompt": |-
+  # QUESTION 4
   Given a DataFrame `df` of historical weather data with columns: StationID, Date, Temperature, Humidity, WindSpeed, perform the following tasks:
-   
+
   1. **Handle Missing Values**: Handle missing values in Temperature, Humidity, and WindSpeed using the mean of each column.  
      **Input**: `data.csv` (contains the initial DataFrame)  
      **Output**: `missing_values_handled.csv` (the DataFrame after handling missing values)
@@ -80,7 +81,7 @@
   2. **Detect and Replace Outliers**: Detect and replace outliers in Temperature, Humidity, and WindSpeed. An outlier is defined as a value below the 2nd percentile or above the 98th percentile. Replace these outliers with the corresponding 2nd or 98th percentile value.  
      **Input**: `missing_values_handled.csv`  
      **Output**: `outliers_handled.csv` (the DataFrame after handling outliers)
-   
+
   3. **Normalize Features**: Normalize Temperature, Humidity, and WindSpeed using Min-Max scaling.  
      **Input**: `outliers_handled.csv`  
      **Output**: `normalized_data.csv` (the DataFrame after normalization)
@@ -89,7 +90,7 @@
      **Input**: `normalized_data.csv`  
      **Output**: `date_formatted.csv` (the DataFrame after formatting the Date)
 
-   5. **One-Hot Encode StationID**: One-hot encode the StationID column.  
+  5. **One-Hot Encode StationID**: One-hot encode the StationID column.  
      **Input**: `date_formatted.csv`  
      **Output**: `final_cleaned_data.csv` (the final cleaned DataFrame ready for further analysis)
 

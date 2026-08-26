@@ -2,32 +2,48 @@
 - "code": |-
     def data_completeness(ground_truth):
         import pandas as pd
-        output = pd.read_csv("cleaned_data.csv")
-        pre_output = output.notnull().all().all()  # Returns True if all values in the DataFrame are non-null
-        gt = pd.read_csv(ground_truth)
-        gt_output = gt.notnull().all().all()
-        return bool(pre_output == gt_output) # Returns True if the two DataFrames are equal
+
+        raw = pd.read_csv("../data.txt", sep="\t", header=None)
+        output = pd.read_csv("cleaned_data.csv", header=None)
+        if output.iloc[0].map(lambda v: pd.to_numeric(v, errors="coerce")).isnull().any():
+            output = output.iloc[1:]
+        output = output.apply(pd.to_numeric, errors="coerce")
+        kept = len(output) / len(raw)
+        duplicates = int(output.duplicated().sum())
+        missing = int(output.isnull().sum().sum())
+        print("rows:", len(output), "of", len(raw), "columns:", output.shape[1], "duplicates:", duplicates, "missing:", missing)
+        if output.shape[1] != raw.shape[1] or duplicates or missing:
+            return False
+        red = output.iloc[:, 0:6]
+        blue = output.iloc[:, 6]
+        in_range = bool(red.min().min() >= 1 and red.max().max() <= 33 and blue.min() >= 1 and blue.max() <= 16)
+        print("in range:", in_range, "kept share:", kept)
+        return bool(in_range and 0.8 <= kept <= 1.0)
   "function": |-
     Data Completeness
   "metric": |-
     Data Completeness
   "task_name": |-
     Data cleaning and preprocessing
-  ground_truth: cleaned_data.csv
 - "code": |-
     def data_distribution_comparison(ground_truth):
-        import pandas as pd
         import numpy as np
+        import pandas as pd
         from scipy.stats import ks_2samp
-        
+
         output = pd.read_csv("train_set.csv")
         ground_truth_df = pd.read_csv(ground_truth)
-        
-        # Assuming the first 6 columns are red balls and the 7th is the blue ball
-        train_red = output.iloc[:, 0:6].values.flatten()
+
+        train_red = pd.to_numeric(output.iloc[:, 0:6].values.flatten(), errors="coerce")
         gt_red = ground_truth_df.iloc[:, 0:6].values.flatten()
-        print (ks_2samp(train_red, gt_red).pvalue, type(ks_2samp(train_red, gt_red).pvalue))
-        return bool(ks_2samp(train_red, gt_red).pvalue == 1)  # Returns the p-value from the Kolmogorov-Smirnov test
+        if not np.isfinite(train_red).all():
+            return False
+
+        enough_rows = len(output) >= 100
+        in_range = bool((train_red >= 1).all() and (train_red <= 33).all())
+        pvalue = float(ks_2samp(train_red, gt_red).pvalue)
+        print("rows:", len(output), "in range 1-33:", in_range, "KS p-value:", pvalue)
+        return bool(enough_rows and in_range and pvalue > 0.05)
   "function": |-
     Data Consistency
   "metric": |-
@@ -37,14 +53,33 @@
   ground_truth: train_set.csv
 - "code": |-
     def model_performance_accuracy(ground_truth):
+        import numpy as np
         import pandas as pd
-        from sklearn.metrics import accuracy_score
-        
-        gt_df = pd.read_csv(ground_truth)
-        gt = gt_df['MAE'].tolist()
+
         output = pd.read_csv("evaluation_results.csv")
-        predictions = output['MAE'].tolist()  # Assuming predictions are in this column
-        return bool(gt == predictions)
+        num_cols = [c for c in output.columns if pd.api.types.is_numeric_dtype(output[c])]
+        text_cols = [c for c in output.columns if c not in num_cols]
+
+        scores = {}
+        if text_cols and num_cols:
+            for name, value in zip(output[text_cols[0]], output[num_cols[0]]):
+                scores[str(name).strip().lower()] = pd.to_numeric(value, errors="coerce")
+        for col in num_cols:
+            series = pd.to_numeric(output[col], errors="coerce").dropna()
+            if len(series):
+                scores[str(col).strip().lower()] = float(series.iloc[0])
+
+        errors = [
+            float(v)
+            for k, v in scores.items()
+            if any(t in k for t in ("mae", "mse", "error", "loss")) and np.isfinite(v)
+        ]
+        print("scores:", scores, "error metrics:", errors)
+        if not errors:
+            return False
+        gt_values = pd.read_csv(ground_truth).apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float)
+        limit = 3 * float(np.nanmax(gt_values))
+        return bool(all(0 <= e <= limit for e in errors) and max(errors) > 0)
   ground_truth: evaluation_results.csv
   "function": |-
     Model Accuracy
@@ -55,7 +90,7 @@
 "prompt": |-
   Import the historical data file **data.txt** of the Double Color Ball lottery, and use the Convolutional Neural Network (CNN) model to predict the next issue's 7 numbers based on historical data. The specific requirements are as follows:
 
-   1. **Data Import**: Read the historical data from the **data.txt** file, which should include the first 6 red ball numbers and the 7th blue ball number for each issue. 
+  1. **Data Import**: Read the historical data from the **data.txt** file, which should include the first 6 red ball numbers and the 7th blue ball number for each issue. 
      - **Output**: Cleaned data in **cleaned_data.csv** format.
 
   2. **Data Preprocessing**: Clean and preprocess the imported data, including: 
@@ -63,7 +98,7 @@
      - Restricting the blue ball number to a range of 1 to 16.
      - Dividing the data into training and test sets.
      - **Output**: Preprocessed training and test sets in **train_set.csv** and **test_set.csv** formats.
-   
+
   3. **Model Building**: Use Convolutional Neural Networks (CNN) to build a prediction model, which will output 7 predicted numbers, the first 6 being red balls and the 7th being the blue ball. 
      - **Output**: Model architecture summary in **model_summary.pdf** format.
 

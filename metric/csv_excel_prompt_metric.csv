@@ -59,7 +59,7 @@ The output should be saved in ""output.csv"".",Data cleaning and preprocessing,D
     completeness = required_fields.issubset(actual_fields)
     
     return completeness  # Returns True if all required fields are present",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-"Please complete the following task using Python:\n Open the 'sheet1' worksheet of the Excel file source.xlsx, and filter the rows where the value in column D is greater than or equal to 8 and less than 8.0010, at the same time, the value in column F should be equal to 18, and the value in column G should be greater than the value of the second row in column G. Copy the values from the filtered rows in column G and paste them into the corresponding cells of the 'sheet1' worksheet in another Excel file target.xlsx.",Data cleaning and preprocessing,Filter Efficiency,"def filter_efficiency(ground_truth):  
+"Please complete the following task using Python:\n Open the 'sheet1' worksheet of the Excel file source.xlsx, and filter the rows where the value in column D is greater than or equal to 8 and less than 8.0010, at the same time, the value in column F should be equal to 18, and the value in column G should be greater than the value of the second row in column G. Copy the values from the filtered rows in column G and write them into the 'sheet1' worksheet in another Excel file target.xlsx. The file target.xlsx does not exist yet: create it with a single worksheet named 'sheet1' where the first row contains the header G and the rows below contain the selected values in their original order.",Data cleaning and preprocessing,Filter Efficiency,"def filter_efficiency(ground_truth):  
     import pandas as pd  
     output = pd.read_excel(""target.xlsx"", sheet_name='sheet1')  
     filtered_rows = output['G'].dropna().tolist()  
@@ -69,7 +69,7 @@ The output should be saved in ""output.csv"".",Data cleaning and preprocessing,D
     stats_ground_truth = ground_truth['G'].describe()  
     stats_output = output['G'].describe()  
     return stats_ground_truth.equals(stats_output)",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-"Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set ""train.csv"" and test set ""test.csv"") to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: Analyze the dataset (input: ""train.csv"", output: ""data_analysis.txt""). Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge.\n(2) Sample filtering: Remove any abnormal training samples (input: ""train.csv"", output: ""filtered_train.csv"").\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images (input: ""filtered_train.csv"", output: ""spectral_images_train.csv""). In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model (input: ""spectral_images_train.csv"", output: ""cnn_model.h5"").\n(5) Model testing: Evaluate the model's output on the test set (input: ""test.csv"" and ""cnn_model.h5"", output: ""model_evaluation_results.csv"").",Data exploration and statistics understand,Analysis Completeness,"def analysis_completeness(ground_truth):
+"Complete the following task based on Python:\nTask requirements: Use Short-Time Fourier Transform (STFT) to process time series data (training set ""train.csv"" and test set ""test.csv"") to obtain spectral images, and then classify the spectral images using a Convolutional Neural Network (CNN).\nSuggested steps:\n(1) Data feature analysis: Analyze the dataset (input: ""train.csv"", output: ""data_analysis.txt""). Each sample is a one-dimensional time series, which can be directly plotted as a time series curve to observe the features from the curve. In practice, the sample curves of class 0 tend to have a stable period and amplitude, while the samples of class 1 do not converge. The file ""data_analysis.txt"" must be a text report that gives summary statistics of the samples and describes the observed differences between class 0 and class 1.\n(2) Sample filtering: Remove any abnormal training samples (input: ""train.csv"", output: ""filtered_train.csv"").\n(3) Time series feature extraction: Use STFT to process the sample data and obtain spectral images (input: ""filtered_train.csv"", output: ""spectral_images_train.csv""). In the spectrum, the samples of class 0 present clear banded patterns due to their stable period and amplitude, while the samples of class 1 are chaotic.\n(4) Model training: Train the CNN with the spectral images from the training data to obtain the trained model (input: ""spectral_images_train.csv"", output: ""cnn_model.h5"").\n(5) Model testing: Evaluate the model's output on the test set (input: ""test.csv"" and ""cnn_model.h5"", output: ""model_evaluation_results.csv""). The file ""model_evaluation_results.csv"" must contain one row per test sample, in the same order as ""test.csv"", and its last column must hold the predicted class label of that sample.",Data exploration and statistics understand,Analysis Completeness,"def analysis_completeness(ground_truth):
     with open(""data_analysis.txt"", 'r') as file:
         analysis = file.read()
     # Compare the content of the analysis with the ground truth
@@ -1450,7 +1450,7 @@ Make sure to clearly label and document all files to facilitate further evaluati
     output = pd.read_csv(""results.csv"")
     metrics_present = set(output.columns)
     return len(metrics_present.intersection(set(ground_truth))) / len(set(ground_truth))",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-"I currently have a structured dataset named date.csv with 6 columns and 5960 rows of data. The first column is named X, the second column is named Y, both of which are structural parameters set for simulation. The following four columns, ff, ft, tt, and tf, represent the simulation results. Now, I need to train a model that can accurately predict the four simulation results for other structural parameters. The model and related content will be saved in the results folder. The model should be saved as ""model.pkl"" and the final accuracy should be saved in ""acc.txt"".",Data cleaning and preprocessing,Percentage of Missing Values,"def percentage_missing_values(ground_truth):
+"I currently have a structured dataset named date.csv with 6 columns and 5960 rows of data. The first column is named X, the second column is named Y, both of which are structural parameters set for simulation. The following four columns, ff, ft, tt, and tf, represent the simulation results. Now, I need to train a model that can accurately predict the four simulation results for other structural parameters. The model and related content will be saved in the results folder. The model should be saved as ""model.pkl"" and the final accuracy should be saved in ""acc.txt"". The accuracy in ""acc.txt"" must be written as exactly two lines, ""Mean Squared Error: <value>"" on the first line and ""R^2 Score: <value>"" on the second, both computed on a held-out test set of 20% of the rows.",Data cleaning and preprocessing,Percentage of Missing Values,"def percentage_missing_values(ground_truth):
     import pandas as pd
     output = pd.read_csv(""data.csv"")
     total_cells = output.size
@@ -1553,25 +1553,25 @@ Attribute description:
 Please complete the following data analysis tasks and provide the specified outputs:
 
 1. Set the index to the date for easy filtering by date.
-   - Output: output_indexed.csv (csv)
+   - Output: output_indexed.csv (csv, keeping 'ymd' as the index column header)
    
 2. Look up the weather conditions on March 1, 2018.
    - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_march_01_2018.csv (csv)
+   - Output: output_march_01_2018.csv (csv, should be a single-row DataFrame format with header and index; in this file the index column header must be left empty)
 
 3. Replace the temperature units with ℃ removed.
    - Input: beijing_tianqi_2018.csv (csv)
    - Output: output_temperature_cleaned.csv (csv)
 
 4. Check the maximum and minimum temperatures for the consecutive 7 days starting from August 1, 2018.
-   - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_august_temperatures.csv (csv)
+   - Input: beijing_tianqi_2018.csv (csv, with the temperatures cleaned as in subtask 3)
+   - Output: output_august_temperatures.csv (csv with all the original columns kept for those 7 days)
 
 5. Check results where the minimum temperature is below -10.
    - Input: beijing_tianqi_2018.csv (csv)
    - Output: output_below_negative_10.csv (csv)
 
-6. Check for ""my perfect weather"" (maximum temperature less than 30, minimum temperature greater than 15, sunny, air quality excellent).
+6. Check for ""my perfect weather"" (maximum temperature less than 30, minimum temperature greater than 15, sunny, air quality excellent). Sunny means the 'tianqi' value contains 晴, including combined values such as 多云~晴.
    - Input: beijing_tianqi_2018.csv (csv)
    - Output: output_perfect_weather.csv (csv)
 
@@ -1579,21 +1579,21 @@ Please complete the following data analysis tasks and provide the specified outp
    - Input: beijing_tianqi_2018.csv (csv)
    - Output: output_wencha_added.csv (csv)
 
-8. Add a new column 'wenduType' (marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise normal temperature).
-   - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_wenduType_added.csv (csv)
+8. Add a new column 'wenduType' (marking 高温 if the maximum temperature is above 30, 低温 if the minimum temperature is below -10, otherwise 正常温度).
+   - Input: output_wencha_added.csv (csv, the result of subtask 7)
+   - Output: output_wenduType_added.csv (csv keeping all the columns of the input)
 
 9. How many types of 'fengxiang' are there in the whole year of 2018? How many days does each type correspond to?
    - Input: beijing_tianqi_2018.csv (csv)
-   - Output: output_fengxiang_counts.csv (csv)
+   - Output: output_fengxiang_counts.csv (csv with columns 'fengxiang' and 'Days')
 
 10. What is the correlation coefficient between air quality 'aqi' and maximum temperature?
     - Input: beijing_tianqi_2018.csv (csv)
-    - Output: output_corr_aqi_max_temp.csv (csv)
+    - Output: output_corr_aqi_max_temp.csv (csv with single value under column 'Correlation' and index labeled 'aqi and bWendu')
 
 11. What is the correlation coefficient between air quality 'aqi' and temperature difference 'wencha'?
     - Input: beijing_tianqi_2018.csv (csv)
-    - Output: output_corr_aqi_wencha.csv (csv)",Data cleaning and preprocessing,Indexed Data Validation,"def indexed_data_validation(ground_truth):
+    - Output: output_corr_aqi_wencha.csv (csv with single value under column 'Correlation' and index labeled 'aqi and wencha')",Data cleaning and preprocessing,Indexed Data Validation,"def indexed_data_validation(ground_truth):
     import pandas as pd
     output = pd.read_csv(""output_indexed.csv"")
     output_indexed = output.set_index('ymd')
@@ -1887,11 +1887,11 @@ Subtasks:
 
 1. Gaussian Naive Bayes Training: Train a Gaussian Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
    Input: `data.csv`  
-   Output: `gaussian_model_accuracy.csv` (contains accuracy metrics)
+   Output: `gaussian_model_accuracy.csv` (contains accuracy metrics) and `gaussian_predictions.csv` (the held-out rows the accuracy was measured on: their feature columns plus the columns `Actual` and `Predicted` holding the true and the predicted value of the target column)
 
 2. Multinomial Naive Bayes Training: Train a Multinomial Naive Bayes model on the cleaned dataset and evaluate its accuracy.  
    Input: `data.csv`  
-   Output: `multinomial_model_accuracy.csv` (contains accuracy metrics)
+   Output: `multinomial_model_accuracy.csv` (contains accuracy metrics) and `multinomial_predictions.csv` (the held-out rows the accuracy was measured on: their feature columns plus the columns `Actual` and `Predicted` holding the true and the predicted value of the target column)
 
 3. Comparison of Models: Generate a comparative analysis of the accuracy of both models in a visual format.  
    Input: `gaussian_model_accuracy.csv`, `multinomial_model_accuracy.csv`  
@@ -1927,9 +1927,9 @@ Please ensure that the outputs contain necessary details for further evaluation.
     plt.title('Comparison of Model Accuracies')
     plt.ylim([0, 1])  # Assuming accuracy is between 0 and 1
     plt.savefig(""model_comparison.png"")",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-"Read the dataset (input file: ""Fish.csv""). Encode the dataset to divide it into training and test sets. From the dataset's four categories of Bream, Roach, Parkki, and Perch, randomly select 2 samples from each category for the test set. The remaining samples will be used as the training set. Output the number of samples in the training and test sets in a CSV file named ""sample_counts.csv"".
+"Read the dataset (input file: ""Fish.csv"") and keep only the dataset's four categories of Bream, Roach, Parkki, and Perch. Encode the dataset to divide it into training and test sets. From each of these four categories, randomly select 2 samples for the test set. The remaining samples will be used as the training set. Output the number of samples in the training and test sets in a CSV file named ""sample_counts.csv"" with the columns ""Set"" and ""Sample Count"", the first row holding ""Training"" and the second row holding ""Test"".
 
-Next, implement the KNN algorithm with K values of 1, 5, 15, and 100 to classify all samples in the test set. Output the classification results of the test samples to a CSV file named ""classification_results.csv"".",Data cleaning and preprocessing,Number of Samples in Sets,"def sample_counts(ground_truth):
+Next, implement the KNN algorithm with K values of 1, 5, 15, and 100 to classify all samples in the test set. Output the classification results of the test samples to a CSV file named ""classification_results.csv"" with one row per test sample per K value and the columns ""Test Sample Index"", ""True Species Code"", ""Predicted Species Code"", ""K"", and ""Accuracy"", where the species codes are the encoded species labels and ""Accuracy"" is the accuracy on the test set for that K value.",Data cleaning and preprocessing,Number of Samples in Sets,"def sample_counts(ground_truth):
     import pandas as pd
     output = pd.read_csv(""sample_counts.csv"")
     training_samples = output['Training Samples'].iloc[0]
@@ -1967,7 +1967,7 @@ Subtasks and Requirements:
 3. Model Evaluation  
    - Input: ""naive_bayes_model.pkl"", ""Bayesian_Dataset_test.csv""  
    - Output: ""evaluation_results.csv"" (CSV format)  
-   - Details: Evaluate the model using cross-validation and leave-one-out methods, and compute statistical results, including Accuracy, Precision, Recall, F1 Score, and ROC AUC.",Data cleaning and preprocessing,Data Quality Score,"def data_quality_score(ground_truth):
+   - Details: Evaluate the model using cross-validation and leave-one-out methods, and compute statistical results, including Accuracy, Precision, Recall, F1 Score, and ROC AUC. Save ""evaluation_results.csv"" in long format with exactly two columns, ""Metric"" and ""Score"", and exactly five rows whose ""Metric"" values are ""Accuracy"", ""Precision"", ""Recall"", ""F1 Score"" and ""ROC AUC"".",Data cleaning and preprocessing,Data Quality Score,"def data_quality_score(ground_truth):
     import pandas as pd
     output = pd.read_csv(""preprocessed_data.csv"")
     # Example metric: percentage of missing values

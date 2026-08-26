@@ -21,18 +21,18 @@
   ### Input:
   - **train_input_file**: A file containing a two-dimensional NumPy array, where each element is an array with four features: sepal length, sepal width, petal length, and petal width.
   - **train_output_file**: A file containing a one-dimensional NumPy array, where each element is a number representing the species of iris corresponding to the same row in `train_input_file`. 0 represents Iris setosa, 1 represents Iris versicolor, and 2 represents Iris virginica.
-   - **prediction_input_file**: A file containing a two-dimensional NumPy array, where each element is an array with four features: sepal length, sepal width, petal length, and petal width.
+  - **prediction_input_file**: A file containing a two-dimensional NumPy array, where each element is an array with four features: sepal length, sepal width, petal length, and petal width.
 
   ### Output:
   - **prediction_output_file**: A file to store the predicted iris species as an iterable (like a list or `numpy.ndarray`). The nth position in the result should correspond to the classification of the nth row of the data in `prediction_input_file`.
 
   ### Instructions:
   - The `train_and_predict` function should train a classifier using the data from `train_input_file` and `train_output_file`.
-   - The trained classifier should then predict the labels for the data in `prediction_input_file`.
-   - Save the predicted labels to `prediction_output_file`.
+  - The trained classifier should then predict the labels for the data in `prediction_input_file`.
+  - Save the predicted labels to `prediction_output_file`.
 
   ### Starter Code:
-   ```python
+  ```python
   import numpy as np
   from sklearn import datasets
   from sklearn.model_selection import train_test_split
@@ -45,20 +45,20 @@
   prediction_features = np.load(prediction_input_file)
 
   # [Implement the classifier training and prediction here]
-      
+
   # Save the predictions to output file
   np.save(prediction_output_file, predictions)
 
   # Example usage
   iris = datasets.load_iris()
   X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.3, random_state=0)
-   
+
   # Saving the training and testing data to files
   np.save('train_input.npy', X_train)
   np.save('train_output.npy', y_train)
   np.save('prediction_input.npy', X_test)
 
-   # Run the train_and_predict function
+  # Run the train_and_predict function
   train_and_predict('train_input.npy', 'train_output.npy', 'prediction_input.npy', 'prediction_output.npy')
 
   # Load and print the accuracy of the prediction

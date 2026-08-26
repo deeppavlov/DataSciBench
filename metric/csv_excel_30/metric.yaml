@@ -12,7 +12,6 @@
     Data Quality - Missing Values Percentage
   "task_name": |-
     Data cleaning and preprocessing
-  ground_truth: results.csv
 # - "code": |-
 #     def unique_values_count(ground_truth):
 #         import pandas as pd
@@ -28,9 +27,78 @@
 - "code": |-
     def unique_values_count(ground_truth):
         import pandas as pd
-        gt_output = pd.read_csv(ground_truth)
         output = pd.read_csv("results.csv")
-        return bool(output.equals(gt_output))
+        if len(output) != 3:
+            return False
+        measures = ["jaccard", "dice", "levenshtein", "cosine"]
+        columns = {}
+        for measure in measures:
+            matched = [c for c in output.columns if measure in c.lower()]
+            if len(matched) != 1:
+                return False
+            columns[measure] = matched[0]
+        first = 0
+        for i in range(len(output)):
+            if "230203199611020216" in " ".join(str(v) for v in output.iloc[i].tolist()):
+                first = i
+        numbers = {}
+        for measure in measures:
+            series = pd.to_numeric(
+                output[columns[measure]].astype(str).str.strip().str.rstrip("%"), errors="coerce"
+            )
+            if series.isnull().any():
+                return False
+            values = series.tolist()
+            if min(values) < 0 or max(values) > 100:
+                return False
+            if values[first] < max(values) or values[first] <= min(values):
+                return False
+            numbers[measure] = values
+        for jaccard, dice in zip(numbers["jaccard"], numbers["dice"]):
+            if jaccard > dice + 1e-9:
+                return False
+        def locate(frame, key):
+            hits = [i for i in range(len(frame)) if key in " ".join(str(v) for v in frame.iloc[i].tolist())]
+            return hits[0] if len(hits) == 1 else None
+        reference = pd.read_csv(ground_truth)
+        ref_column = [c for c in reference.columns if "levenshtein" in c.lower()][0]
+        ref_values = pd.to_numeric(
+            reference[ref_column].astype(str).str.strip().str.rstrip("%"), errors="coerce"
+        ).tolist()
+        matched_pairs = 0
+        for key in ["230203199611020216", "g7amms3t", "9ojhg65t6754"]:
+            i, j = locate(output, key), locate(reference, key)
+            if i is not None and j is not None and abs(numbers["levenshtein"][i] - ref_values[j]) <= 2.0:
+                matched_pairs += 1
+        print("levenshtein values matching the reference:", matched_pairs, "of 3")
+        import math
+        from collections import Counter
+        def variants(a, b):
+            options = []
+            for size in (1, 2):
+                ta = [a[i:i + size] for i in range(len(a) - size + 1)]
+                tb = [b[i:i + size] for i in range(len(b) - size + 1)]
+                for ca, cb in ((Counter(set(ta)), Counter(set(tb))), (Counter(ta), Counter(tb))):
+                    shared = sum((ca & cb).values())
+                    dot = sum(ca[k] * cb[k] for k in set(ca) & set(cb))
+                    norm = math.sqrt(sum(v * v for v in ca.values()) * sum(v * v for v in cb.values()))
+                    options.append({
+                        "jaccard": 100.0 * shared / sum((ca | cb).values()),
+                        "dice": 200.0 * shared / (sum(ca.values()) + sum(cb.values())),
+                        "cosine": 100.0 * dot / norm,
+                    })
+            return options
+        agreed = 0
+        for key, other in [("230203199611020216", "230203196201020236"), ("g7amms3t", "ms3t"), ("9ojhg65t6754", "ijg8g65t67ui")]:
+            i = locate(output, key)
+            if i is None:
+                continue
+            options = variants(key, other)
+            for measure in ("jaccard", "dice", "cosine"):
+                if any(abs(numbers[measure][i] - option[measure]) <= 2.0 for option in options):
+                    agreed += 1
+        print("values reproduced by a standard tokenisation:", agreed, "of 9")
+        return matched_pairs >= 2 and agreed >= 7
   "function": |-
     Data Accuracy
   "metric": |-

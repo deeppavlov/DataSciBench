@@ -2,7 +2,23 @@
 - "code": |-
     def vlm_judge(ground_truth):
         from src.vlm_utils import vlm_vis_quality
-        score = vlm_vis_quality(ground_truth, "training_results.png")
+
+        prompt = """Above are two figures, A and B. A is a reference chart for the same task, B is the chart produced by the solution. Judge B on its own merits as the visualization of the training data and of the simple linear regression fitted to it by gradient descent, against the requirements the task actually states. The total score is 5. Add one point for each criterion that B satisfies:
+        - add 1 point for Readability: B is a real, non-empty chart, with the data actually drawn and nothing blank, cropped or corrupted.
+        - add 1 point for Training Data: the 150 training points of data.csv are drawn as a scatter, spread over roughly 0 to 10 horizontally and roughly 1.3 to 24.5 vertically, in a band that rises from left to right.
+        - add 1 point for Regression Result: a single straight line is drawn on the same axes as the fitted regression, over the whole range of the data.
+        - add 1 point for Correct Fit: the line runs through the middle of the cloud with a slope of about 2 and an intercept of about 3, so it starts near y = 3 at the left edge and reaches about y = 23 at x = 10; a line that misses the cloud, that is flat, or that falls from left to right does not get this point.
+        - add 1 point for Axis Labels and Caption: both axes are labelled with legible tick labels, and a legend or a title tells the training data apart from the fitted line.
+
+        This chart is only the first of the four outputs the task asks for; judge it alone and do not look for the cost curve, the 3D surface or the contour plot here. Do not require B to match A in colors, in marker or line styles, in grid lines, in figure size or aspect ratio, or in the wording of the title and the axis labels, because the task does not fix any of them.
+
+        ### Explanation:
+        your explanation here
+
+        ### Total Score:
+        x/5
+        """
+        score = vlm_vis_quality(ground_truth, "training_results.png", prompt)
         return float(score)
   "function": |-
     Visualization Quality
@@ -13,10 +29,21 @@
   ground_truth: training_results.png
 - "code": |-
     def report_completeness(ground_truth_text):
-        import PyPDF2  
-        pdfobj = open('experimental_report.pdf', 'rb') 
-        pdfreader = PyPDF2.PdfReader(pdfobj) 
-        return bool(len(pdfreader.pages) > 0)
+        import re
+        try:
+            from pypdf import PdfReader
+        except ImportError:
+            from PyPDF2 import PdfReader
+        with open('experimental_report.pdf', 'rb') as pdfobj:
+            pdfreader = PdfReader(pdfobj)
+            if len(pdfreader.pages) == 0:
+                return False
+            text = " ".join((page.extract_text() or "") for page in pdfreader.pages).lower()
+        topics = [("data",), ("gradient descent",), ("regression", "fit"), ("plot", "chart", "figure", "graph", "visual")]
+        missing = [group[0] for group in topics if not any(word in text for word in group)]
+        words = set(re.findall(r"[a-z]+", text))
+        print("required topics not found:", missing, "distinct words:", len(words))
+        return bool(not missing and len(words) >= 50)
   "function": |-
     Report Completeness
   "metric": |-

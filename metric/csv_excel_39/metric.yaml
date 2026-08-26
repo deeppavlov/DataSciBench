@@ -150,48 +150,48 @@
   Data source for this case: the whole year of Beijing weather in 2018, input file: beijing_tianqi_2018.csv (file encoding: utf-8)
 
   Attribute description:
-   - ymd: Year, month, day
+  - ymd: Year, month, day
   - bWendu: Maximum temperature
   - yWendu: Minimum temperature
-   - tianqi: Weather status (sunny, sunny to cloudy)
+  - tianqi: Weather status (sunny, sunny to cloudy)
   - fengxiang: Wind direction (southwest wind, north wind)
   - fengli: Wind force level
   - aqi: Air quality
   - aqiInfo: Air Quality Index (excellent, good, light pollution)
   - aqiLevel: Air quality score
-   
+
   Please complete the following data analysis tasks and provide the specified outputs:
-   
+
   1. Set the index to the date for easy filtering by date.
-     - Output: output_indexed.csv (csv)
+     - Output: output_indexed.csv (csv, keeping 'ymd' as the index column header)
      
   2. Look up the weather conditions on March 1, 2018.
      - Input: beijing_tianqi_2018.csv (csv)
-     - Output: output_march_01_2018.csv (csv, should be a single-row DataFrame format with header and index)
+     - Output: output_march_01_2018.csv (csv, should be a single-row DataFrame format with header and index; in this file the index column header must be left empty)
 
   3. Replace the temperature units with ℃ removed.
      - Input: beijing_tianqi_2018.csv (csv)
      - Output: output_temperature_cleaned.csv (csv)
 
   4. Check the maximum and minimum temperatures for the consecutive 7 days starting from August 1, 2018.
-     - Input: beijing_tianqi_2018.csv (csv)
-     - Output: output_august_temperatures.csv (csv)
+     - Input: beijing_tianqi_2018.csv (csv, with the temperatures cleaned as in subtask 3)
+     - Output: output_august_temperatures.csv (csv with all the original columns kept for those 7 days)
 
   5. Check results where the minimum temperature is below -10.
      - Input: beijing_tianqi_2018.csv (csv)
      - Output: output_below_negative_10.csv (csv)
 
-  6. Check for "my perfect weather" (maximum temperature less than 30, minimum temperature greater than 15, sunny, air quality excellent).
+  6. Check for "my perfect weather" (maximum temperature less than 30, minimum temperature greater than 15, sunny, air quality excellent). Sunny means the 'tianqi' value contains 晴, including combined values such as 多云~晴.
      - Input: beijing_tianqi_2018.csv (csv)
      - Output: output_perfect_weather.csv (csv)
 
-   7. Add a new column 'wencha' (maximum temperature - minimum temperature).
+  7. Add a new column 'wencha' (maximum temperature - minimum temperature).
      - Input: beijing_tianqi_2018.csv (csv)
      - Output: output_wencha_added.csv (csv)
-   
-  8. Add a new column 'wenduType' (marking high temperature if the maximum temperature is above 30, low temperature if the minimum temperature is below -10, otherwise 正常温度).
-     - Input: beijing_tianqi_2018.csv (csv)
-     - Output: output_wenduType_added.csv (csv)
+
+  8. Add a new column 'wenduType' (marking 高温 if the maximum temperature is above 30, 低温 if the minimum temperature is below -10, otherwise 正常温度).
+     - Input: output_wencha_added.csv (csv, the result of subtask 7)
+     - Output: output_wenduType_added.csv (csv keeping all the columns of the input)
 
   9. How many types of 'fengxiang' are there in the whole year of 2018? How many days does each type correspond to?
      - Input: beijing_tianqi_2018.csv (csv)

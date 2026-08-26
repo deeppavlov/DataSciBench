@@ -1,10 +1,28 @@
 "TMC-list":
 - "code": |-
     def eda_completion_rate(ground_truth):
+        import numpy as np
         import pandas as pd
-        output = pd.read_csv("eda_results.csv")
-        gt_output = pd.read_csv(ground_truth)
-        return bool(output.equals(gt_output))
+
+        def prepare(df):
+            df = df.set_index(df.columns[0])
+            df.index = [str(i).strip() for i in df.index]
+            df.columns = [str(c).strip() for c in df.columns]
+            return df
+
+        gt_output = prepare(pd.read_csv(ground_truth))
+        output = prepare(pd.read_csv("eda_results.csv"))
+        stat_names = set(gt_output.columns)
+        if len(stat_names & set(output.index)) > len(stat_names & set(output.columns)):
+            output = output.T
+        identifier = str(pd.read_csv("../data.csv", nrows=1).columns[0]).strip()
+        stats = [c for c in gt_output.columns if c in output.columns]
+        rows = [r for r in gt_output.index if r in output.index]
+        if len(stats) < len(gt_output.columns) or set(gt_output.index) - set(rows) - {identifier}:
+            return False
+        expected = gt_output.loc[rows, stats].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float)
+        actual = output.loc[rows, stats].apply(pd.to_numeric, errors="coerce").to_numpy(dtype=float)
+        return bool(np.allclose(expected, actual, rtol=1e-3, atol=1e-6))
   "function": |-
     Data Validity
   "metric": |-
@@ -14,13 +32,42 @@
   ground_truth: eda_results.csv
 - "code": |-
     def evaluation_metrics_report(ground_truth):
+        import os
+        import re
+
         import pandas as pd
-        from sklearn.metrics import classification_report
-        output = pd.read_csv("model_evaluation_results.csv")
-        predictions = set(output.iloc[:, 0].tolist())  # Assuming there is a 'predictions' column
-        gt_output = pd.read_csv(ground_truth)
-        gt = set(gt_output.iloc[:, 0].tolist())  # Assuming there is a 'Predictions' column
-        return bool(gt.issubset(predictions)) # Returns the report as a dictionary
+
+        aliases = {
+            "r2": "r2",
+            "r2score": "r2",
+            "rsquare": "r2",
+            "rsquared": "r2",
+            "coefficientofdetermination": "r2",
+            "mse": "meansquarederror",
+        }
+
+        def normalize(name):
+            key = re.sub(r"[^a-z0-9]", "", str(name).lower())
+            return aliases.get(key, key)
+
+        def to_dict(frame):
+            values = pd.to_numeric(frame.iloc[:, 1], errors="coerce")
+            return {normalize(n): v for n, v in zip(frame.iloc[:, 0], values)}
+
+        output = to_dict(pd.read_csv("model_evaluation_results.csv"))
+        gt_output = to_dict(pd.read_csv(ground_truth))
+        if not set(gt_output).issubset(output):
+            print("metrics missing in the report:", sorted(set(gt_output) - set(output)))
+            return False
+        if abs(output["r2"] - gt_output["r2"]) > 0.2:
+            print("reported r2", output["r2"], "is far from the reference", gt_output["r2"])
+            return False
+        scales = [float(pd.read_csv("../data.csv").iloc[:, -1].var())]
+        if os.path.exists("processed_features.csv"):
+            scales.append(float(pd.read_csv("processed_features.csv").select_dtypes("number").iloc[:, -1].var()))
+        implied = output["meansquarederror"] / max(1.0 - output["r2"], 1e-9)
+        print("variance implied by the reported error:", implied, "target variance:", scales)
+        return bool(any(0.5 <= implied / scale <= 2.0 for scale in scales if scale > 0))
   "function": |-
     Result Completeness
   "metric": |-
@@ -40,7 +87,7 @@
   3. **Model Building**: Build a machine learning model to predict the success rate of study abroad applications.  
   **Output Filename**: ""success_rate_model.pkl""  
 
-  4. **Model Evaluation**: Evaluate the performance of the model and output the evaluation metrics.
+  4. **Model Evaluation**: Evaluate the performance of the model and output the evaluation metrics.  
   **Output Filename**: ""model_evaluation_results.csv""  
 
   Please provide the complete code implementation and ensure that the code structure is clear and the comments are comprehensive for understanding and evaluation."

@@ -2,48 +2,119 @@
 - "code": |-
     def feature_selection_impact(ground_truth):
         import pandas as pd
-        from sklearn.model_selection import train_test_split
-        from sklearn.ensemble import RandomForestClassifier
-        from sklearn.metrics import accuracy_score
 
-        output = pd.read_csv("data/train_set.csv")
-        output_gt = pd.read_csv(ground_truth)
+        train = pd.read_csv("data/train_set.csv")
+        test = pd.read_csv("data/test_set.csv")
+        overlap = set(map(tuple, train.values)) & set(map(tuple, test.values))
+        source = pd.read_csv("../WA_Fn-UseC_-HR-Employee-Attrition.csv").select_dtypes("number")
+        shared = [c for c in source.columns if c in train.columns and train[c].nunique() > 1 and source[c].nunique() > 1]
+        if len(shared) < 8 or not ((train[shared].corr() - source[shared].corr()).abs().to_numpy() <= 0.25).all():
+            return False
 
-        return output.shape[1] == output_gt.shape[1]
+        return (
+            train.shape[0] >= 100
+            and train.shape[1] >= 2
+            and test.shape[0] >= 10
+            and list(train.columns) == list(test.columns)
+            and len(overlap) <= 0.05 * len(test)
+        )
   "function": |-
     Data Validity
-  "ground_truth": |-
-    data/train_set.csv
   "metric": |-
     Feature Selection Impact
   "task_name": |-
     Data exploration and statistics understand
 - "code": |-
     def model_accuracy(ground_truth):
-        import pandas as pd
+        import re
 
-        output = pd.read_csv("results/evaluation_metrics.csv")['Accuracy']
-        output_gt = pd.read_csv(ground_truth)['Accuracy']
-        return output_gt.equals(output)
+        import pandas as pd
+        from sklearn.metrics import accuracy_score
+
+        def norm(name):
+            return re.sub(r"[^a-z0-9]", "", str(name).lower())
+
+        def read_metric(aliases):
+            table = pd.read_csv("results/evaluation_metrics.csv")
+            keys = {norm(alias) for alias in aliases}
+            for column in table.columns:
+                if norm(column) in keys:
+                    return float(table[column].iloc[0])
+            columns = list(table.columns)
+            if len(columns) >= 2:
+                for _, row in table.iterrows():
+                    if norm(row[columns[0]]) in keys:
+                        return float(row[columns[1]])
+            return None
+
+        value = read_metric(["accuracy", "accuracy score", "acc"])
+        if value is None or not 0.7 <= value <= 1.0:
+            return False
+        predictions = pd.read_csv("results/predictions.csv")
+        actual = next((predictions[c] for c in predictions.columns if norm(c) in {"actual", "true", "ytrue", "actuallabel", "truelabel"}), None)
+        predicted = next((predictions[c] for c in predictions.columns if norm(c) in {"predicted", "prediction", "pred", "ypred", "predictedlabel"}), None)
+        if actual is None or predicted is None:
+            return False
+        test = pd.read_csv("data/test_set.csv")
+        source = pd.read_csv("../WA_Fn-UseC_-HR-Employee-Attrition.csv").select_dtypes("number")
+        shared = [c for c in source.columns if c in test.columns and test[c].nunique() > 1 and source[c].nunique() > 1]
+        if len(shared) < 8 or not ((test[shared].corr() - source[shared].corr()).abs().to_numpy() <= 0.25).all():
+            return False
+        target = next((test[c] for c in test.columns if norm(c) in {"attrition", "target", "label", "churn"}), None)
+        if target is None or len(target) != len(actual) or not (target.to_numpy() == actual.to_numpy()).all():
+            return False
+        return abs(accuracy_score(actual, predicted) - value) <= 0.02
   "function": |-
     Model Accuracy
-  "ground_truth": |-
-    results/evaluation_metrics.csv
   "metric": |-
     Model Accuracy
   "task_name": |-
     Predictive modeling
 - "code": |-
     def f1_score_metric(ground_truth):
-        import pandas as pd
+        import re
 
-        output = pd.read_csv("results/evaluation_metrics.csv")['F1 Score']
-        output_gt = pd.read_csv(ground_truth)['F1 Score']
-        return output_gt.equals(output)
+        import pandas as pd
+        from sklearn.metrics import f1_score
+
+        def norm(name):
+            return re.sub(r"[^a-z0-9]", "", str(name).lower())
+
+        def read_metric(aliases):
+            table = pd.read_csv("results/evaluation_metrics.csv")
+            keys = {norm(alias) for alias in aliases}
+            for column in table.columns:
+                if norm(column) in keys:
+                    return float(table[column].iloc[0])
+            columns = list(table.columns)
+            if len(columns) >= 2:
+                for _, row in table.iterrows():
+                    if norm(row[columns[0]]) in keys:
+                        return float(row[columns[1]])
+            return None
+
+        value = read_metric(["f1 score", "f1", "f1-score", "f measure"])
+        if value is None or not 0.0 <= value <= 1.0:
+            return False
+        predictions = pd.read_csv("results/predictions.csv")
+        actual = next((predictions[c] for c in predictions.columns if norm(c) in {"actual", "true", "ytrue", "actuallabel", "truelabel"}), None)
+        predicted = next((predictions[c] for c in predictions.columns if norm(c) in {"predicted", "prediction", "pred", "ypred", "predictedlabel"}), None)
+        if actual is None or predicted is None:
+            return False
+        test = pd.read_csv("data/test_set.csv")
+        source = pd.read_csv("../WA_Fn-UseC_-HR-Employee-Attrition.csv").select_dtypes("number")
+        shared = [c for c in source.columns if c in test.columns and test[c].nunique() > 1 and source[c].nunique() > 1]
+        if len(shared) < 8 or not ((test[shared].corr() - source[shared].corr()).abs().to_numpy() <= 0.25).all():
+            return False
+        target = next((test[c] for c in test.columns if norm(c) in {"attrition", "target", "label", "churn"}), None)
+        if target is None or len(target) != len(actual) or not (target.to_numpy() == actual.to_numpy()).all():
+            return False
+        rate = float((actual == 1).mean())
+        if value <= 2 * rate / (1 + rate):
+            return False
+        return abs(f1_score(actual, predicted, average="binary", pos_label=1) - value) <= 0.02
   "function": |-
     Model Accuracy
-  "ground_truth": |-
-    results/evaluation_metrics.csv
   "metric": |-
     F1 Score
   "task_name": |-
@@ -52,10 +123,21 @@
     def report_completeness_score(ground_truth):
         import os
 
+        try:
+            from pypdf import PdfReader
+        except ImportError:
+            from PyPDF2 import PdfReader
+
         report_path = "reports/model_report.pdf"
-        if os.path.exists(report_path):
-            return 1.0  # Complete report exists
-        return 0.0  # Report is missing
+        if not os.path.exists(report_path) or os.path.getsize(report_path) == 0:
+            return False
+        try:
+            with open(report_path, "rb") as file:
+                pages = PdfReader(file).pages
+                text = "".join(page.extract_text() or "" for page in pages)
+        except Exception:
+            return False
+        return bool(len(text.strip()) > 300)
   "function": |-
     Report Completeness
   "metric": |-
@@ -73,7 +155,7 @@
   3. **Dataset Splitting:** Split the dataset into training and testing sets, saving them as `data/train_set.csv` and `data/test_set.csv`.
 
   4. **Model Building:** Use the Random Forest algorithm to build a predictive model. Optimize the model through hyperparameter tuning using grid search or random search methods to find the best combination of parameters.
-   
+
   5. **Evaluation:** Evaluate the model on the test set using metrics such as accuracy, precision, recall, F1-score, and ROC-AUC. Save the model's predictions in a CSV file at `results/predictions.csv` and the evaluation results in a CSV file at `results/evaluation_metrics.csv`. Save the trained model checkpoint at `models/random_forest_model.pkl`.
 
   6. **Reporting:** Generate a comprehensive report detailing the data preprocessing steps, feature engineering process, model selection and tuning, and evaluation results. Include visualizations such as feature importance plots, ROC curves, and confusion matrices to illustrate the model's performance. Discuss the potential business implications of the model's predictions. Save the report as a PDF file at `reports/model_report.pdf`.

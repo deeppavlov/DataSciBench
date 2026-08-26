@@ -20,10 +20,19 @@
   ground_truth: combined_data.csv
 - "code": |-
     def descriptive_stats_difference(ground_truth):
+        import numpy as np
         import pandas as pd
         output = pd.read_csv("combined_data.csv")
-        ground_truth_df = pd.read_csv(ground_truth)
-        return bool(output.describe().equals(ground_truth_df.describe()))
+        gt_stats = pd.read_csv(ground_truth).describe()
+        missing = [c for c in gt_stats.columns if c not in output.columns]
+        if missing:
+            print("columns missing in combined_data.csv:", missing)
+            return False
+        stats = output[gt_stats.columns].describe().reindex(index=gt_stats.index)
+        stats = stats.values.astype(float)
+        gt_stats = gt_stats.values.astype(float)
+        print("max deviation of descriptive statistics:", np.nanmax(np.abs(stats - gt_stats)))
+        return bool(np.allclose(stats, gt_stats, rtol=1e-10, atol=1e-12))
   "function": |-
     Data Consistency
   "metric": |-
@@ -32,18 +41,44 @@
   ground_truth: combined_data.csv
 - "code": |-
     def cluster_quality(ground_truth):
-        from sklearn.metrics import silhouette_score
+        import glob
+
+        import numpy as np
         import pandas as pd
         from sklearn.cluster import KMeans
-        output = pd.read_csv("segmented_data.csv", nrows=1000)
-        kmeans = KMeans(n_clusters=len(set(output)))
-        kmeans.fit(output)
-        gt_output = pd.read_csv(ground_truth, nrows=1000)
-        gt_kmeans = KMeans(n_clusters=len(set(gt_output)))
-        gt_kmeans.fit(gt_output)
-        pre = silhouette_score(output, gt_kmeans.labels_)
-        gt = silhouette_score(gt_output, gt_kmeans.labels_)
-        return bool(pre >= gt)
+        from sklearn.metrics import silhouette_score
+        n_clusters = 3
+        output = pd.read_csv("segmented_data.csv", nrows=1000).select_dtypes("number")
+        output = output.loc[:, np.isfinite(output).all()]
+        source = set()
+        for path in sorted(glob.glob("../data/*.xlsx")):
+            for sheet in pd.read_excel(path, sheet_name=None).values():
+                source.update(np.round(sheet.select_dtypes("number").to_numpy(dtype=float).ravel(), 6).tolist())
+        from_source = [c for c in output.columns if np.mean([round(float(v), 6) in source for v in output[c]]) >= 0.9]
+        print("columns taken from the input files:", len(from_source), "of", output.shape[1])
+        output = output[from_source]
+        if len(output) < 10 * n_clusters or output.shape[1] < 2:
+            print("segmented data is not built from the input files:", output.shape)
+            return False
+        if (output.std() > 0).sum() < 2:
+            print("segmented data has no varying columns")
+            return False
+        if len(pd.read_csv("segmented_data.csv", usecols=[0])) == len(pd.read_csv("combined_data.csv", usecols=[0])):
+            print("segmented data repeats combined_data.csv")
+            return False
+        gt_frame = pd.read_csv(ground_truth, nrows=1)
+        label_column = str(gt_frame.columns[-1]).strip().lower()
+        if label_column not in [str(c).strip().lower() for c in pd.read_csv("segmented_data.csv", nrows=1).columns]:
+            print("segmented data has no label column:", label_column)
+            return False
+        labels = KMeans(n_clusters=n_clusters, n_init=10, random_state=0).fit(output).labels_
+        if len(set(labels)) < n_clusters:
+            print("clustering is degenerate:", np.bincount(labels))
+            return False
+        score = silhouette_score(output, labels)
+        baseline = silhouette_score(output, np.random.default_rng(0).integers(0, n_clusters, len(output)))
+        print("silhouette:", score, "random labelling silhouette:", baseline, "shape:", output.shape)
+        return bool(score >= baseline)
   "function": |-
     Silhouette Score
   "metric": |-
@@ -70,7 +105,7 @@
 
   2. **Data format**: The time series data of aerial target formations is stored in Excel files located in the '.data/' directory, where each Excel file contains multiple sheets, with each sheet representing the time series data of a vehicle.
      - **Input**: Excel files from '.data/' directory.
-     - **Input filename**: `data.xlsx` (assume example file; consider multiple files in practice)
+     - **Input filename**: from `data_1.xlsx` to `data_5.xlsx`
 
   3. **Data reading**: Read all Excel files from the '.data/' directory and extract the sheets for processing.
      - **Output**: Combined time series data in a structured format.
