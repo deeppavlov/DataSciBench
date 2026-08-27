@@ -4,34 +4,33 @@ from src.schemas.schemas import Evaluator, Metric, Rule, TestFunction
 
 
 class LargerthanMetric(Metric):
-    def __init__(self, f: TestFunction, ground_truth: Any):
+    def __init__(self, f: TestFunction, ground_truth: Any) -> None:
         self.f = f
         self.gt = ground_truth
 
-    def _get_metric(self, output):
-        """Get the Generic Metric
-        """
-        
-        return self.f.test(self.gt, output)
-    
+    def _get_metric(self, output: Any) -> Any:
+        """Get the Generic Metric"""
+
+        return self.f.test(self.gt, output)  # type: ignore[call-arg]
+
 
 class LargerthanRule(Rule):
-    def __init__(self, rule: str):
+    def __init__(self, rule: str) -> None:
         self.rule = eval(rule)
 
-    def _apply_rule(self, metric: Any, **kwargs):
+    def _apply_rule(self, metric: Any, **_kwargs: Any) -> Any:
         return self.rule(metric)
-    
+
 
 class LargerthanEvaluator(Evaluator):
-    def __init__(self, test_func: TestFunction, ground_truth: Any, rule: str, **kwargs):
+    def __init__(self, test_func: TestFunction, ground_truth: Any, rule: str, **_kwargs: Any) -> None:
         self.f = test_func
         self.gt = ground_truth
         self.rule = LargerthanRule(rule)
 
-    def _evaluate(self, output: Any, **kwargs) -> Metric:
+    def _evaluate(self, output: Any, **_kwargs: Any) -> Any:
         """Evaluate the prompt on Generic Metric
-        
+
         Args:
             - prompt (Any): The prompt to evaluate
         """

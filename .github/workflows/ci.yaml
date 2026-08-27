@@ -1,0 +1,140 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      smoke_task_id:
+        required: false
+        type: string
+        description: 'Task id for the smoke run. Use a task whose metric.yaml has no VLM functions, otherwise an image judge is required.'
+
+permissions:
+  contents: read
+
+env:
+  DEFAULT_SMOKE_TASK_ID: 'human_3'
+  MAX_SMOKE_TASKS: '3'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
+      with:
+        version: "0.10.0"
+        enable-cache: true
+    - name: Install lint tooling
+      run: uv sync --locked --only-group dev
+    - name: Check formatting
+      run: uv run --no-sync ruff format --check
+    - name: Check linting
+      run: uv run --no-sync ruff check
+
+  type-check:
+    uses: ./.github/workflows/reusable.yaml
+    permissions:
+      contents: read
+    with:
+      test_command: "mypy"
+
+  test:
+    uses: ./.github/workflows/reusable.yaml
+    permissions:
+      contents: read
+    with:
+      test_command: "pytest"
+
+  validate-benchmark:
+    uses: ./.github/workflows/reusable.yaml
+    permissions:
+      contents: read
+    with:
+      test_command: "python -m scripts.validate_benchmark"
+
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      smoke: ${{ steps.filter.outputs.smoke }}
+      task_ids: ${{ steps.filter.outputs.task_ids }}
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+      with:
+        fetch-depth: 0
+    - name: Detect changes that affect the reference evaluation
+      id: filter
+      env:
+        BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        HEAD_SHA: ${{ github.sha }}
+        DEFAULT_TASK_ID: ${{ env.DEFAULT_SMOKE_TASK_ID }}
+        MAX_SMOKE_TASKS: ${{ env.MAX_SMOKE_TASKS }}
+      run: |
+        set -euo pipefail
+        if [ -z "$BASE_SHA" ] || ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
+          echo "smoke=true" >> "$GITHUB_OUTPUT"
+          echo "task_ids=$DEFAULT_TASK_ID" >> "$GITHUB_OUTPUT"
+          exit 0
+        fi
+        git diff --name-only "$BASE_SHA" "$HEAD_SHA" > changed_paths.txt
+        matched=$(grep -Ec '^(data/|metric/|src/evaluator/|src/schemas/|src/utils\.py$|src/vlm_utils\.py$|experiments/evaluate\.py$|pyproject\.toml$|uv\.lock$)' changed_paths.txt || true)
+        if [ "$matched" -gt 0 ]; then
+          echo "smoke=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "smoke=false" >> "$GITHUB_OUTPUT"
+        fi
+        task_ids=$(.github/scripts/select_smoke_tasks.sh < changed_paths.txt)
+        echo "Smoke tasks: $task_ids"
+        echo "task_ids=$task_ids" >> "$GITHUB_OUTPUT"
+
+  smoke:
+    needs: changes
+    if: github.event_name == 'workflow_dispatch' || needs.changes.outputs.smoke == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v6
+    - name: Install uv
+      uses: astral-sh/setup-uv@v6
+      with:
+        version: "0.10.0"
+        enable-cache: false
+    - name: Install dependencies
+      run: uv sync --locked --all-groups
+    - name: Evaluate the reference solutions of the changed tasks
+      env:
+        SMOKE_TASK_IDS: ${{ inputs.smoke_task_id || needs.changes.outputs.task_ids || env.DEFAULT_SMOKE_TASK_ID }}
+      run: |
+        set -euo pipefail
+        for task_id in $SMOKE_TASK_IDS; do
+          echo "::group::Smoke run for $task_id"
+          uv run --no-sync python -m experiments.evaluate --task_id "$task_id" --model_id gt
+          SMOKE_TASK_ID="$task_id" uv run --no-sync python - <<'PY'
+        import csv
+        import os
+        import sys
+
+        task_id = os.environ["SMOKE_TASK_ID"]
+        with open("evaluation_results/results/gt_results.csv", newline="") as f:
+            rows = list(csv.DictReader(f))
+
+        scores = [float(row["result_cr"]) for row in rows if row["result_type"] == "Completion Rate"]
+        if not scores:
+            sys.exit(f"No Completion Rate rows: the reference solution of {task_id} was not evaluated at all.")
+        if any(score != 1.0 for score in scores):
+            sys.exit(f"The reference solution of {task_id} does not pass its own metrics: Completion Rate {scores}")
+        print(f"{task_id}: Completion Rate {scores}")
+        PY
+          echo "::endgroup::"
+        done

@@ -1,4 +1,6 @@
+import asyncio
 import warnings
+from typing import Any
 
 from ..evaluator import CREvaluator, GenericEvaluator
 from ..evaluator.evaluator_dict import TM_2_EVALUATOR
@@ -6,13 +8,13 @@ from .schemas import DAG, Task, TestFunction
 
 
 class Node:
-    def __init__(self, node_info: dict, taskname2gt: dict[dict]=None, task_list: list[Task]=None):
+    def __init__(self, node_info: Any, taskname2gt: Any = None, task_list: list[Task] | None = None) -> None:
         """
         There are two kinds of Nodes:
         - a Node that does not need to be evaluated
         - a Node needs to be evaluated. In this case, the Node will retrieve Evaluators which include Metrics, Codes and Rules.
         """
-        self.correct_list = []
+        self.correct_list: list[int] = []
         self.task_id = node_info.get("task_id")
         self.function = node_info.get("function")
         self.metric = node_info.get("metric")
@@ -29,39 +31,34 @@ class Node:
             self.task_list = self.retrieve_task(self.task_type)
         else:
             self.task_list = task_list
-        self.evaluator_list = []
+        self.evaluator_list: list[Any] = []
         for task in self.task_list:
             self.evaluator_list.append(self.retrieve_evaluator(task, taskname2gt))
 
     @classmethod
-    def from_taskname2gt(cls, task_name, gt_dict, task_list=None):
+    def from_taskname2gt(cls, task_name: str, gt_dict: dict[str, Any], task_list: list[Task] | None = None) -> "Node":
         """
         Class method to instantiate the class with taskname2gt
         """
         node_info = {
             "task_type": task_name,
-            "task_name": gt_dict['task_name'],
-            "function": gt_dict['function'],
-            "metric": gt_dict['metric']
+            "task_name": gt_dict["task_name"],
+            "function": gt_dict["function"],
+            "metric": gt_dict["metric"],
         }
-        taskname2gt = {
-            task_name: gt_dict
-        }
+        taskname2gt = {task_name: gt_dict}
         return cls(node_info, taskname2gt, task_list)
-    
-    def retrieve_task(self, task_type: str):
+
+    def retrieve_task(self, task_type: Any) -> list[Task]:
         """
         The method to retrieve the task
         """
-        task_list = []
         # print(self.taskname2gt)
-        for taskname in self.taskname2gt:
-            if task_type.lower() in taskname.lower():
-                task_list.append(Task(taskname, self.instruction))
+        return [
+            Task(taskname, self.instruction) for taskname in self.taskname2gt if task_type.lower() in taskname.lower()
+        ]
 
-        return task_list
-    
-    def retrieve_evaluator(self, task: Task, taskname2gt: dict[dict]=None):
+    def retrieve_evaluator(self, task: Task, taskname2gt: Any = None) -> Any:
         """
         The method to retrieve the evaluator
         """
@@ -74,23 +71,19 @@ class Node:
         # print(gt_dict)
         if gt_dict is None:
             return None
-        else:
-            code = TestFunction(gt_dict.get("code", None))
-            # TODO: add the logic to determine which metric to use
-            # metric = gt_dict.get("metric", None)
+        code = TestFunction(gt_dict.get("code", None))
+        # TODO: add the logic to determine which metric to use
+        # metric = gt_dict.get("metric", None)
 
-            return evaluator(
-                test_func = code,
-                ground_truth = gt_dict.get("ground_truth", None),
-                rule=gt_dict.get("rule", None)
-                )
+        return evaluator(test_func=code, ground_truth=gt_dict.get("ground_truth", None), rule=gt_dict.get("rule", None))
 
-    def evaluate_node(self, **kwargs):
+    def evaluate_node(self, **_kwargs: Any) -> Any:
         """
         The method to evaluate the Node
         """
         # print pwd
         import os
+
         print("Current dir is: ", os.path.abspath(os.curdir))
         # TODO: there can also be metric over surface form, but only consider the metric over the output for now
         result_list = []
@@ -107,17 +100,20 @@ class Node:
                 self.correct_list.append(1)
                 print(correctness)
                 wrong_type = type(correctness)
-                warnings.warn(f"The evaluator should return either an integer or a boolean, but a {wrong_type} was returned.", stacklevel=2)
+                warnings.warn(
+                    f"The evaluator should return either an integer or a boolean, but a {wrong_type} was returned.",
+                    stacklevel=2,
+                )
             result_list.append(correctness)
         if len(result_list) > 0:
             return result_list
-        else:
-            return None
+        return None
         # self.evaluator.evaluate(
         #     output=self.result,
         #     is_success=self.is_success,
         #     is_finished=self.is_finished,
         # )
+
 
 class LinearizedDAG(DAG):
     """
@@ -127,7 +123,8 @@ class LinearizedDAG(DAG):
         - prompt (str): The prompt to evaluate
         - taskname2gt (dict[dict]): a dictionary where keys are task name and values are dictionary containing the ground-truths
     """
-    def __init__(self, prompt: str, taskname2gt: dict[dict]=None, force_mode=False):
+
+    def __init__(self, prompt: str, taskname2gt: Any = None, force_mode: bool = False) -> None:
         self.force_mode = force_mode
         self.prompt = prompt
         self.taskname2gt = taskname2gt
@@ -137,14 +134,16 @@ class LinearizedDAG(DAG):
     #     await self.role.run(self.prompt)
     #     return self.role.get_results_for_eval()
 
-    async def launch_test(self):
+    async def launch_test(self) -> Any:
         """
         The method to launch the test
 
         Nodes in the Linearized DAG will be tested first. After the tests of all Nodes are finished, the Completion Rate Node will be tested.
         """
-        plan_list, cost_list, error_counter_list = await self.get_results(self.prompt)
-        self.dag = self.get_dag(plan_list[-1])    # the linearized DAG is a list of Nodes, and we test each Node in the list. Use the last plan in the list.
+        plan_list, _cost_list, _error_counter_list = await self.get_results(self.prompt)  # type: ignore[attr-defined]
+        self.dag = self.get_dag(
+            plan_list[-1]
+        )  # the linearized DAG is a list of Nodes, and we test each Node in the list. Use the last plan in the list.
         # block until get_results is finished
         # test each Node
         # test the Completion Rate Node
@@ -155,27 +154,24 @@ class LinearizedDAG(DAG):
         self.CR = self.CR_evaluator.evaluate(self.dag)
 
         return self.CR
-        
-    def get_dag(self, plan: list[dict]):
-        """The method to get the DAG
-        """
-        dag = []
-        if not self.force_mode:
-            for node in plan:
-                dag.append(Node(node, self.taskname2gt))
 
-            return dag
-        else:
-            print("Using force mode")
-            for task_name, gt_dict in self.taskname2gt.items():
-                # print(task_name)
-                # print(gt_dict)
-                dag.append(Node.from_taskname2gt(task_name, gt_dict, task_list=[Task(task_name, desc="")]))
-            # print(dag)
-            return dag
-        
+    def get_dag(self, plan: Any) -> list[Node]:
+        """The method to get the DAG"""
+        if not self.force_mode:
+            return [Node(node, self.taskname2gt) for node in plan]
+
+        print("Using force mode")
+        # print(task_name)
+        # print(gt_dict)
+        # print(dag)
+        return [
+            Node.from_taskname2gt(task_name, gt_dict, task_list=[Task(task_name, desc="")])
+            for task_name, gt_dict in self.taskname2gt.items()
+        ]
+
+
 if __name__ == "__main__":
     # test the code
     prompt = "Test the code"
     test_dag = LinearizedDAG(prompt)
-    test_dag.launch_test()
+    asyncio.run(test_dag.launch_test())

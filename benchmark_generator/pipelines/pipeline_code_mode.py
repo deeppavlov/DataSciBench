@@ -24,7 +24,7 @@ STEPS = {
 
 def ask(prompt: str, default: str) -> str:
     val = input(f"{prompt} [{default}]: ").strip()
-    return val if val else default
+    return val or default
 
 
 def _choose_start_step(output_dir: Path) -> int:
@@ -40,8 +40,8 @@ def _choose_start_step(output_dir: Path) -> int:
     return int(choice)
 
 
-def _load_existing_state(output_dir: Path, mcp_config: Path):
-    mcp_env = {}
+def _load_existing_state(output_dir: Path, mcp_config: Path) -> tuple[dict[str, str], Path, Path, str | None]:
+    mcp_env: dict[str, str] = {}
     if mcp_config.exists():
         with open(mcp_config, encoding="utf-8") as f:
             data = json.load(f)
@@ -57,7 +57,7 @@ def _load_existing_state(output_dir: Path, mcp_config: Path):
     return mcp_env, api_doc_path, mcp_tools_path, api_doc_text
 
 
-async def run_pipeline():
+async def run_pipeline() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     settings = get_settings()
@@ -206,7 +206,7 @@ async def run_pipeline():
     print("Пайплайн завершен!")
 
 
-def main():
+def main() -> None:
     asyncio.run(run_pipeline())
 
 

@@ -1,47 +1,54 @@
 import logging
-import argparse
 import os
+from typing import Any
+
 import yaml
+
 from metagpt.const import CONFIG_ROOT
 
-def get_model_name(config_name="config2.yaml"):
+
+def get_model_name(config_name: Any = "config2.yaml") -> str:
     assert config_name != "config2.yaml", "Please specify a config file name instead of using the default one for now"
     print("Config Root: ", CONFIG_ROOT)
     print("Config Name: ", config_name)
     config_path = os.path.join(CONFIG_ROOT, config_name)
     # Load the config file
     config_file = os.path.expanduser(config_path)
-    with open(config_file, "r") as f:
+    with open(config_file) as f:
         config = yaml.safe_load(f)
 
     # Get the model name from the config
-    model_name = config["llm"]["model"]
+    model_name: str = config["llm"]["model"]
 
     return model_name
 
-def create_logger(id, sub_idx=None, target_dir=None, config_name=None, split=True):
+
+def create_logger(
+    task_id: str | int,
+    sub_idx: int | None = None,
+    target_dir: str | None = None,
+    config_name: str | None = None,
+    split: bool = True,
+) -> tuple[Any, Any, str, str]:
     # Create the log directory if it doesn't exist
     os.makedirs("logs", exist_ok=True)
-    if split:
-        model_name = get_model_name(config_name).split('/')[-1]
-    else:
-        model_name = get_model_name(config_name)
+    model_name = get_model_name(config_name).split("/")[-1] if split else get_model_name(config_name)
     if sub_idx is not None:
-        log_dir = os.path.join("data", str(id), model_name+f"_{sub_idx}")
-        run_dir = os.path.join("data", str(id))
+        log_dir = os.path.join("data", str(task_id), model_name + f"_{sub_idx}")
+        run_dir = os.path.join("data", str(task_id))
         os.makedirs(log_dir, exist_ok=True)
-        time_log_file = os.path.join("logs", model_name+f"_{sub_idx}_time.txt")
+        time_log_file = os.path.join("logs", model_name + f"_{sub_idx}_time.txt")
     else:
-        log_dir = os.path.join("data", str(id), model_name)
-        run_dir = os.path.join("data", str(id))
+        log_dir = os.path.join("data", str(task_id), model_name)
+        run_dir = os.path.join("data", str(task_id))
         os.makedirs(log_dir, exist_ok=True)
-        time_log_file = os.path.join("logs", model_name+"_time.txt")
+        time_log_file = os.path.join("logs", model_name + "_time.txt")
 
     if target_dir is not None:
-        log_dir = os.path.join("data", str(id), target_dir)
-        run_dir = os.path.join("data", str(id))
+        log_dir = os.path.join("data", str(task_id), target_dir)
+        run_dir = os.path.join("data", str(task_id))
         os.makedirs(log_dir, exist_ok=True)
-        time_log_file = os.path.join("logs", target_dir+"_time.txt")
+        time_log_file = os.path.join("logs", target_dir + "_time.txt")
 
     # Create a logger
     logger = logging.getLogger(__name__)
@@ -53,7 +60,7 @@ def create_logger(id, sub_idx=None, target_dir=None, config_name=None, split=Tru
     file_handler.setLevel(logging.DEBUG)
 
     # Create a formatter and add it to the file handler
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     file_handler.setFormatter(formatter)
 
     if logger.hasHandlers():
@@ -65,7 +72,7 @@ def create_logger(id, sub_idx=None, target_dir=None, config_name=None, split=Tru
     # Create the time logger below
     # ===================================================
 
-    time_logger = logging.getLogger(f"time_logger")
+    time_logger = logging.getLogger("time_logger")
     time_logger.setLevel(logging.INFO)
 
     # Create a file handler for the time log
@@ -73,7 +80,7 @@ def create_logger(id, sub_idx=None, target_dir=None, config_name=None, split=Tru
     time_file_handler.setLevel(logging.INFO)
 
     # Use a simple formatter for the time log
-    time_formatter = logging.Formatter('%(asctime)s - %(message)s')
+    time_formatter = logging.Formatter("%(asctime)s - %(message)s")
     time_file_handler.setFormatter(time_formatter)
 
     # Clear existing handlers and add the new time file handler
@@ -83,6 +90,7 @@ def create_logger(id, sub_idx=None, target_dir=None, config_name=None, split=Tru
 
     return logger, time_logger, log_dir, run_dir
 
+
 if __name__ == "__main__":
-    logger = create_logger(0)
+    logger = create_logger(0)[0]
     logger.info("Logger created")

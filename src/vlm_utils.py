@@ -5,6 +5,7 @@ import os
 import re
 import shutil
 import subprocess
+from typing import Any
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BRIDGE_DIR = os.path.join(ROOT_DIR, "evaluation_results", "vlm_bridge")
@@ -30,12 +31,12 @@ REWADRING_PROMPT = """Above are two figures, which are A and B. The first figure
     """
 
 
-def _digest(path):
+def _digest(path: str) -> str:
     with open(path, "rb") as f:
         return hashlib.sha256(f.read()).hexdigest()[:16]
 
 
-def _read_score(score_path):
+def _read_score(score_path: str) -> float | None:
     if not os.path.exists(score_path):
         return None
     try:
@@ -45,14 +46,14 @@ def _read_score(score_path):
         return None
 
 
-def _log(key, gt_abs, test_abs, score, source, detail=None):
+def _log(key: str, gt_abs: str, test_abs: str, score: float, source: str, detail: str | None = None) -> None:
     with open(LOG_PATH, "a", encoding="utf-8") as f:
         f.write(f"{key}\tgt={gt_abs}\ttest={test_abs}\tscore={score}\tsource={source}\n")
         if detail:
             f.write(f"--- {source} ---\n{detail}\n")
 
 
-def _parse_score(text):
+def _parse_score(text: str | None) -> float | None:
     if not text:
         return None
     if "### Total Score:" in text:
@@ -64,7 +65,7 @@ def _parse_score(text):
     return score if 0 <= score <= 5 else None
 
 
-def _find_cli():
+def _find_cli() -> str | None:
     cli = os.environ.get("VLM_JUDGE_CLI")
     if cli:
         return cli
@@ -77,7 +78,7 @@ def _find_cli():
     return bundled[-1] if bundled else None
 
 
-def _bridge_vis_quality(gt_abs, test_abs, prompt, key):
+def _bridge_vis_quality(gt_abs: str, test_abs: str, prompt: str, key: str) -> tuple[float, str]:
     cli = _find_cli()
     if cli is None:
         raise RuntimeError(
@@ -91,7 +92,7 @@ def _bridge_vis_quality(gt_abs, test_abs, prompt, key):
         f"{prompt}"
     )
     command = [cli, "-p", task, "--model", JUDGE_MODEL, "--effort", JUDGE_EFFORT, "--allowedTools", "Read"]
-    result = subprocess.run(command, cwd=ROOT_DIR, capture_output=True, text=True, timeout=TIMEOUT_SECONDS)
+    result = subprocess.run(command, cwd=ROOT_DIR, capture_output=True, text=True, timeout=TIMEOUT_SECONDS, check=False)
     score = _parse_score(result.stdout)
     if score is None:
         raise RuntimeError(
@@ -101,27 +102,27 @@ def _bridge_vis_quality(gt_abs, test_abs, prompt, key):
     return score, result.stdout
 
 
-def _load_config():
+def _load_config() -> tuple[str, str]:
     try:
         from .vlm_config import API_KEY, BASE_URL
     except (ImportError, ValueError):
-        from vlm_config import API_KEY, BASE_URL
+        from src.vlm_config import API_KEY, BASE_URL
     return API_KEY, BASE_URL
 
 
-def _encode_image(image_path):
+def _encode_image(image_path: str) -> str:
     import base64
 
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
 
 
-def _api_vis_quality(gt_abs, test_abs, prompt):
+def _api_vis_quality(gt_abs: str, test_abs: str, prompt: str) -> tuple[float, str | None]:
     from openai import OpenAI
 
     api_key, base_url = _load_config()
     client = OpenAI(api_key=api_key, base_url=base_url)
-    messages = [
+    messages: list[Any] = [
         {"role": "system", "content": "You are a helpful assistant that responds in Markdown."},
         {
             "role": "user",
@@ -143,7 +144,7 @@ def _api_vis_quality(gt_abs, test_abs, prompt):
     raise RuntimeError("Сетевой судья по изображениям не вернул строку '### Total Score:' за 5 попыток")
 
 
-def vlm_vis_quality(ground_truth_path, test_path, prompt=REWADRING_PROMPT):
+def vlm_vis_quality(ground_truth_path: str, test_path: str, prompt: str = REWADRING_PROMPT) -> float:
     gt_abs = os.path.abspath(ground_truth_path)
     test_abs = os.path.abspath(test_path)
     prompt_tag = hashlib.sha256(prompt.encode("utf-8")).hexdigest()[:8]

@@ -2,31 +2,36 @@ import argparse
 import os
 import re
 
-all_models = [ "Qwen/Qwen2.5-Coder-7B-Instruct", 
-            "01-ai/Yi-1.5-9B-Chat-16K", "google/gemma-2-9b-it", "meta-llama/Meta-Llama-3-8B-Instruct", "meta-llama/Meta-Llama-3.1-8B-Instruct", "Qwen/Qwen2-1.5B-Instruct", "Qwen/Qwen2-7B-Instruct", "Qwen/Qwen2.5-7B-Instruct", "THUDM/glm-4-9b-chat"
-            ]
+all_models = [
+    "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "01-ai/Yi-1.5-9B-Chat-16K",
+    "google/gemma-2-9b-it",
+    "meta-llama/Meta-Llama-3-8B-Instruct",
+    "meta-llama/Meta-Llama-3.1-8B-Instruct",
+    "Qwen/Qwen2-1.5B-Instruct",
+    "Qwen/Qwen2-7B-Instruct",
+    "Qwen/Qwen2.5-7B-Instruct",
+    "THUDM/glm-4-9b-chat",
+]
+
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="For Generation Progress Check")
-    parser.add_argument("--model_id", type=str,help="Specify the model id")
+    parser.add_argument("--model_id", type=str, help="Specify the model id")
 
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
+
 
 def main(all_args):
-    all_should=[]
-    output_dir = 'data'
+    all_should = []
+    output_dir = "data"
     model_ = all_args.model_id
     models = all_models if model_ == "all" else [model_]
 
     for model_id in models:
-        model_name_parts = model_id.split('/')
-        if len(model_name_parts) > 1:
-            model_name_parts[0]
-            model_name = model_name_parts[1]
-        else:
-            model_name = model_name_parts[0]
-        have_completed = 0 
+        model_name_parts = model_id.split("/")
+        model_name = model_name_parts[1] if len(model_name_parts) > 1 else model_name_parts[0]
+        have_completed = 0
         success_num = 0
         bcb_num = 0
         dl_num = 0
@@ -43,13 +48,13 @@ def main(all_args):
                 for sub_dir in os.listdir(new_dir):
                     pattern = re.compile(rf"{re.escape(model_name)}_\d+")
                     if pattern.match(sub_dir):
-                        sys_log_path = os.path.join(new_dir, sub_dir, 'sys_logs.txt')
+                        sys_log_path = os.path.join(new_dir, sub_dir, "sys_logs.txt")
                         if os.path.exists(sys_log_path) and os.path.getsize(sys_log_path) > 100:
                             actual_complete += 1
-                        log_path = os.path.join(new_dir, sub_dir, 'logs.txt')
+                        log_path = os.path.join(new_dir, sub_dir, "logs.txt")
                         if os.path.exists(log_path) and os.path.getsize(log_path) > 10:
                             success += 1
-                if actual_complete > (MAX_RUNS * 0.6): # Dynamically require > 70% success rate
+                if actual_complete > (MAX_RUNS * 0.6):  # Dynamically require > 70% success rate
                     flag = True
                     have_completed += 1
                 elif dir_ not in all_should:
@@ -58,7 +63,7 @@ def main(all_args):
                     success_num += 1
 
                 if flag:
-                    pattern1="".join(filter(str.isalpha, dir_))
+                    pattern1 = "".join(filter(str.isalpha, dir_))
                     if pattern1 == "bcb":
                         bcb_num += 1
                     elif pattern1 == "dl":
@@ -77,6 +82,8 @@ def main(all_args):
         print(f"Number of human tasks: {human_num}/25")
         print(f"Number of CSV tasks: {csv_num}/20\n")
     print(all_should)
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     args = parse_arguments()
     main(args)

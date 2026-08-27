@@ -1,6 +1,6 @@
 import argparse
-import json
 import contextlib
+import json
 import logging
 from pathlib import Path
 
@@ -24,7 +24,7 @@ def generate_tasks(
     output_dir: Path,
     topic_path: Path | None = None,
     code_mode: bool = False,
-    env_hints: dict | None = None,
+    env_hints: dict[str, str] | None = None,
 ) -> list[Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -38,7 +38,7 @@ def generate_tasks(
     parts = [f"Generate exactly {count} benchmark tasks."]
     if topic_text:
         parts.append(f"Topic:\n---\n{topic_text}\n---")
-    
+
     if env_hints:
         env_text = json.dumps(env_hints, indent=2)
         parts.append(f"Environment variables and their current values:\n---\n{env_text}\n---")
@@ -57,7 +57,7 @@ def generate_tasks(
         with contextlib.suppress(IndexError, ValueError):
             next_num = int(last.split("_")[1]) + 1
 
-    created_dirs = []
+    created_dirs: list[Path] = []
     for i, task in enumerate(task_list.tasks):
         task_dir = output_dir / f"task_{next_num + i:03d}"
         task_dir.mkdir(parents=True, exist_ok=True)
@@ -75,7 +75,7 @@ def generate_tasks(
     return created_dirs
 
 
-def main():
+def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     settings = get_settings()

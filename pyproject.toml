@@ -43,7 +43,6 @@ dependencies = [
     "pydantic-core>=2.41.5,<3.0.0",
     "pydantic-settings>=2.13.1,<3.0.0",
     "pypdf>=6.1.3,<7.0.0",
-    "pytest>=9.0.2,<10.0.0",
     "python-dateutil>=2.9.0.post0,<3.0.0",
     "python-levenshtein>=0.27.3,<0.28.0",
     "pytz>=2026.1.post1,<2027.0",
@@ -53,7 +52,6 @@ dependencies = [
     "reportlab>=4.4.10,<5.0.0",
     "requests>=2.33.1,<3.0.0",
     "rich>=14.3.3,<15.0.0",
-    "ruff>=0.15.8,<0.16.0",
     "scikit-learn>=1.8.0,<2.0.0",
     "scipy>=1.17.1,<2.0.0",
     "seaborn>=0.13.2,<0.14.0",
@@ -74,29 +72,45 @@ dependencies = [
 line-length = 120
 indent-width = 4
 target-version = "py312"
-exclude = [
-    "metagpt",
+extend-exclude = [
+    "metagpt/",
+    "data/",
+    "logs/",
+    "log_archive/",
+    "notebooks/",
 ]
 
 [tool.ruff.lint]
-select = [
-    "E",   # pycodestyle errors
-    "F",   # Pyflakes
-    "UP",  # pyupgrade
-    "B",   # flake8-bugbear
-    "SIM", # flake8-simplify
-    "I",   # isort
-]
+select = ["ALL"]
 ignore = [
-    "COM812", # missing-trailing-comma (can conflict with formatter)
-    "E501",   # line-too-long (too many in generated files)
-    "B024",   # abstract class without abstract method
-    "B027",   # empty method in abstract class
-    "B007",   # unused loop control variable
-    "SIM115", # use context handler for opening files
-    "SIM117", # multiple with statements
-    "SIM113", # enumerate for loop
-    "E741",   # ambiguous variable name
+    "COM812",   # конфликтует с форматтером
+    "ISC001",   # конфликтует с форматтером
+    "D",        # докстринги в проекте не пишутся
+    "S102",     # exec — механика запуска проверок метрик
+    "S307",     # eval — компиляция правил из metric.yaml
+    "S603",     # subprocess без shell — запуск решений
+    "S108",     # временные файлы в тестах
+    "T20",      # print — штатный вывод скриптов
+    "ANN",      # аннотации требует mypy в строгой зоне
+    "ERA001",   # закомментированный код
+    "RUF001",   # кириллица в строках
+    "RUF003",   # кириллица в комментариях
+    "PTH",      # os.path вместо pathlib — отдельный рефакторинг
+    "INP001",   # пакеты без __init__.py — текущая раскладка
+    "TID252",   # относительные импорты внутри пакетов
+    "FBT",      # boolean trap
+    "TD",       # оформление TODO
+    "FIX",      # наличие TODO
+    "EM",       # тексты исключений
+    "TRY003",   # тексты исключений
+    "E501",     # длинные строки
+    "PLR2004",  # магические числа
+    "BLE001",   # прогон бенчмарка повсеместно ловит Exception, чтобы сбой одной задачи не прерывал остальные
+    "PLC0415",  # импорт внутри функции
+    "N806",     # X_train и подобные имена приняты в ML-коде
+    "C901",     # сложность функций
+    "PLR0912",  # сложность функций
+    "PLR0915",  # сложность функций
 ]
 
 [tool.ruff.lint.pylint]
@@ -105,12 +119,104 @@ max-args = 10
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = [
+    "pydantic.BaseModel",
+    "metagpt.roles.role.Role",
+    "metagpt.actions.action.Action",
+]
+
 [tool.ruff.lint.per-file-ignores]
-"tests/*.py" = ["S", "PLR2004", "ERA", "D", "ANN", "SLF"]
+"tests/*.py" = ["S101", "PLR2004", "SLF", "PT009", "PT027"]
+"benchmark_generator/tests/*.py" = ["S101", "PLR2004", "SLF", "PT009", "PT027"]
 "**/*.ipynb" = ["E402", "E722"]
 "experiments/*.py" = ["F403", "F405"]
 "evaluations/*.py" = ["F403", "F405"]
 "src/schemas/__init__.py" = ["F401"]
 "src/evaluator/__init__.py" = ["F401"]
 "role/__init__.py" = ["F401"]
-"data/**/gt/*.py" = ["E402"]
+"experiments/run_examples.py" = ["G004"]
+"benchmark_generator/pipelines/pipeline_code_mode.py" = ["ASYNC240", "ASYNC250"]
+# assert в боевом коде: исчезает под python -O, каждое место требует отдельного решения
+"src/logs.py" = ["S101"]
+"src/schemas/dag.py" = ["S101"]
+"scripts/validate_benchmark.py" = ["S101"]
+"experiments/evaluate.py" = ["S101"]
+
+[tool.mypy]
+python_version = "3.12"
+mypy_path = "."
+namespace_packages = true
+explicit_package_bases = true
+files = [
+    "src",
+    "benchmark_generator",
+    "sft",
+    "experiments",
+    "scripts",
+    "utils",
+    "role",
+    "tests",
+    "evaluation_results",
+    "evaluations",
+]
+check_untyped_defs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_unreachable = true
+local_partial_types = true
+plugins = ["pydantic.mypy"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+
+[[tool.mypy.overrides]]
+module = ["src.*", "benchmark_generator.*", "sft.*"]
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+warn_return_any = true
+
+[[tool.mypy.overrides]]
+module = ["metagpt.*"]
+ignore_errors = true
+
+# локальный файл с ключами, в git не хранится — в CI его нет
+[[tool.mypy.overrides]]
+module = ["src.vlm_config"]
+ignore_missing_imports = true
+
+# ставятся только в GPU-окружении кластера, локально и в CI отсутствуют (sft/train_model.py)
+[[tool.mypy.overrides]]
+module = [
+    "datasets",
+    "transformers",
+    "transformers.*",
+    "trl",
+]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "benchmark_generator/tests"]
+# паттерны --only-rerun сопоставляются с "ИмяТипа: сообщение", поэтому якорь ^ и ":"
+# ограничивают совпадение типом исключения и не дают матчить текст сообщения
+addopts = """
+    -ra
+    --reruns 2
+    --reruns-delay 5
+    --only-rerun ^ReadTimeout:
+    --only-rerun ^ConnectError:
+    --only-rerun ^ConnectTimeout:
+    --only-rerun ^APITimeoutError:
+    --only-rerun ^APIConnectionError:
+"""
+
+[dependency-groups]
+dev = [
+    "mypy~=1.19",
+    "pandas-stubs>=3.0.5.260730",
+    "pytest~=9.0",
+    "pytest-rerunfailures~=16.0",
+    "ruff~=0.15.8",
+    "types-pyyaml>=6.0.12.20260815",
+]

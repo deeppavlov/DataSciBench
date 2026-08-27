@@ -1,6 +1,7 @@
 import asyncio
 import os
 from dataclasses import asdict
+from typing import Any, Literal
 
 from metagpt.logs import logger
 
@@ -23,7 +24,7 @@ async def main_simple(requirement: str, config: Config):
 
     result = await run_task(requirement, config)
 
-    plan_list = [[]]
+    plan_list: list[list[Any]] = [[]]
     cost_list = [[0, 0, 0, 0]]
     error_counter_list = [[result.error_count]]
 
@@ -33,14 +34,14 @@ async def main_simple(requirement: str, config: Config):
 async def main_legacy(requirement: str, args):
     from role import SciDataInterpreter
 
-    react_mode = "react" if args.use_react else "plan_and_act"
+    react_mode: Literal["plan_and_act", "react"] = "react" if args.use_react else "plan_and_act"
     config = Config.from_home(args.config)
     role = SciDataInterpreter(
         use_reflection=args.use_reflection,
         hard_retry=args.hard_retry,
         max_retry=args.max_retry,
         react_mode=react_mode,
-        config=config,
+        config=config,  # type: ignore[call-arg]
     )
     role.actions[0].llm.config = config.llm
     role.planner.set_plan_writter(config)
@@ -80,7 +81,7 @@ if __name__ == "__main__":
     elif isinstance(task_id, list):
         folders = task_id
 
-    NaN = ''
+    NaN = ""
     data_source_type = args.data_source_type
     filtered_folders = []
     for folder in folders:
@@ -95,8 +96,8 @@ if __name__ == "__main__":
 
     folders = filtered_folders
 
-    for id, folder in enumerate(folders):
-        if 'bcb' in folder and args.skip_bcb:
+    for folder_idx, folder in enumerate(folders):
+        if "bcb" in folder and args.skip_bcb:
             continue
         if args.data_type not in folder:
             continue
@@ -107,10 +108,14 @@ if __name__ == "__main__":
             with open(prompt_file) as file:
                 prompt_data = eval(file.read())
 
-            if folder.startswith('bcb'):
-                result_logger, time_logger, log_dir, run_dir = create_logger(folder, sub_idx, config_name=args.config, split=False)
+            if folder.startswith("bcb"):
+                result_logger, time_logger, log_dir, run_dir = create_logger(
+                    folder, sub_idx, config_name=args.config, split=False
+                )
             else:
-                result_logger, time_logger, log_dir, run_dir = create_logger(folder, sub_idx, config_name=args.config, split=True)
+                result_logger, time_logger, log_dir, run_dir = create_logger(
+                    folder, sub_idx, config_name=args.config, split=True
+                )
 
             log_file_path = os.path.join(log_dir, "logs.txt")
             sys_log_file_path = os.path.join(log_dir, "sys_logs.txt")
@@ -127,72 +132,72 @@ if __name__ == "__main__":
                 continue
 
             model_name = get_model_name(args.config)
-            if not folder.startswith('bcb'):
+            if not folder.startswith("bcb"):
                 model_name = model_name.split("/")[-1]
             output_dict_path = os.path.join(run_dir, f"{model_name}_outputs.jsonl")
             output_dict_path = os.path.abspath(output_dict_path)
 
             requirement = SPECIFY_PATH_PROMPT + prompt_data["prompt"]
             if args.gt_prompt is not None:
-                requirement = args.gt_prompt + '\n' + requirement
+                requirement = args.gt_prompt + "\n" + requirement
 
             sys_output_path = os.path.join(log_dir, "sys_logs.txt")
             print(sys_output_path)
             print(output_dict_path)
 
-            with change_metalog_path(logger=logger, file_path=sys_output_path) as temp_logger:
-                with change_dir(log_dir):
+            with change_metalog_path(logger=logger, file_path=sys_output_path) as temp_logger, change_dir(log_dir):
+                try:
+                    temp_logger.info(f"Processing {folder} ({folder_idx}/{num_folders})")
+                    temp_logger.info(f"Prompt:\n{requirement}")
+
+                    temp_logger.info("=== ENVIRONMENT DIAGNOSTICS ===")
+                    temp_logger.info(f"CWD: {os.getcwd()}")
+                    temp_logger.info(f"Files in CWD: {os.listdir('.')}")
                     try:
-                        temp_logger.info(f"Processing {folder} ({id}/{num_folders})")
-                        temp_logger.info(f"Prompt:\n{requirement}")
+                        temp_logger.info(f"Files in parent dir: {os.listdir('..')}")
+                    except Exception as e:
+                        temp_logger.info(f"Cannot list parent dir: {e}")
+                    temp_logger.info(f"data_source_type: {prompt_data.get('data_source_type', 'N/A')}")
+                    temp_logger.info(f"Mode: {'legacy (MetaGPT)' if args.legacy else 'simple (single snippet)'}")
+                    temp_logger.info("=== END DIAGNOSTICS ===")
 
-                        temp_logger.info("=== ENVIRONMENT DIAGNOSTICS ===")
-                        temp_logger.info(f"CWD: {os.getcwd()}")
-                        temp_logger.info(f"Files in CWD: {os.listdir('.')}")
-                        try:
-                            temp_logger.info(f"Files in parent dir: {os.listdir('..')}")
-                        except Exception as e:
-                            temp_logger.info(f"Cannot list parent dir: {e}")
-                        temp_logger.info(f"data_source_type: {prompt_data.get('data_source_type', 'N/A')}")
-                        temp_logger.info(f"Mode: {'legacy (MetaGPT)' if args.legacy else 'simple (single snippet)'}")
-                        temp_logger.info("=== END DIAGNOSTICS ===")
+                    time_logger.info(f"Processing {folder} ({folder_idx}/{num_folders})")
+                    start_time = time.time()
 
-                        time_logger.info(f"Processing {folder} ({id}/{num_folders})")
-                        start_time = time.time()
+                    if args.legacy:
+                        plan_list, cost_list, error_counter_list = asyncio.run(main_legacy(requirement, args))
+                    else:
+                        config = Config.from_home(args.config)
+                        plan_list, cost_list, error_counter_list = asyncio.run(main_simple(requirement, config))
 
-                        if args.legacy:
-                            plan_list, cost_list, error_counter_list = asyncio.run(main_legacy(requirement, args))
-                        else:
-                            config = Config.from_home(args.config)
-                            plan_list, cost_list, error_counter_list = asyncio.run(main_simple(requirement, config))
+                    end_time = time.time()
+                    elapsed_time = end_time - start_time
 
-                        end_time = time.time()
-                        elapsed_time = end_time - start_time
+                    temp_logger.info(f"Completed processing folder {folder} ({folder_idx + 1}/{num_folders})")
+                    temp_logger.info(f"Plan list:\n{plan_list}")
+                    temp_logger.info(f"Cost list:\n{cost_list}")
+                    temp_logger.info(f"Error counter list:\n{error_counter_list}")
 
-                        temp_logger.info(f"Completed processing folder {folder} ({id+1}/{num_folders})")
-                        temp_logger.info(f"Plan list:\n{plan_list}")
-                        temp_logger.info(f"Cost list:\n{cost_list}")
-                        temp_logger.info(f"Error counter list:\n{error_counter_list}")
+                    result_logger.info(f"Plan list:\n{plan_list}")
+                    result_logger.info(f"Cost list:\n{cost_list}")
+                    result_logger.info(f"Error counter list:\n{error_counter_list}")
 
-                        result_logger.info(f"Plan list:\n{plan_list}")
-                        result_logger.info(f"Cost list:\n{cost_list}")
-                        result_logger.info(f"Error counter list:\n{error_counter_list}")
+                    time_logger.info(f"Elapsed time: {elapsed_time:.2f} seconds")
 
-                        time_logger.info(f"Elapsed time: {elapsed_time:.2f} seconds")
+                    output_dict = SciAgentBenchOutput(
+                        output_dir=log_dir,
+                        time_cost=elapsed_time,
+                        error_list=error_counter_list[-1],
+                        cost=cost_list[-1],
+                        plan=plan_list[-1],
+                    )
+                    output_json = asdict(output_dict)
 
-                        output_dict = SciAgentBenchOutput(
-                            output_dir=log_dir,
-                            time_cost=elapsed_time,
-                            error_list=error_counter_list[-1],
-                            cost=cost_list[-1],
-                            plan=plan_list[-1],
-                        )
-                        output_dict = asdict(output_dict)
+                    with open(output_dict_path, "a") as f:
+                        f.write(json.dumps(output_json) + "\n")
 
-                        with open(output_dict_path, "a") as f:
-                            f.write(json.dumps(output_dict) + '\n')
+                except Exception:
+                    import traceback
 
-                    except Exception:
-                        import traceback
-                        temp_logger.info("====================================================")
-                        temp_logger.info(f"{traceback.format_exc()}\n====================================================")
+                    temp_logger.info("====================================================")
+                    temp_logger.info(f"{traceback.format_exc()}\n====================================================")

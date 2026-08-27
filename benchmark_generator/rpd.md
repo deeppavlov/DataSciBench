@@ -11,7 +11,7 @@
 **Актуальная конфигурация (из скриптов):**
 - **Модель**: `gemini-3-flash-preview` (через `BENCH_GEN_LLM_MODEL`).
 - **API Base**: `https://generativelanguage.googleapis.com/v1beta/openai/` (Google AI Studio OpenAI-compatible).
-- **Ключ**: Задается через `OPENAI_API_KEY`.
+- **Ключ**: Задается через `OPENAI_API_KEY` — из окружения либо из файла `.env` в корне проекта (см. `.env.example`).
 
 ### 2. `/core` — Инфраструктура
 - **`llm.py`**: Клиент на базе библиотеки `openai`, адаптированный под работу с Gemini. Поддерживает структурированный вывод через Pydantic.

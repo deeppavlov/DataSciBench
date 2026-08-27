@@ -6,10 +6,11 @@ from ..tools.solve_task import _run_script
 
 logger = logging.getLogger(__name__)
 
-def interactive_healthcheck(output_dir: Path, mcp_env: dict):
+
+def interactive_healthcheck(output_dir: Path, mcp_env: dict[str, str]) -> None:
     mcp_tools_path = output_dir / "_mcp_tools.py"
     api_doc_path = output_dir / "api_doc.md"
-    
+
     if not mcp_tools_path.exists() or not api_doc_path.exists():
         print("Невозможно выполнить healthcheck: отсутствуют файлы _mcp_tools.py или api_doc.md")
         return
@@ -22,7 +23,7 @@ The following MCP tools are available:
 
 {api_doc}
 
-Your task is to write a single Python script that performs exactly ONE safe, read-only function call per available server to verify that the underlying systems are alive and responding. 
+Your task is to write a single Python script that performs exactly ONE safe, read-only function call per available server to verify that the underlying systems are alive and responding.\x20
 For example, you could use `list_allowed_directories()` for the filesystem and `list_databases()` for ClickHouse.
 
 REQUIREMENTS:
@@ -32,7 +33,7 @@ REQUIREMENTS:
 4. CRITICAL: All tools are imported automatically into the global namespace. Note that these tools are ASYNCHRONOUS (`async def`). You MUST call them using `await` inside an `asyncio.run(main())` block. Call them directly (e.g. `await list_databases()`), DO NOT use server name prefixes (e.g. NOT `clickhouse.list_databases()`).
 5. Return ONLY the raw python code. DO NOT include markdown formatting or explanations.
 """
-    
+
     print("Генерация диагностического скрипта через LLM...")
     try:
         script_code = call_llm(system=prompt, user="Write the diagnostic script.").strip()
@@ -40,13 +41,10 @@ REQUIREMENTS:
         print(f"Ошибка при обращении к LLM: {e}")
         return
 
-    if script_code.startswith("```python"):
-        script_code = script_code[9:]
-    if script_code.startswith("```"):
-        script_code = script_code[3:]
-    if script_code.endswith("```"):
-        script_code = script_code[:-3]
-    
+    script_code = script_code.removeprefix("```python")
+    script_code = script_code.removeprefix("```")
+    script_code = script_code.removesuffix("```")
+
     script_code = script_code.strip()
 
     script_path = output_dir / "mcp_healthcheck.py"

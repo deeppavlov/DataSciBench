@@ -1,4 +1,3 @@
-import asyncio
 import subprocess
 import sys
 from dataclasses import dataclass
@@ -39,6 +38,7 @@ def _run_code(code: str, cwd: str) -> tuple[str, bool]:
             capture_output=True,
             text=True,
             timeout=CODE_TIMEOUT,
+            check=False,
         )
     except subprocess.TimeoutExpired:
         return f"ERROR: Script timed out after {CODE_TIMEOUT} seconds", False
@@ -62,11 +62,12 @@ async def run_task(requirement: str, config: Config) -> SimpleRunResult:
 
     logger.info("Generating initial solution...")
     response = await llm.acompletion_text(messages, stream=True)
-    code = CodeParser.parse_code(block=None, text=response)
+    code = CodeParser.parse_code(block="", text=response)
 
     messages.append({"role": "assistant", "content": response})
 
     import os
+
     cwd = os.getcwd()
 
     error_count = 0
@@ -96,7 +97,7 @@ async def run_task(requirement: str, config: Config) -> SimpleRunResult:
 
         logger.info("Requesting fix from LLM...")
         response = await llm.acompletion_text(messages, stream=True)
-        code = CodeParser.parse_code(block=None, text=response)
+        code = CodeParser.parse_code(block="", text=response)
         messages.append({"role": "assistant", "content": response})
 
     return SimpleRunResult(code=code, output=output, error_count=error_count)

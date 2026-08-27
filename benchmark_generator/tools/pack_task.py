@@ -66,7 +66,7 @@ def _metrics_to_yaml(metrics: list[dict], prompt_text: str) -> dict:
     }
 
 
-def pack_single_task(task_dir: Path, task_id: str, benchmark_root: Path):
+def pack_single_task(task_dir: Path, task_id: str, benchmark_root: Path) -> None:
     prompt_md = task_dir / "prompt.md"
     metrics_py = task_dir / "metrics.py"
     gt_dir = task_dir / "gt"
@@ -83,9 +83,7 @@ def pack_single_task(task_dir: Path, task_id: str, benchmark_root: Path):
     metric_dir.mkdir(parents=True, exist_ok=True)
 
     prompt_json = _prompt_md_to_json(prompt_md)
-    (data_dir / "prompt.json").write_text(
-        json.dumps(prompt_json, ensure_ascii=False), encoding="utf-8"
-    )
+    (data_dir / "prompt.json").write_text(json.dumps(prompt_json, ensure_ascii=False), encoding="utf-8")
     logger.info("Created data/%s/prompt.json", task_id)
 
     if gt_dir.exists():
@@ -103,10 +101,10 @@ def pack_single_task(task_dir: Path, task_id: str, benchmark_root: Path):
     class BlockStringDumper(yaml.Dumper):
         pass
 
-    def str_presenter(dumper, data):
-        if '\n' in data:
-            return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
-        return dumper.represent_scalar('tag:yaml.org,2002:str', data)
+    def str_presenter(dumper: yaml.Dumper, data: str) -> yaml.ScalarNode:
+        if "\n" in data:
+            return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data)
 
     BlockStringDumper.add_representer(str, str_presenter)
 
@@ -121,7 +119,7 @@ def pack_single_task(task_dir: Path, task_id: str, benchmark_root: Path):
     logger.info("Created metric/%s/metric.yaml", task_id)
 
 
-def pack_all_tasks(output_dir: Path, prefix: str, benchmark_root: Path):
+def pack_all_tasks(output_dir: Path, prefix: str, benchmark_root: Path) -> None:
     task_dirs = sorted(d for d in output_dir.iterdir() if d.is_dir() and d.name.startswith("task_"))
     if not task_dirs:
         logger.warning("No task directories found in %s", output_dir)
@@ -133,7 +131,7 @@ def pack_all_tasks(output_dir: Path, prefix: str, benchmark_root: Path):
         pack_single_task(task_dir, task_id, benchmark_root)
 
 
-def main():
+def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     parser = argparse.ArgumentParser(description="Pack generated tasks into benchmark format")

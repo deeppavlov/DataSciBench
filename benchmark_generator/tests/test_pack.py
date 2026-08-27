@@ -12,7 +12,7 @@ from benchmark_generator.tools.pack_task import (
 
 
 class TestPromptMdToJson:
-    def test_basic_conversion(self, sample_prompt_md):
+    def test_basic_conversion(self, sample_prompt_md: str) -> None:
         import tempfile
 
         with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
@@ -24,7 +24,7 @@ class TestPromptMdToJson:
         assert result["data_source_type"] == "4=auto generated"
         assert "Train a classifier" in result["prompt"]
 
-    def test_prompt_preserves_newlines(self, tmp_path):
+    def test_prompt_preserves_newlines(self, tmp_path: Path) -> None:
         text = "Line 1\n\nLine 2\n  indented\n"
         p = tmp_path / "prompt.md"
         p.write_text(text)
@@ -33,7 +33,7 @@ class TestPromptMdToJson:
 
 
 class TestParseMetricsPy:
-    def test_parse_sample(self, tmp_path, sample_metrics_py):
+    def test_parse_sample(self, tmp_path: Path, sample_metrics_py: str) -> None:
         p = tmp_path / "metrics.py"
         p.write_text(sample_metrics_py)
         metrics = _parse_metrics_py(p)
@@ -44,7 +44,7 @@ class TestParseMetricsPy:
         assert "def model_accuracy" in metrics[0]["code"]
         assert metrics[1]["ground_truth"] is None
 
-    def test_parse_has_code_field(self, tmp_path, sample_metrics_py):
+    def test_parse_has_code_field(self, tmp_path: Path, sample_metrics_py: str) -> None:
         p = tmp_path / "metrics.py"
         p.write_text(sample_metrics_py)
         metrics = _parse_metrics_py(p)
@@ -54,7 +54,7 @@ class TestParseMetricsPy:
 
 
 class TestMetricsToYaml:
-    def test_conversion(self):
+    def test_conversion(self) -> None:
         metrics = [
             {
                 "task_name": "Modeling",
@@ -70,7 +70,7 @@ class TestMetricsToYaml:
         assert result["TMC-list"][0]["task_name"] == "Modeling"
         assert result["prompt"] == "Test prompt"
 
-    def test_none_gt_excluded(self):
+    def test_none_gt_excluded(self) -> None:
         metrics = [
             {
                 "task_name": "Report",
@@ -85,7 +85,7 @@ class TestMetricsToYaml:
 
 
 class TestPackSingleTask:
-    def test_full_pack(self, populated_task_dir, tmp_path):
+    def test_full_pack(self, populated_task_dir: Path, tmp_path: Path) -> None:
         benchmark_root = tmp_path / "bench"
         benchmark_root.mkdir()
 
@@ -110,7 +110,8 @@ class TestPackSingleTask:
         assert "prompt" in metric
         assert len(metric["TMC-list"]) == 2
 
-    def test_missing_prompt_raises(self, tmp_task_dir, tmp_path):
+    def test_missing_prompt_raises(self, tmp_task_dir: Path, tmp_path: Path) -> None:
         import pytest
-        with pytest.raises(FileNotFoundError, match="prompt.md"):
+
+        with pytest.raises(FileNotFoundError, match=r"prompt\.md"):
             pack_single_task(tmp_task_dir, "bad", tmp_path)

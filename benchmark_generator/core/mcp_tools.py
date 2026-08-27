@@ -2,6 +2,7 @@ import json
 import logging
 import textwrap
 from pathlib import Path
+from typing import Any
 
 from mcp.types import Tool
 
@@ -26,10 +27,10 @@ async def discover_tools(mcp_config_path: Path) -> dict[str, list[Tool]]:
     return result
 
 
-def _params_from_schema(schema: dict) -> list[tuple[str, str, bool]]:
+def _params_from_schema(schema: dict[str, Any]) -> list[tuple[str, str, bool]]:
     props = schema.get("properties", {})
     required = set(schema.get("required", []))
-    params = []
+    params: list[tuple[str, str, bool]] = []
     for name, info in props.items():
         typ = info.get("type", "Any")
         params.append((name, typ, name in required))
@@ -44,7 +45,7 @@ def generate_api_doc(tools: dict[str, list[Tool]]) -> str:
         for tool in server_tools:
             params = _params_from_schema(tool.inputSchema)
             sig_parts = []
-            for pname, ptype, req in params:
+            for pname, ptype, _req in params:
                 sig_parts.append(f"{pname}: {ptype}")
             sig = ", ".join(sig_parts)
             lines.append(f"### async {tool.name}({sig}) -> str")
@@ -59,7 +60,7 @@ def generate_api_doc(tools: dict[str, list[Tool]]) -> str:
     return "\n".join(lines)
 
 
-def _check_tool_name_collisions(tools: dict[str, list[Tool]]):
+def _check_tool_name_collisions(tools: dict[str, list[Tool]]) -> None:
     seen: dict[str, str] = {}
     for server_name, server_tools in tools.items():
         for tool in server_tools:
@@ -67,7 +68,9 @@ def _check_tool_name_collisions(tools: dict[str, list[Tool]]):
                 logger.warning(
                     "Tool name collision: '%s' exists in both '%s' and '%s'. "
                     "The second definition will overwrite the first in _mcp_tools.py.",
-                    tool.name, seen[tool.name], server_name,
+                    tool.name,
+                    seen[tool.name],
+                    server_name,
                 )
             seen[tool.name] = server_name
 
@@ -92,8 +95,8 @@ def generate_wrapper_module(tools: dict[str, list[Tool]], mcp_config_path: Path)
         args = repr(cfg.get("args", []))
         env_part = ""
         if cfg.get("env"):
-            env_part = f", env={repr(cfg['env'])}"
-        servers_code += f"    {repr(name)}: StdioServerParameters(command={cmd}, args={args}{env_part}),\n"
+            env_part = f", env={cfg['env']!r}"
+        servers_code += f"    {name!r}: StdioServerParameters(command={cmd}, args={args}{env_part}),\n"
     servers_code += "}\n\n"
 
     runtime = textwrap.dedent("""\
@@ -164,23 +167,23 @@ def generate_wrapper_module(tools: dict[str, list[Tool]], mcp_config_path: Path)
     for server_name, server_tools in tools.items():
         for tool in server_tools:
             params = _params_from_schema(tool.inputSchema)
-            sorted_params = sorted(params, key=lambda x: not x[2]) 
+            sorted_params = sorted(params, key=lambda x: not x[2])
             sig_parts = []
             call_dict_parts = []
             for pname, ptype, _req in sorted_params:
                 py_type = {"string": "str", "integer": "int", "number": "float", "boolean": "bool"}.get(ptype, "str")
                 default = "" if _req else " = None"
                 sig_parts.append(f"{pname}: {py_type}{default}")
-                call_dict_parts.append(f"{repr(pname)}: {pname}")
+                call_dict_parts.append(f"{pname!r}: {pname}")
 
             sig = ", ".join(sig_parts)
             call_dict = "{" + ", ".join(call_dict_parts) + "}"
 
             desc = tool.description or tool.name
             func_code = (
-                f'async def {tool.name}({sig}) -> str:\n'
+                f"async def {tool.name}({sig}) -> str:\n"
                 f'    """{desc}"""\n'
-                f'    return await _run_async({repr(server_name)}, {repr(tool.name)}, {call_dict})\n'
+                f"    return await _run_async({server_name!r}, {tool.name!r}, {call_dict})\n"
             )
             functions.append(func_code)
 

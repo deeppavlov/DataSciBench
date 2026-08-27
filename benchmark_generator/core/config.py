@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    model_config = {"env_prefix": "BENCH_GEN_"}
+    model_config = {"env_prefix": "BENCH_GEN_", "env_file": ".env"}
 
     llm_model: str = "gpt-4o"
     llm_api_base: str = "https://api.openai.com/v1"

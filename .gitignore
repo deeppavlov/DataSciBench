@@ -162,13 +162,34 @@ cython_debug/
 #.idea/
 
 # VS Code
-.vscode/
+.vscode/*
+!.vscode/settings.json
 
 # MetaGPT artifacts (specific to this project)
 workspace/
 costs/
 storage/
-log*
-scripts
+/logs/
+/log_archive/
+*.log
+logs.txt
+sys_logs.txt
+!data/*/gt/logs.txt
+!data/*/gt/sys_logs.txt
+log_analysis/
 notes
 src/vlm_config.py
+
+# Caches and OS junk
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.DS_Store
+
+# Артефакт дымового прогона
+evaluation_results/results/gt_results.csv
+
+# Артефакты прогона оценки: кеш вердиктов VLM-судьи и логи запросов к судьям
+evaluation_results/vlm_bridge/
+evaluation_results/vlm_run_log.txt
+evaluation_results/llm_run_log.txt

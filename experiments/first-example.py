@@ -10,7 +10,7 @@ async def main(requirement: str):
     role = SciDataInterpreter()
     await role.run(requirement)
 
-    #TODO: print the CR here
+    # TODO: print the CR here
     return role.get_results_for_eval()
 
 
@@ -22,16 +22,16 @@ if __name__ == "__main__":
     # eval_path = f"{data_path}/split_eval.csv"
     requirement = '''You are given a list of tickers and their daily closing prices for a given period.
 Implement the most_corr function that, when given each ticker's daily closing prices, returns the pair of tickers that are the most highly (linearly) correlated by daily percentage change.
-Starter Code: 
+Starter Code:\x20
 ```python
 import pandas as pd
 import numpy as np
 
 def most_corr(prices):
     """
-    :param prices: (pandas.DataFrame) A dataframe containing each ticker's 
+    :param prices: (pandas.DataFrame) A dataframe containing each ticker's\x20
                    daily closing prices.
-    :returns: (container of strings) A container, containing the two tickers that 
+    :returns: (container of strings) A container, containing the two tickers that\x20
               are the most highly (linearly) correlated by daily percentage change.
     """
     return None
@@ -58,7 +58,7 @@ print(most_corr(pd.DataFrame.from_dict({
         104.22, 110.16, 109.84, 108.86,
         110.14, 107.66, 108.08, 109.90
     ]
-}))) 
+})))\x20
 ```
 '''
     logger.info(requirement)

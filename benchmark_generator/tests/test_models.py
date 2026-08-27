@@ -8,24 +8,25 @@ from benchmark_generator.core.models import (
 
 
 class TestGeneratedTask:
-    def test_minimal(self):
+    def test_minimal(self) -> None:
         t = GeneratedTask(prompt="Do something")
         assert t.prompt == "Do something"
         assert t.needs_input_data is False
         assert t.input_data_code is None
 
-    def test_with_input_data(self):
+    def test_with_input_data(self) -> None:
         t = GeneratedTask(
             prompt="Train model",
             needs_input_data=True,
             input_data_code="import pandas as pd\npd.DataFrame().to_csv('data.csv')",
         )
         assert t.needs_input_data is True
+        assert t.input_data_code is not None
         assert "pandas" in t.input_data_code
 
 
 class TestTaskList:
-    def test_from_json(self):
+    def test_from_json(self) -> None:
         data = {
             "tasks": [
                 {"prompt": "Task 1"},
@@ -39,7 +40,7 @@ class TestTaskList:
 
 
 class TestSolution:
-    def test_from_json(self):
+    def test_from_json(self) -> None:
         data = {
             "code": "print('hello')",
             "subtasks": [
@@ -57,7 +58,7 @@ class TestSolution:
 
 
 class TestMetricEntry:
-    def test_without_gt(self):
+    def test_without_gt(self) -> None:
         m = MetricEntry(
             task_name="Report",
             function="File Exists",
@@ -66,7 +67,7 @@ class TestMetricEntry:
         )
         assert m.ground_truth is None
 
-    def test_with_gt(self):
+    def test_with_gt(self) -> None:
         m = MetricEntry(
             task_name="Modeling",
             function="Accuracy",
@@ -78,7 +79,7 @@ class TestMetricEntry:
 
 
 class TestMetricsList:
-    def test_from_json(self):
+    def test_from_json(self) -> None:
         data = {
             "metrics": [
                 {

@@ -1,34 +1,47 @@
 import json
 import os
-from datetime import datetime
+from datetime import UTC, datetime
+from functools import lru_cache
+from typing import Any
 
 from openai import OpenAI
 
-try:
-    from .vlm_config import API_KEY, BASE_URL
-except (ImportError, ValueError):
-    from vlm_config import API_KEY, BASE_URL
 
-client = OpenAI(
-    api_key=API_KEY,
-    base_url=BASE_URL,
-)
+class LLMResponseError(Exception):
+    pass
 
-def _log_llm(request_messages, response_content=None, error=None):
+
+def _raise_response_error() -> None:
+    raise LLMResponseError("Failed to get response from the model.")
+
+
+@lru_cache(maxsize=1)
+def _get_client() -> OpenAI:
+    try:
+        from .vlm_config import API_KEY, BASE_URL
+    except (ImportError, ValueError):
+        from src.vlm_config import API_KEY, BASE_URL
+    return OpenAI(api_key=API_KEY, base_url=BASE_URL)
+
+
+def _log_llm(request_messages: list[Any], response_content: str | None = None, error: str | None = None) -> None:
     try:
         # Re-using the same log file or a new one for llm checks
-        log_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "evaluation_results", "llm_run_log.txt")
+        log_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "evaluation_results", "llm_run_log.txt"
+        )
         with open(log_path, "a", encoding="utf-8") as f:
-            f.write(f"\n[{datetime.now().isoformat()}] --- LLM Request ---\n")
+            f.write(f"\n[{datetime.now(tz=UTC).isoformat()}] --- LLM Request ---\n")
             f.write(json.dumps(request_messages, indent=2, ensure_ascii=False) + "\n")
             if response_content:
                 f.write(f"--- LLM Response ---\n{response_content}\n")
             if error:
-                f.write(f"--- LLM Error ---\n{str(error)}\n")
+                f.write(f"--- LLM Error ---\n{error!s}\n")
     except Exception as e:
         print(f"Failed to log LLM call: {e}")
 
-def llm_text_quality(ground_truth_path, test_path):
+
+def llm_text_quality(ground_truth_path: str, test_path: str) -> float:
     try:
         with open(ground_truth_path, encoding="utf-8") as f:
             gt_text = f.read()
@@ -36,9 +49,9 @@ def llm_text_quality(ground_truth_path, test_path):
             test_text = f.read()
     except Exception as e:
         _log_llm([], error=f"File read error: {e}")
-        raise e
+        raise
 
-    SCORING_PROMPT = """You are an expert evaluator. Above are two texts: the Ground Truth response and the Predicted response. 
+    SCORING_PROMPT = """You are an expert evaluator. Above are two texts: the Ground Truth response and the Predicted response.\x20
 Your task is to compare the Predicted text to the Ground Truth text and score it from 1 to 5 based on how well it matches the meaning, correctness, and comprehensiveness of the Ground Truth.
 
 Criteria:
@@ -48,7 +61,7 @@ Criteria:
 2 - Misses significant parts of the expected answer or has major inaccuracies.
 1 - Completely wrong or irrelevant.
 
-Please provide a brief explanation of your reasoning. 
+Please provide a brief explanation of your reasoning.\x20
 Then, on a new line, write the total score out of 5 exactly in this format:
 ### Total Score:
 x/5
@@ -58,22 +71,25 @@ x/5
     max_retry = 5
     retry = 0
     while not success:
-        messages = [
+        messages: list[Any] = [
             {"role": "system", "content": "You are a helpful and precise evaluation assistant."},
-            {"role": "user", "content": [
-                {"type": "text", "text": "Ground Truth Text:\n" + gt_text},
-                {"type": "text", "text": "\n\nPredicted Text:\n" + test_text},
-                {"type": "text", "text": "\n\n" + SCORING_PROMPT},
-            ]}
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": "Ground Truth Text:\n" + gt_text},
+                    {"type": "text", "text": "\n\nPredicted Text:\n" + test_text},
+                    {"type": "text", "text": "\n\n" + SCORING_PROMPT},
+                ],
+            },
         ]
-        
+
         try:
-            response = client.chat.completions.create(
-                model='gpt-4o-mini',
+            response = _get_client().chat.completions.create(
+                model="gpt-4o-mini",
                 messages=messages,
                 temperature=0.3,
             )
-            resp_content = response.choices[0].message.content
+            resp_content: Any = response.choices[0].message.content
             _log_llm(messages, response_content=resp_content)
 
             if "### Total Score:" in resp_content:
@@ -82,9 +98,9 @@ x/5
                 retry += 1
                 if retry >= max_retry:
                     _log_llm(messages, error="Max retries reached. Model response did not contain '### Total Score:'")
-                    raise Exception("Failed to get response from the model.")
+                    _raise_response_error()
         except Exception as e:
             _log_llm(messages, error=str(e))
-            raise e
-            
+            raise
+
     return float(resp_content.split("### Total Score:")[1].strip().split("/")[0])

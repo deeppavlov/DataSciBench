@@ -1,4 +1,5 @@
 import argparse
+import contextlib
 import logging
 import os
 import subprocess
@@ -34,7 +35,7 @@ def _run_script(
     timeout: int | None = None,
     code_mode: bool = False,
     mcp_tools_path: Path | None = None,
-    extra_env: dict | None = None,
+    extra_env: dict[str, str] | None = None,
 ) -> str:
     if timeout is None:
         timeout = get_settings().code_timeout
@@ -51,10 +52,9 @@ def _run_script(
 
         original_code = script_path.read_text(encoding="utf-8")
         wrapper_code = "from _mcp_tools import *\n" + original_code
-        tmp = tempfile.NamedTemporaryFile(mode="w", suffix=".py", dir=str(cwd), delete=False)
-        tmp.write(wrapper_code)
-        tmp.flush()
-        tmp.close()
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".py", dir=str(cwd), delete=False) as tmp:
+            tmp.write(wrapper_code)
+            tmp.flush()
         run_path = Path(tmp.name)
     elif extra_env:
         env = os.environ.copy()
@@ -68,6 +68,7 @@ def _run_script(
             text=True,
             timeout=timeout,
             env=env,
+            check=False,
         )
     except subprocess.TimeoutExpired:
         logger.warning("Script %s timed out after %d seconds", script_path.name, timeout)
@@ -79,17 +80,17 @@ def _run_script(
     output = result.stdout
     if result.stderr:
         output += "\n--- stderr ---\n" + result.stderr
-    
+
     if result.returncode != 0:
         logger.warning("Script %s exited with code %d", script_path.name, result.returncode)
         output += f"\n[EXIT_CODE_ERROR: {result.returncode}]"
-        
+
     return output
 
 
-def _append_chat_log(task_dir: Path, messages: list[dict]):
+def _append_chat_log(task_dir: Path, messages: list[dict[str, str]]) -> None:
     log_path = task_dir / "chat_log.md"
-    lines = []
+    lines: list[str] = []
     for msg in messages:
         role = msg["role"].upper()
         lines.append(f"=== {role} ===")
@@ -99,7 +100,7 @@ def _append_chat_log(task_dir: Path, messages: list[dict]):
         f.write("\n".join(lines) + "\n")
 
 
-def _generate_metrics_py(metrics: MetricsList, prompt_text: str) -> str:
+def _generate_metrics_py(metrics: MetricsList, _prompt_text: str) -> str:
     parts = [
         '"""Auto-generated metrics. Run: python metrics.py"""',
         "",
@@ -123,7 +124,9 @@ def _generate_metrics_py(metrics: MetricsList, prompt_text: str) -> str:
 
     for m in metrics.metrics:
         gt = repr(m.ground_truth)
-        decor = f"@metric(task_name={repr(m.task_name)}, function={repr(m.function)}, metric_name={repr(m.metric)}, ground_truth={gt})"
+        decor = (
+            f"@metric(task_name={m.task_name!r}, function={m.function!r}, metric_name={m.metric!r}, ground_truth={gt})"
+        )
         parts.append(decor)
         code = m.code
         if r"\n" in code and "\n" not in code:
@@ -171,7 +174,7 @@ def run_and_fix_input_data(
     task_dir: Path,
     code_mode: bool = False,
     mcp_tools_path: Path | None = None,
-    extra_env: dict | None = None,
+    extra_env: dict[str, str] | None = None,
     topic_text: str | None = None,
     api_doc_text: str | None = None,
 ) -> bool:
@@ -191,14 +194,14 @@ def run_and_fix_input_data(
     if code_mode and api_doc_text:
         system_content += f"\n\nAvailable MCP API:\n---\n{api_doc_text}\n---"
 
-    messages = [
+    messages: list[dict[str, str]] = [
         {
             "role": "system",
             "content": system_content,
         }
     ]
 
-    for attempt in range(5):
+    for _attempt in range(5):
         out = _run_script(
             input_data_path,
             cwd=task_dir,
@@ -223,7 +226,7 @@ def run_and_fix_input_data(
                 [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}],
             )
         except ValidationError as e:
-            err_msg = f"JSON Validation Error:\n{str(e)}\nFix your response format."
+            err_msg = f"JSON Validation Error:\n{e!s}\nFix your response format."
             messages.append({"role": "user", "content": err_msg})
             _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "user", "content": err_msg}])
             continue
@@ -241,10 +244,10 @@ def solve_single_task(
     codebase_text: str | None = None,
     code_mode: bool = False,
     mcp_tools_path: Path | None = None,
-    mcp_env: dict | None = None,
+    mcp_env: dict[str, str] | None = None,
     topic_text: str | None = None,
     api_doc_text: str | None = None,
-):
+) -> None:
     prompt_path = task_dir / "prompt.md"
     if not prompt_path.exists():
         return
@@ -275,7 +278,7 @@ def solve_single_task(
         label = "Available API" if code_mode else "Framework/codebase"
         user_prompt += f"\n\nYou MUST use the following {label} to solve this task:\n\n---\n{codebase_text}\n---"
 
-    solve_messages = [
+    solve_messages: list[dict[str, str]] = [
         {"role": "system", "content": system_prompt},
         {"role": "user", "content": user_prompt},
     ]
@@ -283,14 +286,14 @@ def solve_single_task(
     try:
         solution, solve_messages = call_llm_multi(solve_messages, response_model=Solution)
         _append_chat_log(task_dir, solve_messages)
-    except ValidationError as e:
-        logger.error("Initial solution generation failed schema validation: %s", e)
+    except ValidationError:
+        logger.exception("Initial solution generation failed schema validation")
         return
 
     solution_path.write_text(solution.code, encoding="utf-8")
 
     exec_output = ""
-    for attempt in range(5):
+    for _attempt in range(5):
         exec_output = _run_script(
             solution_path, cwd=gt_dir, code_mode=code_mode, mcp_tools_path=mcp_tools_path, extra_env=mcp_env
         )
@@ -308,7 +311,7 @@ def solve_single_task(
                 [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}],
             )
         except ValidationError as e:
-            err_msg = f"JSON Validation Error:\n{str(e)}\nFix your response format."
+            err_msg = f"JSON Validation Error:\n{e!s}\nFix your response format."
             solve_messages.append({"role": "user", "content": err_msg})
             _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "user", "content": err_msg}])
             continue
@@ -321,7 +324,7 @@ def solve_single_task(
 
     generated_files = [f.name for f in gt_dir.iterdir() if f.is_file()]
 
-    metric_messages = [
+    metric_messages: list[dict[str, str]] = [
         {"role": "system", "content": _load_prompt("generate_metrics.md")},
         {
             "role": "user",
@@ -339,8 +342,8 @@ def solve_single_task(
     try:
         metrics, metric_messages = call_llm_multi(metric_messages, response_model=MetricsList)
         _append_chat_log(task_dir, metric_messages)
-    except ValidationError as e:
-        logger.error("Initial metrics generation failed schema validation: %s", e)
+    except ValidationError:
+        logger.exception("Initial metrics generation failed schema validation")
         return
 
     metrics_path = task_dir / "metrics.py"
@@ -366,27 +369,30 @@ def solve_single_task(
         metric_messages.append({"role": "user", "content": user_msg})
 
         try:
-            correction, metric_messages = call_llm_multi(metric_messages, response_model=SolutionMetricsCorrection)
+            metrics_correction, metric_messages = call_llm_multi(
+                metric_messages, response_model=SolutionMetricsCorrection
+            )
             _append_chat_log(
                 task_dir,
-                [{"role": "user", "content": user_msg}, {"role": "assistant", "content": correction.model_dump_json()}],
+                [
+                    {"role": "user", "content": user_msg},
+                    {"role": "assistant", "content": metrics_correction.model_dump_json()},
+                ],
             )
         except ValidationError as e:
-            err_msg = f"JSON Validation Error:\n{str(e)}\nFix your response format."
+            err_msg = f"JSON Validation Error:\n{e!s}\nFix your response format."
             metric_messages.append({"role": "user", "content": err_msg})
             _append_chat_log(task_dir, [{"role": "user", "content": user_msg}, {"role": "user", "content": err_msg}])
             continue
 
-        if correction.updated_solution_code:
-            solution.code = correction.updated_solution_code
+        if metrics_correction.updated_solution_code:
+            solution.code = metrics_correction.updated_solution_code
             solution_path.write_text(solution.code, encoding="utf-8")
 
             for f in gt_dir.iterdir():
                 if f.is_file() and f.name not in ("solution.py", "metrics.py"):
-                    try:
+                    with contextlib.suppress(OSError):
                         f.unlink()
-                    except OSError:
-                        pass
 
             exec_output = _run_script(
                 solution_path, cwd=gt_dir, code_mode=code_mode, mcp_tools_path=mcp_tools_path, extra_env=mcp_env
@@ -395,8 +401,8 @@ def solve_single_task(
                 task_dir, [{"role": "system", "content": f"Re-ran updated solution. Output:\n{exec_output}"}]
             )
 
-        if correction.updated_metrics:
-            metrics.metrics = correction.updated_metrics
+        if metrics_correction.updated_metrics:
+            metrics.metrics = metrics_correction.updated_metrics
             metrics_path.write_text(_generate_metrics_py(metrics, prompt_text), encoding="utf-8")
 
 
@@ -405,10 +411,10 @@ def solve_tasks(
     codebase_text: str | None = None,
     code_mode: bool = False,
     mcp_tools_path: Path | None = None,
-    mcp_env: dict | None = None,
+    mcp_env: dict[str, str] | None = None,
     topic_text: str | None = None,
     api_doc_text: str | None = None,
-):
+) -> None:
     task_dirs = sorted(d for d in output_dir.iterdir() if d.is_dir() and d.name.startswith("task_"))
     for task_dir in task_dirs:
         if (task_dir / "solution.py").exists():
@@ -416,7 +422,7 @@ def solve_tasks(
         solve_single_task(task_dir, codebase_text, code_mode, mcp_tools_path, mcp_env, topic_text, api_doc_text)
 
 
-def main():
+def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     parser = argparse.ArgumentParser()
@@ -450,27 +456,26 @@ def main():
             topic_text=topic_text,
             api_doc_text=codebase_text,
         )
-    else:
-        if args.force:
-            task_dirs = sorted(d for d in args.output_dir.iterdir() if d.is_dir() and d.name.startswith("task_"))
-            for td in task_dirs:
-                solve_single_task(
-                    td,
-                    codebase_text,
-                    args.code_mode,
-                    args.mcp_tools_path,
-                    topic_text=topic_text,
-                    api_doc_text=codebase_text,
-                )
-        else:
-            solve_tasks(
-                args.output_dir,
+    elif args.force:
+        task_dirs = sorted(d for d in args.output_dir.iterdir() if d.is_dir() and d.name.startswith("task_"))
+        for td in task_dirs:
+            solve_single_task(
+                td,
                 codebase_text,
                 args.code_mode,
                 args.mcp_tools_path,
                 topic_text=topic_text,
                 api_doc_text=codebase_text,
             )
+    else:
+        solve_tasks(
+            args.output_dir,
+            codebase_text,
+            args.code_mode,
+            args.mcp_tools_path,
+            topic_text=topic_text,
+            api_doc_text=codebase_text,
+        )
 
 
 if __name__ == "__main__":

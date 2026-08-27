@@ -1,14 +1,14 @@
-#!/usr/bin/env python
 """
 Modified DI role for DataSciBench
 @Modified by: 2024/8/6. Added a plan_list to capture the completed/failed plans.
 """
+
 from __future__ import annotations
 
 import json
-from typing import Literal
+from typing import Any, Literal, cast
 
-from pydantic import Field, model_validator
+from pydantic import Field, PrivateAttr, model_validator
 
 from metagpt.actions.di.ask_review import ReviewConst
 from metagpt.actions.di.execute_nb_code import ExecuteNbCode
@@ -16,7 +16,7 @@ from metagpt.actions.di.write_analysis_code import CheckData, WriteAnalysisCode
 from metagpt.logs import logger
 from metagpt.prompts.di.write_analysis_code import DATA_INFO
 from metagpt.roles.role import Role
-from metagpt.schema import Message, Plan, Task, TaskResult
+from metagpt.schema import Message, Task, TaskResult
 from metagpt.strategy.task_type import TaskType
 from metagpt.tools.tool_recommend import BM25ToolRecommender, ToolRecommender
 from metagpt.utils.common import CodeParser
@@ -45,46 +45,51 @@ class SciDataInterpreter(Role):
     use_plan: bool = True
     use_reflection: bool = False
     execute_code: ExecuteNbCode = Field(default_factory=ExecuteNbCode, exclude=True)
-    tools: list[str] = []  # Use special symbol ["<all>"] to indicate use of all registered tools
-    tool_recommender: ToolRecommender = None
+    # Use special symbol ["<all>"] to indicate use of all registered tools
+    tools: list[str] = Field(default_factory=list)
+    tool_recommender: ToolRecommender | None = None
     react_mode: Literal["plan_and_act", "react"] = "plan_and_act"
     max_react_loop: int = 10  # used for react mode
 
     # For evaluation
-    plan_list: list[Plan] = [] # a list of completed/failed plans, we can get the code and resutls from it
-    cost_list: list[Costs] = [] # a list of costs for each (TODO:? not sure, might be the accumulated cost) plan
-    step_error_counter_list: list[int] = [] # a temporary error counter for each plan
-    error_counter_list: list[int] = [] # a list of error counter for each plan
+    # a list of completed/failed plans, we can get the code and resutls from it
+    plan_list: list[Any] = Field(default_factory=list)
+    # a list of costs for each (TODO:? not sure, might be the accumulated cost) plan
+    cost_list: list[Costs] = Field(default_factory=list)
+    step_error_counter_list: list[int] = Field(default_factory=list)  # a temporary error counter for each plan
+    error_counter_list: list[list[int]] = Field(default_factory=list)  # a list of error counter for each plan
     hard_retry: bool = False
     max_retry: int = 3
-    _task_attempts: dict[str, int] = {}
+    _task_attempts: dict[str, int] = PrivateAttr(default_factory=dict)
     # config: Config
 
     # def __init__(self, config):
     #     super().__init__(config)
 
-    def update_results_for_eval(self, rsp: Plan):
+    def update_results_for_eval(self, rsp: Message):
         rsp_json = self.read_json_from_list(rsp)
         self.plan_list.append(rsp_json)
-        self.cost_list.append(self.llm.cost_manager.get_costs())
+        cost_manager = self.llm.cost_manager
+        if cost_manager is None:
+            raise AttributeError("'NoneType' object has no attribute 'get_costs'")
+        self.cost_list.append(cost_manager.get_costs())
         self.error_counter_list.append(self.step_error_counter_list)
         self.step_error_counter_list = []
 
-    def update_react_results_for_eval(self, rsp: TaskResult):
+    def update_react_results_for_eval(self, _rsp: TaskResult):
         self.error_counter_list.append(self.step_error_counter_list)
 
     def get_results_for_eval(self):
         return self.plan_list, self.cost_list, self.error_counter_list
 
     # helper func 1
-    def read_json_from_list(self, plan):
+    def read_json_from_list(self, plan: Message) -> Any:
         content = str(plan)
         # Remove any non-JSON content
         json_start_pos = content.find("## Current Plan")
         json_end_pos = content.find("## Current Task")
-        content = content[json_start_pos+16:json_end_pos]
-        json_objects = json.loads(content)
-        return json_objects
+        content = content[json_start_pos + 16 : json_end_pos]
+        return json.loads(content)
 
     @model_validator(mode="after")
     def set_plan_and_tool(self) -> SciDataInterpreter:
@@ -115,7 +120,7 @@ class SciDataInterpreter(Role):
 
         prompt = REACT_THINK_PROMPT.format(user_requirement=user_requirement, context=context)
         rsp = await self.llm.aask(prompt)
-        rsp_dict = json.loads(CodeParser.parse_code(block=None, text=rsp))
+        rsp_dict = json.loads(CodeParser.parse_code(block="", text=rsp))
         self.working_memory.add(Message(content=rsp_dict["thoughts"], role="assistant"))
         need_action = rsp_dict["state"]
         self._set_state(0) if need_action else self._set_state(-1)
@@ -131,11 +136,12 @@ class SciDataInterpreter(Role):
         try:
             rsp = await super()._plan_and_act()
             self.update_results_for_eval(rsp)
+        except Exception:
+            await self.execute_code.terminate()
+            raise
+        else:
             await self.execute_code.terminate()
             return rsp
-        except Exception as e:
-            await self.execute_code.terminate()
-            raise e
 
     async def _act_on_task(self, current_task: Task) -> TaskResult:
         """Useful in 'plan_and_act' mode. Wrap the output in a TaskResult for review and confirmation."""
@@ -143,11 +149,13 @@ class SciDataInterpreter(Role):
         task_id = current_task.task_id
         if task_id not in self._task_attempts:
             self._task_attempts[task_id] = 0
-            
+
         self._task_attempts[task_id] += 1
-        
+
         if self._task_attempts[task_id] > 5:
-            logger.error(f"Task {task_id} has exceeded the maximum limit of 5 attempts. Raising RuntimeError to abort early.")
+            logger.error(
+                f"Task {task_id} has exceeded the maximum limit of 5 attempts. Raising RuntimeError to abort early."
+            )
             raise RuntimeError(f"Maximum task attempts (5) exceeded for task_id: {task_id}")
 
         code, result, is_success = await self._write_and_exec_code(max_retry=self.max_retry)
@@ -184,6 +192,7 @@ class SciDataInterpreter(Role):
 
             ### execute code ###
             from pathlib import Path
+
             tools_file = Path(__file__).parent.parent / "code_mode" / "_mcp_tools.py"
             if tools_file.exists():
                 init_code = f"import sys\nif '{tools_file.parent}' not in sys.path: sys.path.append('{tools_file.parent}')\nfrom _mcp_tools import *\n"
@@ -243,9 +252,10 @@ class SciDataInterpreter(Role):
         ):
             return
         logger.info("Check updated data")
-        check_data_action = CheckData(context=self.context)
+        check_data_action = CheckData()
+        check_data_action.set_context(self.context)
         check_data_action.set_llm(self.llm)
-        code = await check_data_action.run(self.planner.plan)
+        code = cast("str", await check_data_action.run(self.planner.plan))
         if not code.strip():
             return
         result, success = await self.execute_code.run(code)

@@ -6,16 +6,16 @@ from utils.json_operator import *
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="For Evaluation Result Display")
-    parser.add_argument("--task_id", type=str, default="bcb", choices=["bcb"],
-                        help="Specify the task id, all bcb tasks by default")
+    parser.add_argument(
+        "--task_id", type=str, default="bcb", choices=["bcb"], help="Specify the task id, all bcb tasks by default"
+    )
     parser.add_argument("--model_id", type=str, default="gpt-4-turbo", help="Specify the model id")
 
-    args = parser.parse_args()
-    return args
+    return parser.parse_args()
 
 
 def main(all_args):
-    output_dir = 'data'
+    output_dir = "data"
     model_id = all_args.model_id
     task_id = all_args.task_id
     all_crs = []

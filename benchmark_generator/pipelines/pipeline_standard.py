@@ -11,10 +11,10 @@ logger = logging.getLogger(__name__)
 
 def ask(prompt: str, default: str) -> str:
     val = input(f"{prompt} [{default}]: ").strip()
-    return val if val else default
+    return val or default
 
 
-def main():
+def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
     settings = get_settings()

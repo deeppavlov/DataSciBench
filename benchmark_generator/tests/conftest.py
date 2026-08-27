@@ -1,17 +1,19 @@
 import textwrap
+from pathlib import Path
+from typing import Any
 
 import pytest
 
 
 @pytest.fixture
-def tmp_task_dir(tmp_path):
+def tmp_task_dir(tmp_path: Path) -> Path:
     task_dir = tmp_path / "task_001"
     task_dir.mkdir()
     return task_dir
 
 
 @pytest.fixture
-def sample_prompt_md():
+def sample_prompt_md() -> str:
     return textwrap.dedent("""\
         Complete the following task based on Python:
         Task requirements: Train a classifier on the iris dataset.
@@ -24,7 +26,7 @@ def sample_prompt_md():
 
 
 @pytest.fixture
-def sample_prompt_json():
+def sample_prompt_json() -> dict[str, str]:
     return {
         "prompt": "Train a classifier on iris dataset using sklearn.",
         "data_source_type": "2=open source data",
@@ -32,7 +34,7 @@ def sample_prompt_json():
 
 
 @pytest.fixture
-def sample_metrics_py():
+def sample_metrics_py() -> str:
     return textwrap.dedent('''\
         """Auto-generated metrics. Run: python metrics.py"""
 
@@ -94,7 +96,7 @@ def sample_metrics_py():
 
 
 @pytest.fixture
-def sample_metric_yaml():
+def sample_metric_yaml() -> dict[str, Any]:
     return {
         "TMC-list": [
             {
@@ -117,7 +119,7 @@ def sample_metric_yaml():
 
 
 @pytest.fixture
-def populated_task_dir(tmp_task_dir, sample_prompt_md, sample_metrics_py):
+def populated_task_dir(tmp_task_dir: Path, sample_prompt_md: str, sample_metrics_py: str) -> Path:
     (tmp_task_dir / "prompt.md").write_text(sample_prompt_md)
     (tmp_task_dir / "metrics.py").write_text(sample_metrics_py)
 
